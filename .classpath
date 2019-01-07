@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.11.1.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-2.9.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
