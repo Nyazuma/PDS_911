@@ -36,7 +36,7 @@ public class DataSource {
 		}
 
 		try {
-			logger.info("je suis un logger");
+			logger.info("Récupération des instances du fichier de configuration");
 			properties.load(fichierConfiguration);
 			PROPERTY_URL = properties.getProperty("PROPERTY_URL");
 			PROPERTY_DRIVER = properties.getProperty("PROPERTY_DRIVER");
