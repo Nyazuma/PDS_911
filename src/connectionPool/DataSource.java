@@ -13,9 +13,7 @@ import java.util.Properties;
 public class DataSource {
 
 	
-	
-	
-	private static final String FICHIER_CONFIGURATION = "/config/configuration";
+	private static final String FICHIER_CONFIGURATION = "configuration";
 	private static  String PROPERTY_URL; 
 	private static  String PROPERTY_DRIVER;
 	private static  String PROPERTY_NOM_UTILISATEUR;
@@ -33,7 +31,7 @@ public class DataSource {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream fichierConfiguration = classLoader.getResourceAsStream(FICHIER_CONFIGURATION);
 
-		if ( fichierConfiguration == null ) {
+		if (fichierConfiguration == null) {
 			throw new SQLException ( "Le fichier configuration " + FICHIER_CONFIGURATION + " est introuvable." );
 		}
 
@@ -43,10 +41,11 @@ public class DataSource {
 			PROPERTY_DRIVER = properties.getProperty("PROPERTY_DRIVER");
 			PROPERTY_NOM_UTILISATEUR = properties.getProperty("PROPERTY_USERNAME");
 			PROPERTY_MOT_DE_PASSE = properties.getProperty("PROPERTY_PASSWORD");
-			PROPERTY_NB_CONNEXION = properties.getProperty("PROPERTY_USER_ADMIN"); 
-			PROPERTY_NOM_UTILISATEUR_ADMIN = properties.getProperty("PROPERTY_PASSWORD_ADMIN"); 
-			PROPERTY_MOT_DE_PASSE_ADMIN = properties.getProperty("PROPERTY_NB_CONNEXION"); 
+			PROPERTY_NB_CONNEXION = properties.getProperty("PROPERTY_NB_CONNEXION"); 
+			PROPERTY_NOM_UTILISATEUR_ADMIN = properties.getProperty("PROPERTY_USER_ADMIN"); 
+			PROPERTY_MOT_DE_PASSE_ADMIN = properties.getProperty("PROPERTY_PASSWORD_ADMIN"); 
 
+			
 
 		} catch ( FileNotFoundException e ) {
 			throw new SQLException( "Le fichier de configuration " + FICHIER_CONFIGURATION + " est introuvable.", e );
@@ -57,15 +56,13 @@ public class DataSource {
 	}
 
 
-
-
 	public static String getPROPERTY_URL() {
 		return PROPERTY_URL;
 	}
 	public static void setPROPERTY_URL(String pROPERTY_URL) {
 		PROPERTY_URL = pROPERTY_URL;
 	}
-
+	
 
 	public static String getPROPERTY_DRIVER() {
 		return PROPERTY_DRIVER;
@@ -74,7 +71,7 @@ public class DataSource {
 		PROPERTY_DRIVER = pROPERTY_DRIVER;
 	}
 
-
+	
 	public static String getPROPERTY_NOM_UTILISATEUR() {
 		return PROPERTY_NOM_UTILISATEUR;
 	}
@@ -82,12 +79,14 @@ public class DataSource {
 		PROPERTY_NOM_UTILISATEUR = pROPERTY_NOM_UTILISATEUR;
 	}
 	
+	
 	public static String getPROPERTY_MOT_DE_PASSE() {
 		return PROPERTY_MOT_DE_PASSE;
 	}
 	public static void setPROPERTY_MOT_DE_PASSE(String pROPERTY_MOT_DE_PASSE) {
 		PROPERTY_MOT_DE_PASSE = pROPERTY_MOT_DE_PASSE;
 	}
+	
 	
 	public static String getPROPERTY_NB_CONNEXION() {
 		return PROPERTY_NB_CONNEXION;
