@@ -4,12 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 
+import org.junit.experimental.theories.ParameterSignature;
+
 public class JDBCConnectionPool {
 
 	private ArrayList<Connection> listConnections;
 
 	public JDBCConnectionPool() {
-		
+		for (int i = 0; i< Integer.parseInt(DataConfig.getPROPERTY_NB_CONNEXION()); i++) {
+			init(); 
+		}
 	}
 
 	public void init() {
