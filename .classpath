@@ -4,5 +4,7 @@
 	<classpathentry kind="src" path="config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.13.jar"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
