@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Properties;
-
+import common.Tool;
+import com.sun.istack.internal.logging.Logger;
 
 //*******************************
 
@@ -13,7 +14,8 @@ import java.util.Properties;
 public class DataSource {
 
 	
-	private static final String FICHIER_CONFIGURATION = "configuration";
+	private static final String FICHIER_CONFIGURATION = "configuration"; 
+	private static Logger logger = Logger.getLogger(DataSource.class); 
 	private static  String PROPERTY_URL; 
 	private static  String PROPERTY_DRIVER;
 	private static  String PROPERTY_NOM_UTILISATEUR;
@@ -23,8 +25,6 @@ public class DataSource {
 	private static  String PROPERTY_MOT_DE_PASSE_ADMIN; 
 
 
-
-
 	public static void getInstanceConfig() throws SQLException {
 		Properties properties = new Properties();
 		
@@ -32,10 +32,12 @@ public class DataSource {
 		InputStream fichierConfiguration = classLoader.getResourceAsStream(FICHIER_CONFIGURATION);
 
 		if (fichierConfiguration == null) {
-			throw new SQLException ( "Le fichier configuration " + FICHIER_CONFIGURATION + " est introuvable." );
+			
+			logger.info("Le fichier configuration " + FICHIER_CONFIGURATION + " est introuvable." );
 		}
 
 		try {
+			logger.info("je suis un logger");
 			properties.load(fichierConfiguration);
 			PROPERTY_URL = properties.getProperty("PROPERTY_URL");
 			PROPERTY_DRIVER = properties.getProperty("PROPERTY_DRIVER");
@@ -48,8 +50,9 @@ public class DataSource {
 			
 
 		} catch ( FileNotFoundException e ) {
-			throw new SQLException( "Le fichier de configuration " + FICHIER_CONFIGURATION + " est introuvable.", e );
+			logger.info( "Le fichier de configuration " + FICHIER_CONFIGURATION + " est introuvable.");
 		} catch ( IOException e ) {
+			
 			throw new SQLException( "Impossible de charger le fichier de configuration " + FICHIER_CONFIGURATION, e );
 		}
 
