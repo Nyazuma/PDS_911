@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Properties;
-import common.Tool;
 import com.sun.istack.internal.logging.Logger;
 
 //*******************************
