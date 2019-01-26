@@ -16,6 +16,7 @@ public class DataConfig {
 	private static final String FICHIER_CONFIGURATION = "configuration"; 
 	private static Logger logger = Logger.getLogger(DataConfig.class); 
 	private static  String PROPERTY_URL; 
+	private static  String PROPERTY_DB; 
 	private static  String PROPERTY_DRIVER;
 	private static  String PROPERTY_NOM_UTILISATEUR;
 	private static  String PROPERTY_MOT_DE_PASSE;
@@ -26,10 +27,10 @@ public class DataConfig {
 
 	public static void getInstanceConfig() {
 		Properties properties = new Properties();
-		
+
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream fichierConfiguration = classLoader.getResourceAsStream(FICHIER_CONFIGURATION);
-
+		
 		if (fichierConfiguration == null) {
 			
 			logger.info("Le fichier configuration " + FICHIER_CONFIGURATION + " est introuvable." );
@@ -39,6 +40,7 @@ public class DataConfig {
 			logger.info("Récupération des instances du fichier de configuration");
 			properties.load(fichierConfiguration);
 			PROPERTY_URL = properties.getProperty("PROPERTY_URL");
+			PROPERTY_DB = properties.getProperty("PROPERTY_DB");
 			PROPERTY_DRIVER = properties.getProperty("PROPERTY_DRIVER");
 			PROPERTY_NOM_UTILISATEUR = properties.getProperty("PROPERTY_USERNAME");
 			PROPERTY_MOT_DE_PASSE = properties.getProperty("PROPERTY_PASSWORD");
@@ -61,56 +63,62 @@ public class DataConfig {
 	public static String getPROPERTY_URL() {
 		return PROPERTY_URL;
 	}
-	public static void setPROPERTY_URL(String pROPERTY_URL) {
-		PROPERTY_URL = pROPERTY_URL;
+	public static void setPROPERTY_URL(String PROPERTY_URL) {
+		PROPERTY_URL = PROPERTY_URL;
 	}
 	
+	public static String getPROPERTY_DB() {
+		return PROPERTY_DB;
+	}
+	public static void setPROPERTY_DB(String PROPERTY_DB) {
+		PROPERTY_DB = PROPERTY_DB;
+	}
 
 	public static String getPROPERTY_DRIVER() {
 		return PROPERTY_DRIVER;
 	}
-	public static void setPROPERTY_DRIVER(String pROPERTY_DRIVER) {
-		PROPERTY_DRIVER = pROPERTY_DRIVER;
+	public static void setPROPERTY_DRIVER(String PROPERTY_DRIVER) {
+		PROPERTY_DRIVER = PROPERTY_DRIVER;
 	}
 
 	
 	public static String getPROPERTY_NOM_UTILISATEUR() {
 		return PROPERTY_NOM_UTILISATEUR;
 	}
-	public static void setPROPERTY_NOM_UTILISATEUR(String pROPERTY_NOM_UTILISATEUR) {
-		PROPERTY_NOM_UTILISATEUR = pROPERTY_NOM_UTILISATEUR;
+	public static void setPROPERTY_NOM_UTILISATEUR(String PROPERTY_NOM_UTILISATEUR) {
+		PROPERTY_NOM_UTILISATEUR = PROPERTY_NOM_UTILISATEUR;
 	}
 	
 	
 	public static String getPROPERTY_MOT_DE_PASSE() {
 		return PROPERTY_MOT_DE_PASSE;
 	}
-	public static void setPROPERTY_MOT_DE_PASSE(String pROPERTY_MOT_DE_PASSE) {
-		PROPERTY_MOT_DE_PASSE = pROPERTY_MOT_DE_PASSE;
+	public static void setPROPERTY_MOT_DE_PASSE(String PROPERTY_MOT_DE_PASSE) {
+		PROPERTY_MOT_DE_PASSE = PROPERTY_MOT_DE_PASSE;
 	}
 	
 	
 	public static String getPROPERTY_NB_CONNEXION() {
 		return PROPERTY_NB_CONNEXION;
 	}
-	public static void setPROPERTY_NB_CONNEXION(String pROPERTY_NB_CONNEXION) {
-		PROPERTY_NB_CONNEXION = pROPERTY_NB_CONNEXION;
+	public static void setPROPERTY_NB_CONNEXION(String PROPERTY_NB_CONNEXION) {
+		PROPERTY_NB_CONNEXION = PROPERTY_NB_CONNEXION;
 	}
 
 
 	public static String getPROPERTY_NOM_UTILISATEUR_ADMIN() {
 		return PROPERTY_NOM_UTILISATEUR_ADMIN;
 	}
-	public static void setPROPERTY_NOM_UTILISATEUR_ADMIN(String pROPERTY_NOM_UTILISATEUR_ADMIN) {
-		PROPERTY_NOM_UTILISATEUR_ADMIN = pROPERTY_NOM_UTILISATEUR_ADMIN;
+	public static void setPROPERTY_NOM_UTILISATEUR_ADMIN(String PROPERTY_NOM_UTILISATEUR_ADMIN) {
+		PROPERTY_NOM_UTILISATEUR_ADMIN = PROPERTY_NOM_UTILISATEUR_ADMIN;
 	}
 
 
 	public static String getPROPERTY_MOT_DE_PASSE_ADMIN() {
 		return PROPERTY_MOT_DE_PASSE_ADMIN;
 	}
-	public static void setPROPERTY_MOT_DE_PASSE_ADMIN(String pROPERTY_MOT_DE_PASSE_ADMIN) {
-		PROPERTY_MOT_DE_PASSE_ADMIN = pROPERTY_MOT_DE_PASSE_ADMIN;
+	public static void setPROPERTY_MOT_DE_PASSE_ADMIN(String PROPERTY_MOT_DE_PASSE_ADMIN) {
+		PROPERTY_MOT_DE_PASSE_ADMIN = PROPERTY_MOT_DE_PASSE_ADMIN;
 	}
 
 
