@@ -13,12 +13,25 @@ import connectionPool.JDBCConnectionPool;
 
 public class Controller {
 
+	/**
+	 * Initial poolConnection Object
+	 */
 	private JDBCConnectionPool poolConnection; 
 
+	/**
+	 * Constructeur
+	 */
 	public Controller(JDBCConnectionPool pool) {
 		this.poolConnection = pool; 
 	}
 
+	/**
+	 * Check connection. 
+	 * 
+	 * @param identifiant
+	 * @param password
+	 * @return
+	 */
 	public boolean connection(String identifiant, String password) {
 
 		String requete = "Select count(*) from Personel where identifiant=" + identifiant; 
@@ -64,7 +77,12 @@ public class Controller {
 		}
 	}
 	
-	public int nbObjectConnect() {
+	/**
+	 * Return the object number associate to the account.
+	 * 
+	 * @return
+	 */
+	public int nbObject() {
 		String requete = "Select count(*) from Capteurs"; 
 		int nbObject = 0; 
 		
@@ -81,15 +99,22 @@ public class Controller {
 				nbObject++; 
 				resultat.next(); 
 			}
+			System.out.println("nbObject SUCCED");
 			return nbObject; 
 			
 		}catch (SQLException e) {
 			poolConnection.closeConnection(co1);
-			System.out.println("Connection FAILED - SQL EXCEPTION");
+			System.out.println("nbObject FAILED - SQL EXCEPTION");
 			return 0; 
 		}
 	}
 	
+	/**
+	 * Add an object to the base.
+	 * 
+	 * @param typeCapteur
+	 * @return
+	 */
 	public boolean addObject(String typeCapteur) {
 		String requete = "INSERT INTO table (Type_Capteur, Etat_Capteur) VALUES ('"+ typeCapteur +"', '1')"; 
 		
@@ -101,11 +126,12 @@ public class Controller {
 			co1 = poolConnection.getConnection();
 			Statement statement = co1.createStatement();
 			statement.executeUpdate(requete);
+			System.out.println("addObject SUCCED");
 			return true; 
 			
 		}catch (SQLException e) {
 			poolConnection.closeConnection(co1);
-			System.out.println("Connection FAILED - SQL EXCEPTION");
+			System.out.println("addObject FAILED - SQL EXCEPTION");
 			return false; 
 		}
 	}
