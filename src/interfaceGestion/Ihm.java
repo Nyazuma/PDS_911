@@ -19,16 +19,22 @@ import javax.swing.table.DefaultTableModel;
 
 public class Ihm implements ActionListener{
 	/**
-	 * 
+	 * ACTION PERFORMED ELEMENTS - INITIALIZE
 	 */
 	private JFrame frmInterfaceDeGestion;
 	private JTextField identifiantTxt;
 	private JPasswordField passwordField;
 	private JTable tableObjet;
-	
-	String identifiantTest = "toto"; 
-	String passwordTest = "toto"; 
-	char[] toto = {'t', 'o','t','o'}; 
+	private JButton ValiderButton; 
+
+	private String identifiantTest = "toto"; 
+	private String passwordTest = "toto"; 
+
+	/**
+	 * ACTION PERFORMED ELEMENTS - GESTION OBJECT
+	 */
+	private JButton btnAjouter; 
+	private JComboBox<?> listCapteur;
 
 	/**
 	 * Launch the application.
@@ -64,49 +70,49 @@ public class Ihm implements ActionListener{
 		frmInterfaceDeGestion.setBounds(100, 100, 1400, 900);
 		frmInterfaceDeGestion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmInterfaceDeGestion.getContentPane().setLayout(null);
-		
+
 		JLabel lblAuthentification = new JLabel("Authentification");
 		lblAuthentification.setFont(new Font("Cambria Math", Font.BOLD, 23));
 		lblAuthentification.setBounds(609, 267, 189, 43);
 		frmInterfaceDeGestion.getContentPane().add(lblAuthentification);
-		
+
 		JLabel lblIdentifiant = new JLabel("Identifiant :");
 		lblIdentifiant.setFont(new Font("Cambria Math", Font.BOLD, 17));
 		lblIdentifiant.setBounds(514, 326, 106, 30);
 		frmInterfaceDeGestion.getContentPane().add(lblIdentifiant);
-		
+
 		JLabel lblMotDePasse = new JLabel("Mot de passe :");
 		lblMotDePasse.setFont(new Font("Cambria Math", Font.BOLD, 17));
 		lblMotDePasse.setBounds(503, 369, 122, 30);
 		frmInterfaceDeGestion.getContentPane().add(lblMotDePasse);
-		
+
 		identifiantTxt = new JTextField();
 		identifiantTxt.setBounds(637, 327, 223, 26);
 		frmInterfaceDeGestion.getContentPane().add(identifiantTxt);
 		identifiantTxt.setColumns(10);
-		
-		JButton ValiderButton = new JButton("Valider");
+
+		ValiderButton = new JButton("Valider");
 		ValiderButton.setFont(new Font("Cambria Math", Font.BOLD, 15));
 		ValiderButton.addActionListener(this);
-		
+
 		ValiderButton.setBounds(609, 486, 189, 43);
 		frmInterfaceDeGestion.getContentPane().add(ValiderButton);
-		
+
 		passwordField = new JPasswordField();
 		passwordField.setBounds(637, 371, 223, 26);
 		frmInterfaceDeGestion.getContentPane().add(passwordField);
-		
+
 		JLabel label = new JLabel("--------------------------------------------------------------------------------------------------");
 		label.setBounds(502, 433, 501, 16);
 		frmInterfaceDeGestion.getContentPane().add(label);
-		
+
 		JLabel label_1 = new JLabel("--------------------------------------------------------------------------------------------------");
 		label_1.setBounds(502, 249, 501, 16);
 		frmInterfaceDeGestion.getContentPane().add(label_1);
-		
-	
+
+
 	}
-	
+
 	private void failConnexion() {
 		JLabel lblNewLabel = new JLabel("Identifiant ou mot de passe invalide.");
 		lblNewLabel.setForeground(new Color(128, 0, 0));
@@ -115,11 +121,11 @@ public class Ihm implements ActionListener{
 		frmInterfaceDeGestion.getContentPane().add(lblNewLabel);
 		frmInterfaceDeGestion.repaint();
 	}
-	
+
 	private void gestionObjet() {
 		frmInterfaceDeGestion.getContentPane().removeAll();
 		frmInterfaceDeGestion.revalidate();
-		
+
 		JLabel lblNombreDobjectConnect = new JLabel("Nombre d'objects connect\u00E9s : ");
 		lblNombreDobjectConnect.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblNombreDobjectConnect.setBounds(48, 184, 246, 28);
@@ -140,9 +146,9 @@ public class Ihm implements ActionListener{
 		lblGestionDesNouveaux.setBounds(525, 25, 291, 41);
 		frmInterfaceDeGestion.getContentPane().add(lblGestionDesNouveaux);
 		
-		JComboBox listCapteur = new JComboBox();
+		listCapteur = new JComboBox();
 		listCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		listCapteur.setModel(new DefaultComboBoxModel(new String[] {"Capteur de temp\u00E9rature", "Capteur fumer"}));
+		listCapteur.setModel(new DefaultComboBoxModel(new String[] {"Capteur de temp\u00E9rature", "Capteur de fum\u00E9e", "Capteur d'ouverture ", "Capteur d'hygrom\u00E9trie", "Capteur de pr\u00E9sence", "Capteur d'appel ", "Bracelet"}));
 		listCapteur.setBounds(969, 279, 309, 33);
 		frmInterfaceDeGestion.getContentPane().add(listCapteur);
 		
@@ -156,63 +162,36 @@ public class Ihm implements ActionListener{
 			new Object[][] {
 			},
 			new String[] {
-				"Type du capteur", "Zone", "Etage", "Pi\u00E8ce", "Etat"
+				"Identifiant du capteur", "Type du capteur", "Etat"
 			}
 		));
 		tableObjet.setBounds(12, 225, 727, 413);
 		frmInterfaceDeGestion.getContentPane().add(tableObjet);
 		
-		JLabel lblemplacement = new JLabel("*Choix de la zone : ");
-		lblemplacement.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblemplacement.setBounds(800, 339, 169, 33);
-		frmInterfaceDeGestion.getContentPane().add(lblemplacement);
-		
-		JComboBox listeZone = new JComboBox();
-		listeZone.setModel(new DefaultComboBoxModel(new String[] {"Zone 1", "Zone 2", "Zone 3"}));
-		listeZone.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		listeZone.setBounds(969, 339, 309, 33);
-		frmInterfaceDeGestion.getContentPane().add(listeZone);
-		
-		JLabel lblchoix = new JLabel("*Choix de l'\u00E9tage :\r\n");
-		lblchoix.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblchoix.setBounds(800, 396, 169, 33);
-		frmInterfaceDeGestion.getContentPane().add(lblchoix);
-		
-		JComboBox listeEtage = new JComboBox();
-		listeEtage.setModel(new DefaultComboBoxModel(new String[] {"Rez de chauss\u00E9 ", "Premi\u00E8re \u00E9tage"}));
-		listeEtage.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		listeEtage.setBounds(969, 401, 309, 33);
-		frmInterfaceDeGestion.getContentPane().add(listeEtage);
-		
-		JLabel lblchoixDeLa = new JLabel("*Choix de la pi\u00E8ce :");
-		lblchoixDeLa.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblchoixDeLa.setBounds(800, 463, 169, 33);
-		frmInterfaceDeGestion.getContentPane().add(lblchoixDeLa);
-		
-		JComboBox listPiece = new JComboBox();
-		listPiece.setModel(new DefaultComboBoxModel(new String[] {"Couloir ", "Salon", "hall", "Terrasse", "Toilette"}));
-		listPiece.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		listPiece.setBounds(969, 463, 309, 33);
-		frmInterfaceDeGestion.getContentPane().add(listPiece);
-		
 		JButton btnAjouter = new JButton("Ajouter");
 		btnAjouter.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		btnAjouter.setBounds(924, 553, 162, 41);
+		btnAjouter.setBounds(970, 438, 162, 41);
 		frmInterfaceDeGestion.getContentPane().add(btnAjouter);
 		frmInterfaceDeGestion.repaint();
 		frmInterfaceDeGestion.setVisible(true);
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		if(!(identifiantTxt.getText().equals(identifiantTest)) || !(String.valueOf(passwordField.getPassword()).equals(passwordTest))) {
-			failConnexion();
+	public void actionPerformed(ActionEvent event) {
+
+		if(event.getSource().equals(ValiderButton)) {
+			if(!(identifiantTxt.getText().equals(identifiantTest)) || !(String.valueOf(passwordField.getPassword()).equals(passwordTest))) {
+				failConnexion();
+			}
+			else
+			{
+				gestionObjet();
+			}
 		}
-		else
-		{
-			gestionObjet();
-		}
 		
+		if(event.getSource().equals(btnAjouter)) {
+			
+		}
+
 	}
 }
