@@ -1,4 +1,4 @@
-package testObject;
+package testobject;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import connectionPool.DataConfig;
+import connectionpool.DataConfig;
 
 public class DataSourceTest {
 

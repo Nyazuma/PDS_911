@@ -1,4 +1,4 @@
-package connectionPool;
+package connectionpool;
 
 public class DataSource {
 

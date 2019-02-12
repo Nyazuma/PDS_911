@@ -1,4 +1,4 @@
-package interfaceGestion;
+package interfacegestion;
 
 
 import static org.junit.Assert.assertEquals;
@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import connectionPool.DataConfig;
-import connectionPool.JDBCConnectionPool;
+import connectionpool.DataConfig;
+import connectionpool.JDBCConnectionPool;
 
 public class Controller {
 

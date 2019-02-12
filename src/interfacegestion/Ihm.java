@@ -1,4 +1,4 @@
-package interfaceGestion;
+package interfacegestion;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -16,8 +16,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import connectionPool.DataConfig;
-import connectionPool.JDBCConnectionPool;
+import connectionpool.DataConfig;
+import connectionpool.JDBCConnectionPool;
 
 
 public class Ihm implements ActionListener{

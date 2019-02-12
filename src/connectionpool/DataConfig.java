@@ -1,4 +1,4 @@
-package connectionPool;
+package connectionpool;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

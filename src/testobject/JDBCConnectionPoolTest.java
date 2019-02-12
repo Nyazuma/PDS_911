@@ -1,4 +1,4 @@
-package testObject;
+package testobject;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -12,8 +12,8 @@ import java.sql.Statement;
 import org.junit.Before;
 import org.junit.Test;
 
-import connectionPool.DataConfig;
-import connectionPool.JDBCConnectionPool;
+import connectionpool.DataConfig;
+import connectionpool.JDBCConnectionPool;
 
 public class JDBCConnectionPoolTest {
 
