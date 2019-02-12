@@ -34,27 +34,25 @@ public class Controller {
 	 */
 	public boolean connection(String identifiant, String password) {
 
-		String requete = "Select count(*) from Personel where identifiant=" + identifiant; 
-		String requete2 = "Select count(*) from Personel where identifiant=" + identifiant + "and password = " + password; 
+		String requete = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "'"; 
+		String requete2 = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
 
 		System.out.println("Connection - Controller");
 
-		DataConfig.getInstanceConfig();
-		poolConnection = new JDBCConnectionPool();
-		assertEquals(Integer.parseInt(DataConfig.getPROPERTY_NB_CONNEXION()), poolConnection.statusConnection());
 		Connection co1 = null;
 		try {
 			co1 = poolConnection.getConnection();
 			Statement statement = co1.createStatement();
 			ResultSet resultat = statement.executeQuery(requete);
 			resultat.next(); 
-			if(resultat.getInt(0) == 1) {
+			if(resultat.getInt(1) == 1) {
 				Statement statement2 = co1.createStatement(); 
 				ResultSet resultat2 = statement2.executeQuery(requete2); 
 				resultat2.next(); 
-				if (resultat2.getInt(0)==1) {
+				System.out.println("debug : " + resultat2.getInt(1));
+				if (resultat2.getInt(1)==1) {
 					poolConnection.closeConnection(co1);
-					System.out.println("Conection SUCCED");
+					System.out.println("Connection SUCCEED");
 					return true; 
 				}
 				else {
@@ -73,6 +71,7 @@ public class Controller {
 		}catch (SQLException e) {
 			poolConnection.closeConnection(co1);
 			System.out.println("Connection FAILED - SQL EXCEPTION");
+			e.printStackTrace();
 			return false; 
 		}
 	}
@@ -83,8 +82,7 @@ public class Controller {
 	 * @return
 	 */
 	public int nbObject() {
-		String requete = "Select count(*) from Capteurs"; 
-		int nbObject = 0; 
+		String requete = "Select count(*) from Capteurs";  
 		
 		DataConfig.getInstanceConfig();
 		poolConnection = new JDBCConnectionPool();
@@ -95,12 +93,9 @@ public class Controller {
 			Statement statement = co1.createStatement();
 			ResultSet resultat = statement.executeQuery(requete);
 			resultat.next(); 
-			while(!resultat.isLast()) {
-				nbObject++; 
-				resultat.next(); 
-			}
-			System.out.println("nbObject SUCCED");
-			return nbObject; 
+			System.out.println("nbObject SUCCEED");
+			poolConnection.closeConnection(co1);
+			return resultat.getInt(1); 
 			
 		}catch (SQLException e) {
 			poolConnection.closeConnection(co1);
@@ -116,7 +111,7 @@ public class Controller {
 	 * @return
 	 */
 	public boolean addObject(String typeCapteur) {
-		String requete = "INSERT INTO table (Type_Capteur, Etat_Capteur) VALUES ('"+ typeCapteur +"', '1')"; 
+		String requete = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement) VALUES ('"+ typeCapteur +"', 1, 1)"; 
 		
 		DataConfig.getInstanceConfig();
 		poolConnection = new JDBCConnectionPool();
@@ -132,6 +127,8 @@ public class Controller {
 		}catch (SQLException e) {
 			poolConnection.closeConnection(co1);
 			System.out.println("addObject FAILED - SQL EXCEPTION");
+			System.out.println(requete);
+			e.printStackTrace();
 			return false; 
 		}
 	}

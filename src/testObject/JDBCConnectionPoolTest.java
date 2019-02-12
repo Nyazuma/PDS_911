@@ -48,7 +48,7 @@ public class JDBCConnectionPoolTest {
 		// Test requete
 		try {
 			Statement statement = co1.createStatement();
-			statement.executeUpdate("INSERT INTO test(id, nom) VALUES (1, 'Jean-Paul')");
+			statement.executeUpdate("INSERT INTO test(id, nom, MotDePasse) VALUES (1, 'Jean-Paul', 'toto')");
 			ResultSet resultat = statement.executeQuery( "SELECT nom  FROM test WHERE id=1");
 			resultat.next();
 			assertEquals(resultat.getString("nom"), "Jean-Paul");

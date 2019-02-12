@@ -16,30 +16,35 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import connectionPool.DataConfig;
+import connectionPool.JDBCConnectionPool;
+
 
 public class Ihm implements ActionListener{
+
+	private JFrame frmInterfaceDeGestion;
 	/**
 	 * ACTION PERFORMED ELEMENTS - INITIALIZE
 	 */
-	private JFrame frmInterfaceDeGestion;
 	private JTextField identifiantTxt;
 	private JPasswordField passwordField;
 	private JTable tableObjet;
 	private JButton ValiderButton; 
 
-	private String identifiantTest = "toto"; 
-	private String passwordTest = "toto"; 
+	private Controller control;
 
 	/**
 	 * ACTION PERFORMED ELEMENTS - GESTION OBJECT
 	 */
 	private JButton btnAjouter; 
 	private JComboBox<?> listCapteur;
+	private JLabel lblNewLabel; 
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		DataConfig.getInstanceConfig();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -57,6 +62,7 @@ public class Ihm implements ActionListener{
 	 */
 	public Ihm() {
 		initialize();
+		control = new Controller(new JDBCConnectionPool());
 	}
 
 	/**
@@ -136,7 +142,7 @@ public class Ihm implements ActionListener{
 		lblAjouterUnObjet.setBounds(843, 219, 236, 16);
 		frmInterfaceDeGestion.getContentPane().add(lblAjouterUnObjet);
 		
-		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel = new JLabel("");
 		lblNewLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblNewLabel.setBounds(317, 184, 64, 28);
 		frmInterfaceDeGestion.getContentPane().add(lblNewLabel);
@@ -148,7 +154,7 @@ public class Ihm implements ActionListener{
 		
 		listCapteur = new JComboBox();
 		listCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		listCapteur.setModel(new DefaultComboBoxModel(new String[] {"Capteur de temp\u00E9rature", "Capteur de fum\u00E9e", "Capteur d'ouverture ", "Capteur d'hygrom\u00E9trie", "Capteur de pr\u00E9sence", "Capteur d'appel ", "Bracelet"}));
+		listCapteur.setModel(new DefaultComboBoxModel(new String[] {"Capteur de temp\u00E9rature", "Capteur de fum\u00E9e", "Capteur ouverture ", "Capteur hygrom\u00E9trique", "Capteur de pr\u00E9sence", "Capteur appel ", "Bracelet"}));
 		listCapteur.setBounds(969, 279, 309, 33);
 		frmInterfaceDeGestion.getContentPane().add(listCapteur);
 		
@@ -171,6 +177,7 @@ public class Ihm implements ActionListener{
 		JButton btnAjouter = new JButton("Ajouter");
 		btnAjouter.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		btnAjouter.setBounds(970, 438, 162, 41);
+		btnAjouter.addActionListener(this);
 		frmInterfaceDeGestion.getContentPane().add(btnAjouter);
 		frmInterfaceDeGestion.repaint();
 		frmInterfaceDeGestion.setVisible(true);
@@ -179,21 +186,20 @@ public class Ihm implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event) {
 
-//		if(event.getSource().equals(ValiderButton)) {
-//			if(!(identifiantTxt.getText().equals(identifiantTest)) || !(String.valueOf(passwordField.getPassword()).equals(passwordTest))) {
-//				failConnexion();
-//			}
-//			else
-//			{
-//				gestionObjet();
-//			}
-//		}
-		
+		System.out.println("Hello from the other side1 " + event.getSource());
 		if(event.getSource().equals(ValiderButton)) {
-			//identifiantTxt.get
+			if(!(control.connection(identifiantTxt.getText(), String.valueOf(passwordField.getPassword())))) {
+				failConnexion();
+			}
+			else
+			{
+				gestionObjet();
+				lblNewLabel.setText(Integer.toString(control.nbObject())); 
+			}
 		}
-		
-		if(event.getSource().equals(btnAjouter)) {
+		else {
+			control.addObject(listCapteur.getSelectedItem().toString());
+			lblNewLabel.setText(Integer.toString(control.nbObject())); 
 			
 		}
 
