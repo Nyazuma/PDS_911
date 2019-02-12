@@ -179,14 +179,18 @@ public class Ihm implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event) {
 
+//		if(event.getSource().equals(ValiderButton)) {
+//			if(!(identifiantTxt.getText().equals(identifiantTest)) || !(String.valueOf(passwordField.getPassword()).equals(passwordTest))) {
+//				failConnexion();
+//			}
+//			else
+//			{
+//				gestionObjet();
+//			}
+//		}
+		
 		if(event.getSource().equals(ValiderButton)) {
-			if(!(identifiantTxt.getText().equals(identifiantTest)) || !(String.valueOf(passwordField.getPassword()).equals(passwordTest))) {
-				failConnexion();
-			}
-			else
-			{
-				gestionObjet();
-			}
+			//identifiantTxt.get
 		}
 		
 		if(event.getSource().equals(btnAjouter)) {
