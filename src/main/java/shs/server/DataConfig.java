@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 public class DataConfig {
 
 	
-	private static final String FICHIER_CONFIGURATION = "configuration"; 
+	private static final String PROPERTIES_FILE = "configuration"; 
 	private static Logger logger = Logger.getLogger(DataConfig.class); 
 	private static  String PROPERTY_URL; 
 	private static  String PROPERTY_DB; 
@@ -29,15 +29,15 @@ public class DataConfig {
 		Properties properties = new Properties();
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream fichierConfiguration = classLoader.getResourceAsStream(FICHIER_CONFIGURATION);
+		InputStream fichierConfiguration = classLoader.getResourceAsStream(PROPERTIES_FILE);
 		
 		if (fichierConfiguration == null) {
 			
-			logger.info("Le fichier configuration " + FICHIER_CONFIGURATION + " est introuvable." );
+			logger.info("Le fichier configuration " + PROPERTIES_FILE + " est introuvable." );
 		}
 
 		try {
-			logger.info("R�cup�ration des instances du fichier de configuration");
+			logger.info("Properties file loading");
 			properties.load(fichierConfiguration);
 			PROPERTY_URL = properties.getProperty("PROPERTY_URL");
 			PROPERTY_DB = properties.getProperty("PROPERTY_DB");
@@ -51,10 +51,10 @@ public class DataConfig {
 			
 
 		} catch ( FileNotFoundException e ) {
-			logger.info( "Le fichier de configuration " + FICHIER_CONFIGURATION + " est introuvable.");
+			logger.info( "The properties file " + PROPERTIES_FILE + " wasn't found.");
 		} catch ( IOException e ) {
 			
-			logger.info( "Impossible de charger le fichier de configuration " + FICHIER_CONFIGURATION, e );
+			logger.info( "Impossible to load the properties file " + PROPERTIES_FILE, e );
 		}
 
 	}

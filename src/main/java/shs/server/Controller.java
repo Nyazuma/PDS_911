@@ -6,8 +6,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.sun.istack.internal.logging.Logger;
+
 public class Controller {
-	
+
+
+	private static Logger logger = Logger.getLogger(DataConfig.class); 
+	/***
+	 *  Initialize poolConnection Object
+	 */
+	private JDBCConnectionPool poolConnection;
+
+	/**
+	 * Constructor
+	 */
+	public Controller(JDBCConnectionPool poolConnection) {
+		this.poolConnection = poolConnection;
+	}
+
 	/**
 	 * Check connection. 
 	 * 
@@ -15,84 +31,81 @@ public class Controller {
 	 * @param password
 	 * @return
 	 */
-	public boolean connection(Connection connection, String identifiant, String password) {
+	public boolean connection(String identifiant, String password) {
 
-		String requete = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "'"; 
-		String requete2 = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
+		String request = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
 
-		System.out.println("Connection - Controller");
+		logger.info("Connection - Controller");
 
+		Connection connection = poolConnection.getConnection();
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet resultat = statement.executeQuery(requete);
+			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
-			if(resultat.getInt(1) == 1) {
-				Statement statement2 = connection.createStatement(); 
-				ResultSet resultat2 = statement2.executeQuery(requete2); 
-				resultat2.next(); 
-				System.out.println("debug : " + resultat2.getInt(1));
-				if (resultat2.getInt(1)==1) {
-					System.out.println("Connection SUCCEED");
-					return true; 
-				}
-				else {
-					System.out.println("Connection FAILED");
-					return false; 
-				}
+			if (resultat.getInt(1)==1) {
+				logger.info("Connection SUCCEED");
+				poolConnection.closeConnection(connection);
+				return true; 
 			}
 			else {
-				System.out.println("Connection FAILED");
+				logger.info("Connection FAILED");
+				poolConnection.closeConnection(connection);
 				return false; 
 			}
-
-
 		}catch (SQLException e) {
-			System.out.println("Connection FAILED - SQL EXCEPTION");
+			logger.info("Connection FAILED - SQL EXCEPTION");
 			e.printStackTrace();
+			poolConnection.closeConnection(connection);
 			return false; 
 		}
 	}
-	
+
 	/**
 	 * Return the object number associate to the account.
 	 * 
 	 * @return
 	 */
-	public int nbObject(Connection connection) {
-		String requete = "Select count(*) from Capteurs";  
+	public int nbObject() {
+		String request = "Select count(*) from Capteurs";  
 		
+		Connection connection = poolConnection.getConnection();
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet resultat = statement.executeQuery(requete);
+			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
-			System.out.println("nbObject SUCCEED");
+			logger.info("nbObject SUCCEED");
+			poolConnection.closeConnection(connection);
 			return resultat.getInt(1); 
-			
+
 		}catch (SQLException e) {
-			System.out.println("nbObject FAILED - SQL EXCEPTION");
+			logger.info("nbObject FAILED - SQL EXCEPTION");
+			poolConnection.closeConnection(connection);
 			return 0; 
 		}
 	}
-	
+
 	/**
 	 * Add an object to the base.
 	 * 
 	 * @param typeCapteur
 	 * @return
 	 */
-	public boolean addObject(Connection connection, String typeCapteur) {
-		String requete = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement) VALUES ('"+ typeCapteur +"', 1, 1)"; 
-		
+	public boolean addObject(String typeCapteur) {
+		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement) VALUES ('"+ typeCapteur +"', 1, 1)"; 
+
+		//TODO see the 31 entity limit
+		Connection connection = poolConnection.getConnection();
 		try {
 			Statement statement = connection.createStatement();
-			statement.executeUpdate(requete);
-			System.out.println("addObject SUCCED");
+			statement.executeUpdate(request);
+			logger.info("addObject SUCCEED");
+			poolConnection.closeConnection(connection);
 			return true; 
-			
+
 		}catch (SQLException e) {
-			System.out.println("addObject FAILED - SQL EXCEPTION");
-			System.out.println(requete);
+			logger.info("addObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
+			poolConnection.closeConnection(connection);
 			return false; 
 		}
 	}

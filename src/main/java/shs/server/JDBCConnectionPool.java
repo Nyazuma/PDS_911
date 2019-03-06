@@ -44,6 +44,7 @@ public class JDBCConnectionPool {
 	}
 
 	public Connection getConnection() {
+		//TODO launch a thread to add more connection ? See the synchronization problem
 		Connection availableConnection = listConnections.get(0);
 		listConnections.remove(availableConnection);
 		return availableConnection;

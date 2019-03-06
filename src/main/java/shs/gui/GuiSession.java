@@ -10,27 +10,25 @@ public class GuiSession {
 	// TEMPORARY
 	// TODO : Generate a JSON to send to the Controller instead of using a Controller object. Each of this function should be adapted
 	// It should also contains the operator identificator
-	private Connection connection;
-	Controller controller;
+	private Controller controller;
 	
 	
 	public GuiSession() {
 		// Get a dedicated connection from the pool to the object
 		JDBCConnectionPool pool = new JDBCConnectionPool();
-		connection = pool.getConnection();
-		controller = new Controller();
+		controller = new Controller(pool);
 	}
 	
 	public boolean connection(String identifiant, String password) {
-		return controller.connection(connection, identifiant, password);
+		return controller.connection(identifiant, password);
 	}
 
 	public int nbObject() {
-		return controller.nbObject(connection);
+		return controller.nbObject();
 	}
 	
 	public boolean addObject(String typeCapteur) {
-		return controller.addObject(connection, typeCapteur);
+		return controller.addObject(typeCapteur);
 	}
 
 }

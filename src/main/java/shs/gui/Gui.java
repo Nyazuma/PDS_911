@@ -35,7 +35,7 @@ public class Gui implements ActionListener{
 	private GuiSession gisSession;
 
 	/**
-	 * ACTION PERFORMED ELEMENTS - GESTION OBJECT
+	 * ACTION PERFORMED ELEMENTS - object management
 	 */
 	private JButton btnAjouter; 
 	private JComboBox<?> listCapteur;
@@ -193,6 +193,7 @@ public class Gui implements ActionListener{
 			}
 			else
 			{
+				// TODO the else with a getSource()
 				gestionObjet();
 				lblNewLabel.setText(Integer.toString(gisSession.nbObject())); 
 			}
