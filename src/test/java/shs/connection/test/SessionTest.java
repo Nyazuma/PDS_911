@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import shs.gui.GuiSession;
+import shs.gui.GuiController;
 import shs.server.DataConfig;
 import shs.server.JDBCConnectionPool;
 
@@ -16,7 +16,7 @@ public class SessionTest {
 		DataConfig.getInstanceConfig();
 		JDBCConnectionPool poolConnection = new JDBCConnectionPool();		
 		assertEquals(Integer.parseInt(DataConfig.getPROPERTY_NB_CONNEXION()), poolConnection.statusConnection());
-		GuiSession session = new GuiSession();
+		GuiController session = new GuiController();
 		assertTrue(session.connection("Justin911", "911"));
 		int nombre = session.nbObject();
 		assertTrue(session.addObject("Capteur Ouverture"));
