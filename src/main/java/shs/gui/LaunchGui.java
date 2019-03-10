@@ -15,6 +15,7 @@ public class LaunchGui {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					@SuppressWarnings("unused")
 					GuiController controller = new GuiController();
 				} catch (Exception e) {
 					e.printStackTrace();

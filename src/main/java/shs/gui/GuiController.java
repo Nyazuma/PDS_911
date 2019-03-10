@@ -1,7 +1,5 @@
 package shs.gui;
 
-import javax.swing.JFrame;
-
 import shs.server.Controller;
 import shs.server.JDBCConnectionPool;
 

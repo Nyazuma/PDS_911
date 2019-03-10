@@ -19,16 +19,19 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	private GuiController controller;
 
-	// TODO change to english variable
-	protected JTable tableObjet;
-	protected JButton btnAjouter; 
-	protected JComboBox<?> listCapteur;
-	protected JLabel lblNewLabel; 
-	protected JLabel lblGestionDesNouveaux;
-	protected JLabel lblNombreDobjectConnect;
-	protected JLabel lblAjouterUnObjet;
-	protected JLabel lbltypeDuCapteur;
+	protected JTable objectTable;
+	protected JLabel addTitleLabel;
+	protected JButton addButton; 
+	protected JComboBox<?> detectorList;
+	protected JLabel objectNumberTitleLabel;
+	protected JLabel objectNumberLabel; 
+	protected JLabel manageObjectLabel;
+	protected JLabel detectorTypeTitleLabel;
 
+	
+	/**
+	 * Initialize the contents of the frame.
+	 */
 	public ObjectGestion(GuiController controller) {
 		
 		this.controller = controller;
@@ -37,61 +40,61 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
 		setLayout(null);
 
-		lblNombreDobjectConnect = new JLabel("Nombre d'objects connect\u00E9s : ");
-		lblNombreDobjectConnect.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblNombreDobjectConnect.setBounds(48, 184, 246, 28);
-		this.add(lblNombreDobjectConnect);
+		objectNumberTitleLabel = new JLabel("Nombre d'objects connect\u00E9s : ");
+		objectNumberTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectNumberTitleLabel.setBounds(48, 184, 246, 28);
+		this.add(objectNumberTitleLabel);
 
-		lblAjouterUnObjet = new JLabel("Ajouter un nouvel objet :");
-		lblAjouterUnObjet.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblAjouterUnObjet.setBounds(843, 219, 236, 16);
-		this.add(lblAjouterUnObjet);
+		addTitleLabel = new JLabel("Ajouter un nouvel objet :");
+		addTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		addTitleLabel.setBounds(843, 219, 236, 16);
+		this.add(addTitleLabel);
 
-		lblNewLabel = new JLabel("");
-		lblNewLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblNewLabel.setBounds(317, 184, 64, 28);
-		lblNewLabel.setText(Integer.toString(controller.nbObject())); 
-		this.add(lblNewLabel);
+		objectNumberLabel = new JLabel("");
+		objectNumberLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectNumberLabel.setBounds(317, 184, 64, 28);
+		objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
+		this.add(objectNumberLabel);
 
-		lblGestionDesNouveaux = new JLabel("Gestion des nouveaux objets");
-		lblGestionDesNouveaux.setFont(new Font("Cambria Math", Font.BOLD, 20));
-		lblGestionDesNouveaux.setBounds(525, 25, 291, 41);
-		this.add(lblGestionDesNouveaux);
+		manageObjectLabel = new JLabel("Gestion des nouveaux objets");
+		manageObjectLabel.setFont(new Font("Cambria Math", Font.BOLD, 20));
+		manageObjectLabel.setBounds(525, 25, 291, 41);
+		this.add(manageObjectLabel);
 
-		listCapteur = new JComboBox();
-		listCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		listCapteur.setModel(new DefaultComboBoxModel(new String[] {"Capteur de temp\u00E9rature", "Capteur de fum\u00E9e", "Capteur ouverture ", "Capteur hygrom\u00E9trique", "Capteur de pr\u00E9sence", "Capteur appel ", "Bracelet"}));
-		listCapteur.setBounds(969, 279, 309, 33);
-		this.add(listCapteur);
+		detectorList = new JComboBox();
+		detectorList.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		detectorList.setModel(new DefaultComboBoxModel(new String[] {"Capteur de temp\u00E9rature", "Capteur de fum\u00E9e", "Capteur ouverture ", "Capteur hygrom\u00E9trique", "Capteur de pr\u00E9sence", "Capteur appel ", "Bracelet"}));
+		detectorList.setBounds(969, 279, 309, 33);
+		this.add(detectorList);
 
-		lbltypeDuCapteur = new JLabel("*Type du capteur : ");
-		lbltypeDuCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lbltypeDuCapteur.setBounds(800, 279, 169, 33);
-		this.add(lbltypeDuCapteur);
+		detectorTypeTitleLabel = new JLabel("*Type du capteur : ");
+		detectorTypeTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		detectorTypeTitleLabel.setBounds(800, 279, 169, 33);
+		this.add(detectorTypeTitleLabel);
 
-		tableObjet = new JTable();
-		tableObjet.setModel(new DefaultTableModel(
+		objectTable = new JTable();
+		objectTable.setModel(new DefaultTableModel(
 				new Object[][] {
 				},
 				new String[] {
 						"Identifiant du capteur", "Type du capteur", "Etat"
 				}
 				));
-		tableObjet.setBounds(12, 225, 727, 413);
-		this.add(tableObjet);
+		objectTable.setBounds(12, 225, 727, 413);
+		this.add(objectTable);
 
-		btnAjouter = new JButton("Ajouter");
-		btnAjouter.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		btnAjouter.setBounds(970, 438, 162, 41);
-		btnAjouter.addActionListener(this);
-		this.add(btnAjouter);
+		addButton = new JButton("Ajouter");
+		addButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		addButton.setBounds(970, 438, 162, 41);
+		addButton.addActionListener(this);
+		this.add(addButton);
 	}
 
 	public void actionPerformed(ActionEvent event) {
 
-		if(event.getSource().equals(btnAjouter)){
-			controller.addObject(listCapteur.getSelectedItem().toString());
-			lblNewLabel.setText(Integer.toString(controller.nbObject())); 
+		if(event.getSource().equals(addButton)){
+			controller.addObject(detectorList.getSelectedItem().toString());
+			objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
 		}
 
 	}
