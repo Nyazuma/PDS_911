@@ -18,10 +18,10 @@ public class DataSourceTest {
 		
 		assertEquals("127.0.0.1:3306", DataConfig.getPROPERTY_URL());
 		assertEquals("jdbc:mysql", DataConfig.getPROPERTY_DRIVER()); 
-		assertEquals("911_user", DataConfig.getPROPERTY_NOM_UTILISATEUR());
-		assertEquals("toto", DataConfig.getPROPERTY_MOT_DE_PASSE()); 
-		assertEquals("root", DataConfig.getPROPERTY_NOM_UTILISATEUR_ADMIN()); 
-		assertEquals("root", DataConfig.getPROPERTY_MOT_DE_PASSE_ADMIN());
+		assertEquals("911_user", DataConfig.getPROPERTY_USERNAME());
+		assertEquals("toto", DataConfig.getPROPERTY_PASSWORD()); 
+		assertEquals("root", DataConfig.getPROPERTY_USER_ADMIN()); 
+		assertEquals("root", DataConfig.getPROPERTY_PASSWORD_ADMIN());
 		assertEquals("10", DataConfig.getPROPERTY_NB_CONNEXION());
 	}
 

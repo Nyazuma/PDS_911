@@ -2,19 +2,14 @@ package shs.gui;
 
 import javax.swing.JFrame;
 
-import com.sun.istack.internal.logging.Logger;
-
+import shs.common.Tool;
 import shs.gui.window.Authentication;
 import shs.gui.window.ObjectGestion;
 import shs.gui.window.WindowList;
-import shs.server.DataConfig;
 
 
-public class Gui extends JFrame{
-
-	private static Logger logger = Logger.getLogger(DataConfig.class); 
+public class Gui extends JFrame{ 
 	
-	private WindowList currentScreen;
 	private GuiController controller;
 	
 	/**
@@ -28,6 +23,9 @@ public class Gui extends JFrame{
 		this.setVisible(true);
 	}
 	
+	/**
+	 * Load the precized panel in the JFrame
+	 */
 	public void changeWindow(WindowList newWindow) {
 		switch(newWindow) {
 		case AUTHENTICATION : 
@@ -39,7 +37,7 @@ public class Gui extends JFrame{
 			repaint();
 			break;
 		default :
-			logger.info("#ERROR : Gui > ChangeWindow : Unknow window");
+			Tool.logger.info("#ERROR : Gui > ChangeWindow : Unknow window");
 		}
 	}
 

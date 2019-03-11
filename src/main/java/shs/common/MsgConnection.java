@@ -3,15 +3,17 @@ package shs.common;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Connection {
+public class MsgConnection extends Message {
 
+	
 	private String username;
 	private String password;
 	
 	private Boolean status;
 
 	@JsonCreator
-	public Connection(@JsonProperty("username") String username, @JsonProperty("password") String password) {
+	public MsgConnection(@JsonProperty("username") String username, @JsonProperty("password") String password) {
+		super(MessageType.CONNECTION);
 		this.username = username;
 		this.password = password;
 		this.status = Boolean.FALSE;
@@ -39,6 +41,10 @@ public class Connection {
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+	
+	public MessageType getType() {
+		return type;
 	}
 
 	@Override
