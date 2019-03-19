@@ -31,10 +31,12 @@ public class Gui extends JFrame{
 		case AUTHENTICATION : 
 			this.setContentPane(new Authentication(controller));
 			repaint();
+			setVisible(true);
 			break;
 		case OBJECTGESTION : 
 			this.setContentPane(new ObjectGestion(controller));
 			repaint();
+			setVisible(true);
 			break;
 		default :
 			Tool.logger.info("#ERROR : Gui > ChangeWindow : Unknow window");

@@ -12,8 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import shs.gui.GuiController;
 
@@ -22,6 +22,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	private GuiController controller;
 
 	protected JTable objectTable;
+	protected JScrollPane scrollPane;
 	protected JLabel addTitleLabel;
 	protected JButton addButton; 
 	protected JComboBox<?> detectorList;
@@ -74,37 +75,40 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		detectorTypeTitleLabel.setBounds(800, 279, 169, 33);
 		this.add(detectorTypeTitleLabel);
 
-
-		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur"}; 
+		gestionListObject();
+		this.add(scrollPane, BorderLayout.CENTER);
+		
+		addButton = new JButton("Ajouter");
+		addButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		addButton.setBounds(970, 438, 162, 41);
+		addButton.addActionListener(this);
+		this.add(addButton);
+	}
+	
+	
+	public void gestionListObject() {
+		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Emplacement"}; 
 		List<List<String>> listObject = controller.listObjet();
-		for (int i = 0; i<listObject.size(); i++) {
-			System.out.println(i);
-		}
 		Integer x = listObject.size();
 		Integer y;
-		if(x<=0) { 
+		if(x>0) { 
 			// If the result is not empty, we could fill our table
 			y = listObject.get(0).size();
 			Object[][] data = new Object[x][y]; 
 			Integer i =0;
 			Integer j = 0;
+			System.out.println("Affichage de la liste :");
 			for(List<String> line : listObject) {
 				for(String column : line) {
 					data[i][j]=column;
+					System.out.print(column + " ");
 					j++;
 				}
+				System.out.println("");
+				j=0;
 				i++;
 			}
 
-			while(!listObject.isEmpty()) {
-				List<String> tamponList = listObject.get(1); 
-				while(!tamponList.isEmpty()) {
-
-
-					tamponList.remove(0); 
-				}
-				listObject.remove(0); 
-			}
 			objectTable = new JTable(data, header);
 		}
 		else {
@@ -112,16 +116,8 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			objectTable = new JTable();
 		}
 				
-		objectTable.setBounds(12, 225, 727, 413);
-
-		this.add(objectTable.getTableHeader(), BorderLayout.NORTH);
-		this.add(objectTable, BorderLayout.CENTER); 
-
-		addButton = new JButton("Ajouter");
-		addButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		addButton.setBounds(970, 438, 162, 41);
-		addButton.addActionListener(this);
-		this.add(addButton);
+		scrollPane = new JScrollPane(objectTable);
+		scrollPane.setBounds(12, 225, 727, 413);
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -129,6 +125,9 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		if(event.getSource().equals(addButton)){
 			controller.addObject(detectorList.getSelectedItem().toString());
 			objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
+			gestionListObject();
+			controller.getGui().revalidate();
+			controller.getGui().repaint();
 		}
 
 	}
