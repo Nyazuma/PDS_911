@@ -19,7 +19,7 @@ public class ServerLaunch {
 		DataConfig.getInstanceConfig();
 		Socket socket = null;
 		final ServerSocket serverSocket = new ServerSocket(PORT);
-		JDBCConnectionPool connectionPool = new JDBCConnectionPool();
+		final JDBCConnectionPool connectionPool = new JDBCConnectionPool();
 		
 		// Define the closing process of the server application (by closing the port and avoiding any blocked port issue at the next launch)
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -28,7 +28,7 @@ public class ServerLaunch {
 					Tool.logger.info("ServerLaunch : closing " + PORT);
 					serverSocket.close();
 				} catch (IOException e) {
-					Tool.logger.info("#Erreur ServerLaunch : An error occurs during the closing port process");
+					Tool.logger.info("#Error ServerLaunch : An error occurs during the closing port process");
 				}
 			}
 			}));
@@ -41,6 +41,7 @@ public class ServerLaunch {
 				socket = serverSocket.accept();
 				System.out.println("SHS Server : a new connection was initialized!");
 				// We open a new Thread to serve the request
+				
 				Controller controller = new Controller(connectionPool);
 				new ServerService(socket, controller).start();
 			} catch (IOException e) {

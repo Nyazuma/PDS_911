@@ -77,15 +77,15 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 		gestionListObject();
 		this.add(scrollPane, BorderLayout.CENTER);
-		
+
 		addButton = new JButton("Ajouter");
 		addButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		addButton.setBounds(970, 438, 162, 41);
 		addButton.addActionListener(this);
 		this.add(addButton);
 	}
-	
-	
+
+
 	public void gestionListObject() {
 		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Emplacement"}; 
 		List<List<String>> listObject = controller.listObjet();
@@ -95,29 +95,43 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			// If the result is not empty, we could fill our table
 			y = listObject.get(0).size();
 			Object[][] data = new Object[x][y]; 
-			Integer i =0;
+			Integer i = 0;
 			Integer j = 0;
-			System.out.println("Affichage de la liste :");
 			for(List<String> line : listObject) {
 				for(String column : line) {
+					// TODO Select should be adapted to get the real information
 					data[i][j]=column;
-					System.out.print(column + " ");
+					if(j==2) {
+						if(column.equals("1")) 
+							data[i][2] = "enable"; 
+						else 
+							data[i][2] = "disable"; 
+					}
+					if(j==3) {
+						System.out.println("'" + column + "'" );
+						if (column.equals("1"))
+							data[i][3] = "Zone couloir";
+					}
 					j++;
 				}
-				System.out.println("");
 				j=0;
 				i++;
 			}
 
 			objectTable = new JTable(data, header);
+			//Hide ID column
+			objectTable.getColumnModel().getColumn(0).setMinWidth(0);
+			objectTable.getColumnModel().getColumn(0).setMaxWidth(0);
 		}
 		else {
 			// if the result is empty, the table will be empty
 			objectTable = new JTable();
 		}
-				
+
+
 		scrollPane = new JScrollPane(objectTable);
 		scrollPane.setBounds(12, 225, 727, 413);
+
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -125,7 +139,9 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		if(event.getSource().equals(addButton)){
 			controller.addObject(detectorList.getSelectedItem().toString());
 			objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
+			this.remove(scrollPane);
 			gestionListObject();
+			this.add(scrollPane, BorderLayout.CENTER);
 			controller.getGui().revalidate();
 			controller.getGui().repaint();
 		}
