@@ -31,7 +31,7 @@ public class GuiController {
 		try {
 			String answer = contactServer(output);
 		}
-		catch (ConnectException e) {
+		catch (Throwable e) {
 			return false;
 		}
 
