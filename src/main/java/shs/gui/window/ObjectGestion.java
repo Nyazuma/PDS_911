@@ -77,6 +77,9 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur"}; 
 		List<List<String>> listObject = controller.listObjet();
+		for (int i = 0; i<listObject.size(); i++) {
+			System.out.println(i);
+		}
 		Integer x = listObject.size();
 		Integer y;
 		if(x<=0) { 
