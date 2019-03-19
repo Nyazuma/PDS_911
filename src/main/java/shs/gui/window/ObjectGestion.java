@@ -77,7 +77,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 				new Object[][] {
 				},
 				new String[] {
-						"Identifiant du capteur", "Type du capteur", "Etat"
+						"ID du Capteur", "Type du capteur", "Etat du capteur", "Id de l'emplacement"
 				}
 				));
 		objectTable.setBounds(12, 225, 727, 413);

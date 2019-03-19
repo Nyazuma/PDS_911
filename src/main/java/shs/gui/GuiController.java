@@ -7,6 +7,7 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import shs.common.Message;
 import shs.common.MessageType;
@@ -14,6 +15,7 @@ import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
 import shs.common.MsgIntResult;
+import shs.common.MsgListObject;
 import shs.common.Tool;
 
 public class GuiController {
@@ -24,7 +26,7 @@ public class GuiController {
 	public GuiController() {
 		this.gui=new Gui(this);
 	}
-	
+
 	public boolean ping() {
 		Message ping = new Message(MessageType.PING);
 		String output = Tool.messageToJSON(ping);
@@ -43,7 +45,7 @@ public class GuiController {
 		String output = Tool.messageToJSON(connection);
 		String answer;
 		try {
-			 answer = contactServer(output);
+			answer = contactServer(output);
 		}
 		catch (ConnectException e) {
 			return false;
@@ -77,7 +79,7 @@ public class GuiController {
 		String output = Tool.messageToJSON(addObject);
 		String answer;
 		try {
-		answer = contactServer(output);
+			answer = contactServer(output);
 		}
 		catch (ConnectException e) {
 			return false;
@@ -89,13 +91,29 @@ public class GuiController {
 		return false;
 	}
 
+	public List<List<String>> listObjet() {
+		Message listObject = new Message(MessageType.LISTOBJECT);
+		String output = Tool.messageToJSON(listObject);
+		String answer; 
+		try { 
+			answer = contactServer(output);
+		}
+		catch (ConnectException e) {
+			return null;
+		}
+		if(answer!= null) {
+			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer);
+			return result.getListObject();
+		}
+		return null;
+	}
 
 
 	// TODO Work in progress, is it the right place?
 	private String contactServer(String request) throws ConnectException {
 
 		final int port = 2001;
-		
+
 		// Get the local address
 		InetAddress address = null;
 		try {
@@ -108,7 +126,7 @@ public class GuiController {
 		DataOutputStream requestServer=null;
 		DataInputStream rawAnswerServer=null;
 		String answerServer = "";
-		
+
 		try {
 			socket=new Socket(address, port);
 			// We send the request
@@ -133,7 +151,7 @@ public class GuiController {
 		return answerServer;
 	}
 
-	
+
 	/**
 	 * Getter of the Gui
 	 */

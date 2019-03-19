@@ -7,5 +7,5 @@ public enum MessageType {
 	// Request from the GUI with a specific class
 	CONNECTION, ADDOBJECT,
 	// Request from the GUI without a specific class
-	NUMBEROBJECT, PING
+	NUMBEROBJECT, PING,  LISTOBJECT
 }
