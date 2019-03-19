@@ -18,13 +18,19 @@ public class Controller {
 	/***
 	 *  Initialize poolConnection Object
 	 */
-	private JDBCConnectionPool poolConnection;
+	private JDBCConnectionPool connectionPool;
+	private Connection connection;
 
 	/**
 	 * Constructor
 	 */
-	public Controller(JDBCConnectionPool poolConnection) {
-		this.poolConnection = poolConnection;
+	public Controller(JDBCConnectionPool connectionPool) {
+		this.connectionPool = connectionPool;
+		this.connection = connectionPool.getConnection();
+	}
+	
+	public void closeController() {
+		connectionPool.closeConnection(connection);
 	}
 
 	public String treatmentRequest(String request) {
@@ -63,25 +69,24 @@ public class Controller {
 
 		Tool.logger.info("Connection - Controller");
 
-		Connection connection = poolConnection.getConnection();
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
 			if (resultat.getInt(1)==1) {
 				Tool.logger.info("Connection SUCCEED");
-				poolConnection.closeConnection(connection);
+				
 				return true; 
 			}
 			else {
 				Tool.logger.info("Connection FAILED");
-				poolConnection.closeConnection(connection);
+				
 				return false; 
 			}
 		}catch (SQLException e) {
 			Tool.logger.info("Connection FAILED - SQL EXCEPTION");
 			e.printStackTrace();
-			poolConnection.closeConnection(connection);
+			
 			return false; 
 		}
 	}
@@ -94,18 +99,18 @@ public class Controller {
 	public int nbObject() {
 		String request = "Select count(*) from Capteurs";  
 
-		Connection connection = poolConnection.getConnection();
+		
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
 			Tool.logger.info("nbObject SUCCEED");
-			poolConnection.closeConnection(connection);
+			
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
 			Tool.logger.info("nbObject FAILED - SQL EXCEPTION");
-			poolConnection.closeConnection(connection);
+			
 			return 0; 
 		}
 	}
@@ -119,18 +124,17 @@ public class Controller {
 	public boolean addObject(String typeCapteur) {
 		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement) VALUES ('"+ typeCapteur +"', 1, 1)"; 
 
-		Connection connection = poolConnection.getConnection();
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(request);
 			Tool.logger.info("addObject SUCCEED");
-			poolConnection.closeConnection(connection);
+			
 			return true; 
 
 		}catch (SQLException e) {
 			Tool.logger.info("addObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
-			poolConnection.closeConnection(connection);
+			
 			return false; 
 		}
 	}

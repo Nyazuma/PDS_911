@@ -35,6 +35,7 @@ public class ServerService extends Thread{
 		// The end, we close the socket
 		try {
 			socket.close();
+			controller.closeController();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

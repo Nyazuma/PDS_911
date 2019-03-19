@@ -3,6 +3,7 @@ package shs.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
 
 import shs.common.Tool;
 
@@ -18,7 +19,7 @@ public class ServerLaunch {
 		DataConfig.getInstanceConfig();
 		Socket socket = null;
 		final ServerSocket serverSocket = new ServerSocket(PORT);
-		Controller controller = new Controller(new JDBCConnectionPool());
+		JDBCConnectionPool connectionPool = new JDBCConnectionPool();
 		
 		// Define the closing process of the server application (by closing the port and avoiding any blocked port issue at the next launch)
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -40,6 +41,7 @@ public class ServerLaunch {
 				socket = serverSocket.accept();
 				System.out.println("SHS Server : a new connection was initialized!");
 				// We open a new Thread to serve the request
+				Controller controller = new Controller(connectionPool);
 				new ServerService(socket, controller).start();
 			} catch (IOException e) {
 				Tool.logger.info("#Erreur : ServerLaunch > I/O error: " + e);
