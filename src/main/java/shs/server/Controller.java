@@ -3,14 +3,18 @@ package shs.server;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import shs.common.Message;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
 import shs.common.MsgIntResult;
+import shs.common.MsgListObject;
 import shs.common.Tool;
 
 public class Controller {
@@ -37,6 +41,7 @@ public class Controller {
 		Message input = Tool.jsonToMessage(request);
 		Boolean resultBoolean;
 		Integer resultInteger;
+		List<List<String>> resultList; 
 		switch(input.getType()) {
 			case CONNECTION : 
 				resultBoolean = connection(((MsgConnection)input).getUsername(), ((MsgConnection)input).getPassword());
@@ -50,6 +55,10 @@ public class Controller {
 				resultInteger = nbObject();
 				MsgIntResult answer3 = new MsgIntResult(resultInteger);
 				return Tool.messageToJSON(answer3);
+			case LISTOBJECT : 
+				resultList = listObject(); 
+				MsgListObject answer4 = new MsgListObject(resultList); 
+				return Tool.messageToJSON(answer4);
 			default:
 				Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
 				return "";
@@ -136,6 +145,31 @@ public class Controller {
 			e.printStackTrace();
 			
 			return false; 
+		}
+	}
+	
+	public List<List<String>> listObject(){
+		String request = "SELECT * FROM Capteurs"; 
+		List<List<String>> list = new ArrayList<List<String>>();
+
+		try {
+			Statement statement = connection.createStatement(); 
+			ResultSet result = statement.executeQuery(request); 
+			ResultSetMetaData resultMetada = result.getMetaData(); 
+			while(result.next()) {
+				List<String> record = new ArrayList<String>(); 
+				for (int i = 1; i<= resultMetada.getColumnCount(); i++) {
+					record.add(result.getString(i)); 
+				}
+				list.add(record); 
+			}
+			
+			Tool.logger.info("getListObject SUCCED");
+			return list; 
+		}catch (SQLException e) {
+			Tool.logger.info("getListObject FAILED - SQL EXCEPTION : " + request);
+			e.printStackTrace();
+			return null; 
 		}
 	}
 

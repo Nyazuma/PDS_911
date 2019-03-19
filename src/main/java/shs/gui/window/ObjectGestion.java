@@ -1,9 +1,11 @@
 package shs.gui.window;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -28,14 +30,14 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JLabel manageObjectLabel;
 	protected JLabel detectorTypeTitleLabel;
 
-	
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	public ObjectGestion(GuiController controller) {
-		
+
 		this.controller = controller;
-		
+
 		setBackground(new Color(95, 158, 160));
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
 		setLayout(null);
@@ -72,16 +74,48 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		detectorTypeTitleLabel.setBounds(800, 279, 169, 33);
 		this.add(detectorTypeTitleLabel);
 
-		objectTable = new JTable();
-		objectTable.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"Identifiant du capteur", "Type du capteur", "Etat"
+
+		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur"}; 
+		List<List<String>> listObject = controller.listObjet();
+		for (int i = 0; i<listObject.size(); i++) {
+			System.out.println(i);
+		}
+		Integer x = listObject.size();
+		Integer y;
+		if(x<=0) { 
+			// If the result is not empty, we could fill our table
+			y = listObject.get(0).size();
+			Object[][] data = new Object[x][y]; 
+			Integer i =0;
+			Integer j = 0;
+			for(List<String> line : listObject) {
+				for(String column : line) {
+					data[i][j]=column;
+					j++;
 				}
-				));
+				i++;
+			}
+
+			while(!listObject.isEmpty()) {
+				List<String> tamponList = listObject.get(1); 
+				while(!tamponList.isEmpty()) {
+
+
+					tamponList.remove(0); 
+				}
+				listObject.remove(0); 
+			}
+			objectTable = new JTable(data, header);
+		}
+		else {
+			// if the result is empty, the table will be empty
+			objectTable = new JTable();
+		}
+				
 		objectTable.setBounds(12, 225, 727, 413);
-		this.add(objectTable);
+
+		this.add(objectTable.getTableHeader(), BorderLayout.NORTH);
+		this.add(objectTable, BorderLayout.CENTER); 
 
 		addButton = new JButton("Ajouter");
 		addButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
