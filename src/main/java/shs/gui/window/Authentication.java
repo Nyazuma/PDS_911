@@ -30,6 +30,8 @@ public class Authentication extends JPanel implements ActionListener {
 	
 	protected JLabel connectionFailedTitleLabel;
 	
+	protected JLabel serverConnectionFailedTitleLabel;
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -85,6 +87,15 @@ public class Authentication extends JPanel implements ActionListener {
 		connectionFailedTitleLabel.setFont(new Font("Cambria Math", Font.PLAIN, 16));
 		connectionFailedTitleLabel.setBounds(573, 457, 255, 16);
 		// ConnectionFailed label is only visible after a password error
+		
+		serverConnectionFailedTitleLabel = new JLabel("Aucune connexion au serveur est disponible");
+		serverConnectionFailedTitleLabel.setForeground(new Color(128, 0, 0));
+		serverConnectionFailedTitleLabel.setFont(new Font("Cambria Math", Font.PLAIN, 16));
+		serverConnectionFailedTitleLabel.setBounds(573, 457, 255, 16);
+		// serverConnectionFailed label is only visible when server is offline
+		if(!controller.ping()) {
+			this.add(serverConnectionFailedTitleLabel);
+		}
 		
 	}
 

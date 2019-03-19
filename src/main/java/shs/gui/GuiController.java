@@ -3,17 +3,18 @@ package shs.gui;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import shs.common.Tool;
 import shs.common.Message;
 import shs.common.MessageType;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
 import shs.common.MsgIntResult;
+import shs.common.Tool;
 
 public class GuiController {
 
@@ -21,14 +22,32 @@ public class GuiController {
 	protected Gui gui;
 
 	public GuiController() {
-		// Get a dedicated connection from the pool to the object
 		this.gui=new Gui(this);
+	}
+	
+	public boolean ping() {
+		Message ping = new Message(MessageType.PING);
+		String output = Tool.messageToJSON(ping);
+		try {
+			String answer = contactServer(output);
+		}
+		catch (ConnectException e) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public boolean connection(String username, String password) {
 		MsgConnection connection = new MsgConnection(username, password);
 		String output = Tool.messageToJSON(connection);
-		String answer = contactServer(output);
+		String answer;
+		try {
+			 answer = contactServer(output);
+		}
+		catch (ConnectException e) {
+			return false;
+		}
 		if(answer!= null) {
 			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer);
 			return result.getStatus();
@@ -39,7 +58,13 @@ public class GuiController {
 	public int nbObject() {
 		Message nbObject = new Message(MessageType.NUMBEROBJECT);
 		String output = Tool.messageToJSON(nbObject);
-		String answer = contactServer(output);
+		String answer;
+		try {
+			answer = contactServer(output);
+		}
+		catch (ConnectException e) {
+			return -1;
+		}
 		if(answer!= null) {
 			MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
 			return result.getNumber();
@@ -50,7 +75,13 @@ public class GuiController {
 	public boolean addObject(String detectorType) {
 		MsgAddObject addObject = new MsgAddObject(detectorType);
 		String output = Tool.messageToJSON(addObject);
-		String answer = contactServer(output);
+		String answer;
+		try {
+		answer = contactServer(output);
+		}
+		catch (ConnectException e) {
+			return false;
+		}
 		if(answer!= null) {
 			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer);
 			return result.getStatus();
@@ -61,7 +92,7 @@ public class GuiController {
 
 
 	// TODO Work in progress, is it the right place?
-	private String contactServer(String request) {
+	private String contactServer(String request) throws ConnectException {
 
 		final int port = 2001;
 		
