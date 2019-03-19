@@ -159,7 +159,7 @@ public class Controller {
 			while(result.next()) {
 				List<String> record = new ArrayList<String>(); 
 				for (int i = 1; i<= resultMetada.getColumnCount(); i++) {
-					record.add(result.getString(i) + ";"); 
+					record.add(result.getString(i)); 
 				}
 				list.add(record); 
 			}
