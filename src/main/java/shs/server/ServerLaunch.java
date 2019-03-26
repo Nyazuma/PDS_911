@@ -43,7 +43,9 @@ public class ServerLaunch {
 				// We open a new Thread to serve the request
 				
 				Controller controller = new Controller(connectionPool);
-				new ServerService(socket, controller).start();
+				ServerService service = new ServerService(socket, controller);
+				Thread thread = new Thread(service);
+				thread.start();
 			} catch (IOException e) {
 				Tool.logger.info("#Erreur : ServerLaunch > I/O error: " + e);
 			}

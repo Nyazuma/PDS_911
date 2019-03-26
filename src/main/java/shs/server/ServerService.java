@@ -7,7 +7,7 @@ import java.net.Socket;
 
 import shs.common.Tool;
 
-public class ServerService extends Thread{
+public class ServerService implements Runnable{
 
 	protected Socket socket;
 	protected Controller controller;
