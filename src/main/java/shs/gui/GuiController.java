@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 import shs.common.Message;
+import shs.common.MsgDeleteObject;
 import shs.common.MessageType;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
@@ -91,6 +92,24 @@ public class GuiController {
 		return false;
 	}
 
+	public boolean delete(String idObject) {
+		MsgDeleteObject delete = new MsgDeleteObject(idObject); 
+		String output = Tool.messageToJSON(delete);
+		String answer; 
+		try {
+			answer = contactServer(output); 
+		}catch(ConnectException e) {
+			return false; 
+		}
+		if(answer != null) {
+			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
+			return result.getStatus(); 
+		}
+		return false; 
+		
+	}
+	
+	
 	public List<List<String>> listObjet() {
 		Message listObject = new Message(MessageType.LISTOBJECT);
 		String output = Tool.messageToJSON(listObject);
@@ -133,7 +152,8 @@ public class GuiController {
 			requestServer= new DataOutputStream(socket.getOutputStream());
 			requestServer.writeUTF(request);
 			requestServer.flush();
-			// We get the answer
+			// We get the answer 
+			//TODO : put a timmer before awfull exception
 			rawAnswerServer= new DataInputStream(socket.getInputStream());
 			answerServer = rawAnswerServer.readUTF();
 		}

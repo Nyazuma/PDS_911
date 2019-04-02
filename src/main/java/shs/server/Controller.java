@@ -13,6 +13,7 @@ import shs.common.Message;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
+import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
 import shs.common.MsgListObject;
 import shs.common.Tool;
@@ -59,6 +60,9 @@ public class Controller {
 				resultList = listObject(); 
 				MsgListObject answer4 = new MsgListObject(resultList); 
 				return Tool.messageToJSON(answer4);
+			case DELETEOBJECT : 
+				resultBoolean = deleteObeject(((MsgDeleteObject)input).getObject()); 
+				MsgBooleanResult answer5 = new MsgBooleanResult(resultBoolean); 
 			default:
 				Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
 				return "";
@@ -144,6 +148,20 @@ public class Controller {
 			Tool.logger.info("addObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
 			
+			return false; 
+		}
+	}
+	
+	public boolean deleteObeject(String idCapteur) {
+		String request = "DELETE FROM Capteurs WHERE ID_Capteur ='" +idCapteur + "'";
+		try {
+			Statement statement = connection.createStatement(); 
+			statement.executeUpdate(request); 
+			Tool.logger.info("deleteObject SUCCED");
+			return true; 
+		}catch(SQLException e) {
+			Tool.logger.info("deleteObject FAILED - SQL EXCEPTION : " + request);
+			e.printStackTrace();
 			return false; 
 		}
 	}

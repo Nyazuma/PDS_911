@@ -25,11 +25,14 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JScrollPane scrollPane;
 	protected JLabel addTitleLabel;
 	protected JButton addButton; 
+	protected JButton deleteButton; 
+	protected JButton updateButton; 
 	protected JComboBox<?> detectorList;
 	protected JLabel objectNumberTitleLabel;
 	protected JLabel objectNumberLabel; 
 	protected JLabel manageObjectLabel;
 	protected JLabel detectorTypeTitleLabel;
+	protected JLabel errorSelection; 
 
 
 	/**
@@ -83,6 +86,24 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		addButton.setBounds(970, 438, 162, 41);
 		addButton.addActionListener(this);
 		this.add(addButton);
+		
+		deleteButton = new JButton("Supprimer");
+		deleteButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		deleteButton.setBounds(81, 671, 162, 41);
+		deleteButton.addActionListener(this);
+		this.add(deleteButton);
+		
+		updateButton = new JButton("Modifier");
+		updateButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		updateButton.setBounds(317, 671, 162, 41);
+		updateButton.addActionListener(this);
+		this.add(updateButton);
+		
+		errorSelection = new JLabel("Op\\u00E9ration impossible !");
+		errorSelection.setForeground(new Color(128, 0, 0));
+		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
+		errorSelection.setBounds(120, 755, 255, 16);
+		
 	}
 
 
@@ -144,6 +165,13 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			this.add(scrollPane, BorderLayout.CENTER);
 			controller.getGui().revalidate();
 			controller.getGui().repaint();
+		}
+		
+		else if(event.getSource().equals(deleteButton)) {
+			if(objectTable.getSelectedRow()) {
+				
+			}
+			controller.delete(objectTable.getSelectedRow()); 
 		}
 
 	}
