@@ -26,7 +26,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 	private JLabel lblEtatCapteur;
 	private JCheckBox confirmation; 
 	private JButton valider; 
-	private JButton retour; 
+	private JButton returnButton; 
 	
 	/**
 	 * Initialize the contents of the frame.
@@ -93,16 +93,18 @@ public class ObjectModification extends JPanel implements ActionListener{
 		label_1.setBounds(315, 500, 740, 16);
 		this.add(label_1);
 		
-		retour = new JButton("Retour");
-		retour.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		retour.setBounds(56, 40, 98, 48);
-		retour.addActionListener(this);
-		this.add(retour);
+		returnButton = new JButton("Retour");
+		returnButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		returnButton.setBounds(56, 40, 98, 48);
+		returnButton.addActionListener(this);
+		this.add(returnButton);
 		
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		// TODO Auto-generated method stub
+		if(event.getSource().equals(returnButton)) {
+				controller.getGui().changeWindow(WindowList.OBJECTGESTION);
+		}
 		
 	}
 	

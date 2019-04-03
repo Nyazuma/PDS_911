@@ -107,7 +107,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		errorSelection = new JLabel("Veuillez sélectionner une ligne dans la table");
 		errorSelection.setForeground(new Color(128, 0, 0));
 		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
-		errorSelection.setBounds(120, 755, 255, 16);
+		errorSelection.setBounds(120, 755, 307, 16);
 		
 	}
 
@@ -177,9 +177,10 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			this.add(scrollPane, BorderLayout.CENTER);
 			controller.getGui().revalidate();
 			controller.getGui().repaint();
+			return;
 		}
 		
-		else if(event.getSource().equals(deleteButton)) {
+		if(event.getSource().equals(deleteButton)) {
 			clearlabel();
 			if(objectTable.getSelectedRow()!= -1) {
 				int ligne = objectTable.getSelectedRow(); 
@@ -196,16 +197,17 @@ public class ObjectGestion extends JPanel implements ActionListener {
 				controller.getGui().revalidate();
 				controller.getGui().repaint();
 			}
+			return;
 		}
 		
-		else if(event.getSource().equals(updateButton)) {
+		if(event.getSource().equals(updateButton)) {
 			if(objectTable.getSelectedRow()!= -1) {
 				controller.getGui().changeWindow(WindowList.OBJECTMODIFICATION);
 			}
 			else {
 				this.add(errorSelection);
 				controller.getGui().revalidate();
-				controller.getGui().getIgnoreRepaint(); 
+				controller.getGui().repaint(); 
 			}
 		}
 
