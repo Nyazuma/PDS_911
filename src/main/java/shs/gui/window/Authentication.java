@@ -17,8 +17,6 @@ public class Authentication extends JPanel implements ActionListener {
 
 	private GuiController controller;
 	
-	//TODO change to english variable
-	
 	protected JLabel authenticationtTitleLabel;
 	protected JLabel loginTitleLabel;
 	protected JLabel passwordTitleLabel;
