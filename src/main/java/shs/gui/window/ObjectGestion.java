@@ -169,9 +169,11 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		}
 		
 		else if(event.getSource().equals(deleteButton)) {
-			if(objectTable.getSelectedRow()!=0) {
+			if(objectTable.getSelectedRow()!= -1) {
 				int ligne = objectTable.getSelectedRow(); 
+				System.out.println(data[ligne][1].toString());
 				controller.delete(data[ligne][1].toString()); 
+				
 			}
 			else {
 				errorSelection.setText("Aucune ligne sélectionnée !");
