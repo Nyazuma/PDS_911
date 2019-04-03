@@ -34,7 +34,8 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JLabel detectorTypeTitleLabel;
 	protected JLabel errorSelection; 
 
-
+	protected Object[][] data; 
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -99,7 +100,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		updateButton.addActionListener(this);
 		this.add(updateButton);
 		
-		errorSelection = new JLabel("Op\\u00E9ration impossible !");
+		errorSelection = new JLabel();
 		errorSelection.setForeground(new Color(128, 0, 0));
 		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
 		errorSelection.setBounds(120, 755, 255, 16);
@@ -115,7 +116,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		if(x>0) { 
 			// If the result is not empty, we could fill our table
 			y = listObject.get(0).size();
-			Object[][] data = new Object[x][y]; 
+			data = new Object[x][y]; 
 			Integer i = 0;
 			Integer j = 0;
 			for(List<String> line : listObject) {
@@ -168,10 +169,16 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		}
 		
 		else if(event.getSource().equals(deleteButton)) {
-			if(objectTable.getSelectedRow()) {
-				
+			if(objectTable.getSelectedRow()!=0) {
+				int ligne = objectTable.getSelectedRow(); 
+				controller.delete(data[ligne][1].toString()); 
 			}
-			controller.delete(objectTable.getSelectedRow()); 
+			else {
+				errorSelection.setText("Aucune ligne sélectionnée !");
+				this.add(errorSelection); 
+				controller.getGui().revalidate();
+				controller.getGui().repaint();
+			}
 		}
 
 	}
