@@ -61,8 +61,9 @@ public class Controller {
 				MsgListObject answer4 = new MsgListObject(resultList); 
 				return Tool.messageToJSON(answer4);
 			case DELETEOBJECT : 
-				resultBoolean = deleteObeject(((MsgDeleteObject)input).getObject()); 
-				MsgBooleanResult answer5 = new MsgBooleanResult(resultBoolean); 
+				resultList = deleteObeject(((MsgDeleteObject)input).getObject()); 
+				MsgListObject answer5 = new MsgListObject(resultList); 
+				return Tool.messageToJSON(answer5);
 			default:
 				Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
 				return "";
@@ -152,17 +153,17 @@ public class Controller {
 		}
 	}
 	
-	public boolean deleteObeject(String idCapteur) {
+	public List<List<String>> deleteObeject(String idCapteur) {
 		String request = "DELETE FROM Capteurs WHERE ID_Capteur ='" +idCapteur + "'";
 		try {
 			Statement statement = connection.createStatement(); 
 			statement.executeUpdate(request); 
 			Tool.logger.info("deleteObject SUCCED");
-			return true; 
+			return listObject(); 
 		}catch(SQLException e) {
 			Tool.logger.info("deleteObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
-			return false; 
+			return listObject(); 
 		}
 	}
 	

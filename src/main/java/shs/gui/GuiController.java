@@ -92,20 +92,20 @@ public class GuiController {
 		return false;
 	}
 
-	public boolean delete(String idObject) {
+	public List<List<String>> delete(String idObject) {
 		MsgDeleteObject delete = new MsgDeleteObject(idObject); 
 		String output = Tool.messageToJSON(delete);
 		String answer; 
 		try {
 			answer = contactServer(output); 
 		}catch(ConnectException e) {
-			return false; 
+			return null; 
 		}
 		if(answer != null) {
-			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
-			return result.getStatus(); 
+			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
+			return result.getListObject(); 
 		}
-		return false; 
+		return null; 
 		
 	}
 	

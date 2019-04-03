@@ -34,6 +34,9 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JLabel detectorTypeTitleLabel;
 	protected JLabel errorSelection; 
 
+	// Raw Table we get by the controller
+	protected List<List<String>> listObject; 
+	// Table used to display our elements after implementation
 	protected Object[][] data; 
 	
 	/**
@@ -79,6 +82,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		detectorTypeTitleLabel.setBounds(800, 279, 169, 33);
 		this.add(detectorTypeTitleLabel);
 
+		listObject = controller.listObjet();
 		gestionListObject();
 		this.add(scrollPane, BorderLayout.CENTER);
 
@@ -100,7 +104,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		updateButton.addActionListener(this);
 		this.add(updateButton);
 		
-		errorSelection = new JLabel();
+		errorSelection = new JLabel("Veuillez sélectionner une ligne dans la table");
 		errorSelection.setForeground(new Color(128, 0, 0));
 		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
 		errorSelection.setBounds(120, 755, 255, 16);
@@ -110,8 +114,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	public void gestionListObject() {
 		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Emplacement"}; 
-		List<List<String>> listObject = controller.listObjet();
-		Integer x = listObject.size();
+		Integer x = listObject.size(); 
 		Integer y;
 		if(x>0) { 
 			// If the result is not empty, we could fill our table
@@ -130,7 +133,6 @@ public class ObjectGestion extends JPanel implements ActionListener {
 							data[i][2] = "disable"; 
 					}
 					if(j==3) {
-						System.out.println("'" + column + "'" );
 						if (column.equals("1"))
 							data[i][3] = "Zone couloir";
 					}
@@ -156,12 +158,21 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	}
 
+	// Remove all the information label we could have displayed at this point
+		private void clearlabel() {
+			this.remove(errorSelection);
+			
+		}
+	
+	
 	public void actionPerformed(ActionEvent event) {
 
 		if(event.getSource().equals(addButton)){
+			clearlabel();
 			controller.addObject(detectorList.getSelectedItem().toString());
 			objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
 			this.remove(scrollPane);
+			listObject = controller.listObjet();
 			gestionListObject();
 			this.add(scrollPane, BorderLayout.CENTER);
 			controller.getGui().revalidate();
@@ -169,14 +180,18 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		}
 		
 		else if(event.getSource().equals(deleteButton)) {
+			clearlabel();
 			if(objectTable.getSelectedRow()!= -1) {
 				int ligne = objectTable.getSelectedRow(); 
-				System.out.println(data[ligne][1].toString());
-				controller.delete(data[ligne][1].toString()); 
-				
+				listObject = controller.delete(data[ligne][0].toString());
+				objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
+				this.remove(scrollPane);
+				gestionListObject();
+				this.add(scrollPane, BorderLayout.CENTER);
+				controller.getGui().revalidate();
+				controller.getGui().repaint();
 			}
 			else {
-				errorSelection.setText("Aucune ligne sélectionnée !");
 				this.add(errorSelection); 
 				controller.getGui().revalidate();
 				controller.getGui().repaint();
@@ -184,4 +199,5 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		}
 
 	}
+
 }
