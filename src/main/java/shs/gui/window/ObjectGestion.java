@@ -197,6 +197,17 @@ public class ObjectGestion extends JPanel implements ActionListener {
 				controller.getGui().repaint();
 			}
 		}
+		
+		else if(event.getSource().equals(updateButton)) {
+			if(objectTable.getSelectedRow()!= -1) {
+				controller.getGui().changeWindow(WindowList.OBJECTMODIFICATION);
+			}
+			else {
+				this.add(errorSelection);
+				controller.getGui().revalidate();
+				controller.getGui().getIgnoreRepaint(); 
+			}
+		}
 
 	}
 
