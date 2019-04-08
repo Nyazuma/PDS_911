@@ -115,7 +115,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 
 	public void gestionListObject() {
-		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Emplacement"}; 
+		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Residence", "Zone", "Piece"}; 
 		Integer x = listObject.size(); 
 		Integer y;
 		if(x>0) { 
@@ -126,17 +126,14 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			Integer j = 0;
 			for(List<String> line : listObject) {
 				for(String column : line) {
-					// TODO Select should be adapted to get the real information
-					data[i][j]=column;
-					if(j==2) {
+					if(j!=2)
+						data[i][j]=column;
+					else {
+						// Status
 						if(column.equals("1")) 
 							data[i][2] = "Enable"; 
 						else 
 							data[i][2] = "Disable"; 
-					}
-					if(j==3) {
-						if (column.equals("1"))
-							data[i][3] = "Zone couloir";
 					}
 					j++;
 				}
@@ -145,6 +142,8 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			}
 
 			objectTable = new JTable(data, header);
+			// We cancel the user selection of a table case.
+			objectTable.setDefaultEditor(Object.class, null);
 			//Hide ID column
 			objectTable.getColumnModel().getColumn(0).setMinWidth(0);
 			objectTable.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -173,7 +172,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected static List<String> getRowUpdate(){
 		int ligne = objectTable.getSelectedRow(); 
 		List<String> listUpdate = new ArrayList<String>(); 
-		for(int i = 0; i<4; i++) {
+		for(int i = 0; i<data.length; i++) {
 			listUpdate.add(data[ligne][i].toString()); 
 		}
 		return listUpdate;
@@ -184,10 +183,9 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 		if(event.getSource().equals(addButton)){
 			clearlabel();
-			controller.addObject(detectorList.getSelectedItem().toString());
+			listObject = controller.addObject(detectorList.getSelectedItem().toString());
 			objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
 			this.remove(scrollPane);
-			listObject = controller.listObjet();
 			gestionListObject();
 			this.add(scrollPane, BorderLayout.CENTER);
 			controller.getGui().revalidate();

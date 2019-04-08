@@ -23,8 +23,6 @@ public class ObjectModification extends JPanel implements ActionListener{
 	private JLabel labTitre; 
 	private JComboBox<String> typeCapteur; 
 	private JLabel lblTypeCapteur; 
-	private JComboBox<String> emplacement; 
-	private JLabel lblEmplacement; 
 	private JComboBox<String> etatCapteur; 
 	private JLabel lblEtatCapteur;
 	private JCheckBox confirmation; 
@@ -39,9 +37,8 @@ public class ObjectModification extends JPanel implements ActionListener{
 	private JLabel lblResidence; 
 
 	//Initialization of the JComboBox with a model
-	private DefaultComboBoxModel<String> modelTypeCapteur = new DefaultComboBoxModel<String>(new String[] {"Capteur de température", "Capteur de fumee", "Capteur ouverture ", "Capteur hygrométrique", "Capteur de présence", "Capteur appel ", "Bracelet"}); 
-	private DefaultComboBoxModel<String> modelEtatCapteur = new DefaultComboBoxModel<String>(new String[] {"Enable", "Disable"}); 
-	private DefaultComboBoxModel<String> modelEmplacement; 
+	private DefaultComboBoxModel<String> modelTypeCapteur;
+	private DefaultComboBoxModel<String> modelEtatCapteur; 
 	private DefaultComboBoxModel<String> modelResidence; 
 	private DefaultComboBoxModel<String> modelPiece; 
 	private DefaultComboBoxModel<String> modelZone; 
@@ -64,6 +61,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 		labTitre.setBounds(511, 103, 447, 28);
 		this.add(labTitre);
 
+		modelTypeCapteur = new DefaultComboBoxModel<String>(new String[] {"Capteur de température", "Capteur de fumee", "Capteur ouverture ", "Capteur hygrométrique", "Capteur de présence", "Capteur appel ", "Bracelet"});	
 		typeCapteur = new JComboBox<String>();
 		typeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		typeCapteur.setModel(modelTypeCapteur);
@@ -76,18 +74,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 		lblTypeCapteur.setBounds(381, 250, 152, 28);
 		this.add(lblTypeCapteur);
 
-		emplacement = new JComboBox<String>();
-		emplacement.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		modelEmplacement = new DefaultComboBoxModel<String>(new String[] {ObjectGestion.getRowUpdate().get(3).toString()});
-		emplacement.setModel(modelEmplacement);
-		emplacement.setBounds(571, 396, 265, 42);
-		this.add(emplacement);
-
-		lblEmplacement = new JLabel("Emplacement :");
-		lblEmplacement.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblEmplacement.setBounds(381, 403, 152, 28);
-		this.add(lblEmplacement);
-
+		modelEtatCapteur = new DefaultComboBoxModel<String>(new String[] {"Enable", "Disable"});
 		etatCapteur = new JComboBox<String>();
 		etatCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etatCapteur.setModel(modelEtatCapteur);
@@ -100,48 +87,75 @@ public class ObjectModification extends JPanel implements ActionListener{
 		lblEtatCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblEtatCapteur.setBounds(381, 329, 152, 28);
 		this.add(lblEtatCapteur);
-		
+
+		// We get the residences list
+		List<List<String>> listResidences = controller.readResidences();
+		String[] tabResidences = new String[listResidences.size()];
+		int i =0;
+		for(List<String> line : listResidences) {
+			tabResidences[i]=line.get(1);
+			i++;
+		}
+		modelResidence = new DefaultComboBoxModel<String>(tabResidences);
 		residenceCapteur = new JComboBox<String>(); 
 		residenceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		residenceCapteur.setModel(modelResidence);
-		residenceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
+		residenceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
 		residenceCapteur.setBounds(571, 396, 265, 42);
 		this.add(residenceCapteur);
-		
-		lblResidence = new JLabel("R\\u00E9sidence :"); 
+
+		lblResidence = new JLabel("Résidence :"); 
 		lblResidence.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblResidence.setBounds(381, 403, 152, 28);
 		this.add(lblResidence); 
-		
+
+		// We get the list of zones
+		List<List<String>> listZones = controller.readZones();
+		String[] tabZones = new String[listZones.size()];
+		i =0;
+		for(List<String> line : listZones) {
+			tabZones[i]=line.get(0);
+			i++;
+		}
+		modelZone = new DefaultComboBoxModel<String>(tabZones);
+		zoneCapteur = new JComboBox<String>(); 
+		zoneCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		zoneCapteur.setModel(modelZone);
+		zoneCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
+		zoneCapteur.setBounds(571, 477, 265, 42);
+		this.add(zoneCapteur); 
+
+		// We get the list of pieces
+		List<List<String>> listPieces = controller.readPieces();
+		String[] tabPieces = new String[listPieces.size()];
+		i =0;
+		for(List<String> line : listPieces) {
+			tabPieces[i]=line.get(0);
+			i++;
+		}
+		modelPiece = new DefaultComboBoxModel<String>(tabPieces);
 		pieceCapteur = new JComboBox<String>(); 
 		pieceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		pieceCapteur.setModel(modelPiece);
 		pieceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
 		pieceCapteur.setBounds(571, 556, 265, 42);
 		this.add(pieceCapteur); 
-		
+
 		lblPiece = new JLabel("Pi\u00E8ce :");
 		lblPiece.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblPiece.setBounds(381, 563, 152, 28);
 		this.add(lblPiece); 
-		
-		zoneCapteur = new JComboBox<String>(); 
-		zoneCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		zoneCapteur.setModel(modelZone);
-		zoneCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(6).toString());
-		zoneCapteur.setBounds(571, 477, 265, 42);
-		this.add(zoneCapteur); 
-		
+
 		lblZone = new JLabel("Zone :");
 		lblZone.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblZone.setBounds(381, 484, 152, 28);
 		this.add(lblZone); 
-		
-		
+
+
 		confirmation = new JCheckBox("Je confirme vouloir modifier cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
 		confirmation.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		confirmation.setBounds(509, 579, 350, 25);
+		confirmation.setBounds(512, 692, 350, 25);
 		confirmation.addActionListener(this);
 		this.add(confirmation);
 
@@ -153,7 +167,6 @@ public class ObjectModification extends JPanel implements ActionListener{
 		this.add(valider);
 
 		message = new JLabel();
-		message.setForeground(Color.RED);
 		message.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		message.setBounds(389, 802, 559, 16);
 		message.setEnabled(false);
@@ -185,9 +198,9 @@ public class ObjectModification extends JPanel implements ActionListener{
 			listValues.add("1"); 
 		else 
 			listValues.add("0"); 
-		if(emplacement.getSelectedItem().toString().contentEquals("Zone couloir"))
-			listValues.add("1"); 
-
+		listValues.add(residenceCapteur.getSelectedItem().toString());
+		listValues.add(zoneCapteur.getSelectedItem().toString()); 
+		listValues.add(pieceCapteur.getSelectedItem().toString()); 
 		return listValues; 
 
 	}
@@ -210,10 +223,12 @@ public class ObjectModification extends JPanel implements ActionListener{
 			boolean test = controller.update(gestionUpdate()); 
 			if(test) {
 				message.setText("L'object a été modifié avec succès !"); 
+				message.setForeground(Color.WHITE);
 				message.setEnabled(true);
 			}
 			else {
 				message.setText("Une erreur est survenue. L'object n'a pas pu être modifié.");
+				message.setForeground(Color.RED);
 				message.setEnabled(true);
 			}
 		}

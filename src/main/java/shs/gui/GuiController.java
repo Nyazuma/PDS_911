@@ -76,7 +76,7 @@ public class GuiController {
 		return -1;
 	}
 
-	public boolean addObject(String detectorType) {
+	public List<List<String>> addObject(String detectorType) {
 		MsgAddObject addObject = new MsgAddObject(detectorType);
 		String output = Tool.messageToJSON(addObject);
 		String answer;
@@ -84,13 +84,13 @@ public class GuiController {
 			answer = contactServer(output);
 		}
 		catch (ConnectException e) {
-			return false;
+			return null;
 		}
 		if(answer!= null) {
-			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer);
-			return result.getStatus();
+			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
+			return result.getListObject(); 
 		}
-		return false;
+		return null;
 	}
 
 	public List<List<String>> delete(String idObject) {
@@ -126,6 +126,57 @@ public class GuiController {
 		return false; 
 	}
 	
+	public List<List<String>> readResidences() {
+		Message read = new Message(MessageType.LISTRESIDENCES); 
+		String output = Tool.messageToJSON(read);
+		String answer; 
+		try {
+			answer = contactServer(output); 
+		}catch(ConnectException e) {
+			return null; 
+		}
+		if(answer != null) {
+			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
+			return result.getListObject(); 
+		}
+		return null; 
+		
+	}
+	
+	public List<List<String>> readZones() {
+		Message read = new Message(MessageType.LISTZONES); 
+		String output = Tool.messageToJSON(read);
+		String answer; 
+		try {
+			answer = contactServer(output); 
+		}catch(ConnectException e) {
+			return null; 
+		}
+		if(answer != null) {
+			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
+			return result.getListObject(); 
+		}
+		return null; 
+		
+	}
+	
+	public List<List<String>> readPieces() {
+		Message read = new Message(MessageType.LISTPIECES); 
+		String output = Tool.messageToJSON(read);
+		String answer; 
+		try {
+			answer = contactServer(output); 
+		}catch(ConnectException e) {
+			return null; 
+		}
+		if(answer != null) {
+			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
+			return result.getListObject(); 
+		}
+		return null; 
+		
+	}
+	
 	
 	public List<List<String>> listObjet() {
 		Message listObject = new Message(MessageType.LISTOBJECT);
@@ -153,7 +204,7 @@ public class GuiController {
 		// Get the local address
 		InetAddress address = null;
 		try {
-			//address = InetAddress.getLocalHost(); + mettre dans config 192.168.20.20 et garder le même port
+			//address = InetAddress.getLocalHost(); //+ mettre dans config 192.168.20.20 et garder le même port
 			address = InetAddress.getByName("192.168.20.20");
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();

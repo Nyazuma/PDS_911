@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shs.common.Message;
+import shs.common.MessageType;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
@@ -35,11 +36,11 @@ public class Controller {
 		this.connection = connectionPool.getConnection();
 	}
 
-	
+
 	public void closeController() {
 		connectionPool.closeConnection(connection);
 	}
-	
+
 	/**
 	 * 
 	 * @param request
@@ -51,13 +52,15 @@ public class Controller {
 		Integer resultInteger;
 		List<List<String>> resultList; 
 		switch(input.getType()) {
+		case PING :
+			return Tool.messageToJSON(new Message(MessageType.PING));
 		case CONNECTION : 
 			resultBoolean = connection(((MsgConnection)input).getUsername(), ((MsgConnection)input).getPassword());
 			MsgBooleanResult answer1 = new MsgBooleanResult(resultBoolean);
 			return Tool.messageToJSON(answer1);
 		case ADDOBJECT :
-			resultBoolean = addObject(((MsgAddObject)input).getObject());
-			MsgBooleanResult answer2 = new MsgBooleanResult(resultBoolean);
+			resultList = addObject(((MsgAddObject)input).getObject());
+			MsgListObject answer2 = new MsgListObject(resultList); 
 			return Tool.messageToJSON(answer2);
 		case NUMBEROBJECT :
 			resultInteger = nbObject();
@@ -75,6 +78,18 @@ public class Controller {
 			resultBoolean = updateObject(((MsgUpdateObject)input).getObject()); 
 			MsgBooleanResult answer6 = new MsgBooleanResult(resultBoolean); 
 			return Tool.messageToJSON(answer6);
+		case LISTZONES :
+			resultList = listZones();
+			MsgListObject answer7 = new MsgListObject(resultList); 
+			return Tool.messageToJSON(answer7);
+		case LISTPIECES :
+			resultList = listPieces();
+			MsgListObject answer8 = new MsgListObject(resultList); 
+			return Tool.messageToJSON(answer8);
+		case LISTRESIDENCES :
+			resultList = listResidences();
+			MsgListObject answer9 = new MsgListObject(resultList); 
+			return Tool.messageToJSON(answer9);
 		default:
 			Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return "";
@@ -88,7 +103,7 @@ public class Controller {
 	 * @param password
 	 * @return
 	 */
-	public boolean connection(String identifiant, String password) {
+	private boolean connection(String identifiant, String password) {
 
 		String request = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
 
@@ -121,7 +136,7 @@ public class Controller {
 	 * 
 	 * @return
 	 */
-	public int nbObject() {
+	private int nbObject() {
 		String request = "Select count(*) from Capteurs";  
 
 
@@ -146,7 +161,7 @@ public class Controller {
 	 * @param typeCapteur
 	 * @return
 	 */
-	public boolean addObject(String typeCapteur) {
+	private List<List<String>> addObject(String typeCapteur) {
 		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement) VALUES ('"+ typeCapteur +"', 1, 1)"; 
 
 		try {
@@ -154,13 +169,13 @@ public class Controller {
 			statement.executeUpdate(request);
 			Tool.logger.info("addObject SUCCEED");
 
-			return true; 
+			return listObject(); 
 
 		}catch (SQLException e) {
 			Tool.logger.info("addObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
 
-			return false; 
+			return listObject(); 
 		}
 	}
 
@@ -169,7 +184,7 @@ public class Controller {
 	 * @param idCapteur
 	 * @return
 	 */
-	public List<List<String>> deleteObeject(String idCapteur) {
+	private List<List<String>> deleteObeject(String idCapteur) {
 		String request = "DELETE FROM Capteurs WHERE ID_Capteur ='" +idCapteur + "'";
 		try {
 			Statement statement = connection.createStatement(); 
@@ -188,13 +203,36 @@ public class Controller {
 	 * @param attribute
 	 * @return
 	 */
-	public boolean updateObject(List<String> attribute) {
-		String request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + attribute.get(3) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'"; 
-		System.out.println(request);
+	private boolean updateObject(List<String> attribute) {
+		String requestEmplacement = "SELECT ID_Emplacement FROM Emplacement INNER JOIN Residences ON Residences.ID_Residence=Emplacement.ID_Residence "
+				+ "					WHERE Nom_Residence='" + attribute.get(3) + "' AND Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'";
+		String request = "";
 		try {
 			Statement statement = connection.createStatement(); 
+			ResultSet resultEmplacement = statement.executeQuery(requestEmplacement); 
+			if(!resultEmplacement.next()) {
+				// The "Emplacement" doesn't exit, we have to create it
+				// We get the Residence ID
+				String requestResidence = "SELECT ID_Residence FROM Residences WHERE Nom_Residence='" + attribute.get(3) + "'";
+				ResultSet resultResidence = statement.executeQuery(requestResidence); 
+				resultResidence.next();
+				int id = resultResidence.getInt(1);
+				// We create the "Emplacement" with the Residence ID
+				String createEmplacement = "INSERT INTO Emplacement(Piece_Emplacement, Zone_Emplacement, ID_Residence) VALUES('" +attribute.get(5) + "', '" + attribute.get(4)+ "', '" + id + "')" ;
+				statement.executeUpdate(createEmplacement); 
+				// We get the ID from the "Emplacement" we just created
+				String requestEmplacementNew = "SELECT ID_Emplacement FROM Emplacement WHERE Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'"
+												+ " AND ID_Residence='" + id + "'";
+				ResultSet resultEmplacementNew = statement.executeQuery(requestEmplacementNew); 
+				resultEmplacementNew.next();
+				int idNew = resultEmplacementNew.getInt(1);
+				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + idNew + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+			}
+			else {
+				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + resultEmplacement.getInt(1) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+			}
+			
 			statement.executeUpdate(request); 
-			Tool.logger.info("updateObject SUCCED");
 			return true; 
 		}catch(SQLException e) {
 			Tool.logger.info("updateObject FAILED - SQL EXCEPTION : " + request);
@@ -205,16 +243,16 @@ public class Controller {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * getList()
+	 * @return a list given by the select request
 	 */
-	public List<List<String>> listObject(){
-		String request = "SELECT * FROM Capteurs"; 
+
+	private List<List<String>> getList(String sql){
 		List<List<String>> list = new ArrayList<List<String>>();
 
 		try {
 			Statement statement = connection.createStatement(); 
-			ResultSet result = statement.executeQuery(request); 
+			ResultSet result = statement.executeQuery(sql); 
 			ResultSetMetaData resultMetada = result.getMetaData(); 
 			while(result.next()) {
 				List<String> record = new ArrayList<String>(); 
@@ -224,13 +262,39 @@ public class Controller {
 				list.add(record); 
 			}
 
-			Tool.logger.info("getListObject SUCCED");
 			return list; 
 		}catch (SQLException e) {
-			Tool.logger.info("getListObject FAILED - SQL EXCEPTION : " + request);
+			Tool.logger.info("getList FAILED - SQL EXCEPTION :\n " + sql);
 			e.printStackTrace();
 			return null; 
 		}
+	}
+
+	private List<List<String>> listObject(){
+		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, "
+				+ "Zone_emplacement, Piece_Emplacement FROM Capteurs INNER JOIN Emplacement ON "
+				+ "Capteurs.ID_Emplacement=Emplacement.ID_Emplacement INNER JOIN Residences ON "
+				+ "Emplacement.ID_Residence = Residences.ID_Residence;"; 
+		return getList(request);
+
+	}
+
+
+	private List<List<String>> listResidences() {
+		String request = "SELECT * FROM Residences INNER JOIN Adresse ON Residences.ID_Addresse=Adresse.ID_Addresse;"; 
+		return getList(request);
+	}
+
+
+	private List<List<String>> listPieces() {
+		String request = "SELECT DISTINCT Piece_Emplacement FROM Emplacement;";
+		return getList(request);
+	}
+
+
+	private List<List<String>> listZones() {
+		String request = "SELECT DISTINCT Zone_Emplacement FROM Emplacement;";
+		return getList(request);
 	}
 
 }

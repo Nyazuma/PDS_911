@@ -19,7 +19,6 @@ public class SessionTest {
 		GuiController session = new GuiController();
 		assertTrue(session.connection("Justin911", "911"));
 		int nombre = session.nbObject();
-		assertTrue(session.addObject("Capteur Ouverture"));
 		assertTrue(session.nbObject()==nombre+1);
 		// 
 	}
