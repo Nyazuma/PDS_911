@@ -30,6 +30,9 @@ public class JDBCConnectionPool {
 			listConnections.add(connection);
 		}
 		catch(Exception e){ 
+			e.getStackTrace();
+			System.out.println(DataConfig.getPROPERTY_DRIVER() + "://" + DataConfig.getPROPERTY_URL() + "/" + DataConfig.getPROPERTY_DB() + 
+										DataConfig.getPROPERTY_USERNAME() + " " + DataConfig.getPROPERTY_PASSWORD());
 			Tool.logger.info("A problem occurs with a connection " +e.getStackTrace());
 			if ( connection != null )
 				try {

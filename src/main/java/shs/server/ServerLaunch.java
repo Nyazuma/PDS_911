@@ -2,22 +2,20 @@ package shs.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.sql.Connection;
 
 import shs.common.Tool;
 
 public class ServerLaunch {
 	
+	// TODO : put this on the properties file (right now, it's just the information about jdbc)
 	protected static final int PORT = 2001;
 
 	public static void main(String args[]) throws IOException {
 		
 		System.out.println("SHS Server : launch");
 		
-		// TODO What about writing here the DataSource initialization phase?
+		// DataSource
 		DataConfig.getInstanceConfig();
-		Socket socket = null;
 		final ServerSocket serverSocket = new ServerSocket(PORT);
 		final JDBCConnectionPool connectionPool = new JDBCConnectionPool();
 		
@@ -33,23 +31,8 @@ public class ServerLaunch {
 			}
 			}));
 		
-		System.out.println("SHS Server : Waiting for connection to serve");
-		// Main part of the program : waiting for input
-		while (true) {
-			try {
-				// We wait for a connection
-				socket = serverSocket.accept();
-				System.out.println("SHS Server : a new connection was initialized!");
-				// We open a new Thread to serve the request
-				
-				Controller controller = new Controller(connectionPool);
-				ServerService service = new ServerService(socket, controller);
-				Thread thread = new Thread(service);
-				thread.start();
-			} catch (IOException e) {
-				Tool.logger.info("#Erreur : ServerLaunch > I/O error: " + e);
-			}
-		}
+		ServerAcceptor serverAcceptor = new ServerAcceptor(serverSocket, connectionPool);
+		serverAcceptor.acceptConnection();
 	}
 	
 }

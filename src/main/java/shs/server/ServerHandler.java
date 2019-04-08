@@ -7,19 +7,17 @@ import java.net.Socket;
 
 import shs.common.Tool;
 
-public class ServerService implements Runnable{
+public class ServerHandler implements Runnable{
 
 	protected Socket socket;
 	protected Controller controller;
 
-	public ServerService(Socket clientSocket, Controller controller) {
+	public ServerHandler(Socket clientSocket, Controller controller) {
 		this.socket = clientSocket;
 		this.controller = controller;
 	}
 
 	public void run() {
-
-		// TODO What do we have to do for each request?
 
 		// Get the JSON format from the Byte request
 		String requestJSON = requestDecrypted();
