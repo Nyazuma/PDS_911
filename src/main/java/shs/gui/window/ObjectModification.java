@@ -31,11 +31,20 @@ public class ObjectModification extends JPanel implements ActionListener{
 	private JButton valider; 
 	private JButton returnButton; 
 	private JLabel message; 
+	private JComboBox<String> zoneCapteur; 
+	private JLabel lblZone; 
+	private JComboBox<String> pieceCapteur; 
+	private JLabel lblPiece; 
+	private JComboBox<String> residenceCapteur; 
+	private JLabel lblResidence; 
 
 	//Initialization of the JComboBox with a model
 	private DefaultComboBoxModel<String> modelTypeCapteur = new DefaultComboBoxModel<String>(new String[] {"Capteur de température", "Capteur de fumee", "Capteur ouverture ", "Capteur hygrométrique", "Capteur de présence", "Capteur appel ", "Bracelet"}); 
 	private DefaultComboBoxModel<String> modelEtatCapteur = new DefaultComboBoxModel<String>(new String[] {"Enable", "Disable"}); 
 	private DefaultComboBoxModel<String> modelEmplacement; 
+	private DefaultComboBoxModel<String> modelResidence; 
+	private DefaultComboBoxModel<String> modelPiece; 
+	private DefaultComboBoxModel<String> modelZone; 
 
 
 
@@ -91,7 +100,44 @@ public class ObjectModification extends JPanel implements ActionListener{
 		lblEtatCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblEtatCapteur.setBounds(381, 329, 152, 28);
 		this.add(lblEtatCapteur);
-
+		
+		residenceCapteur = new JComboBox<String>(); 
+		residenceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		residenceCapteur.setModel(modelResidence);
+		residenceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
+		residenceCapteur.setBounds(571, 396, 265, 42);
+		this.add(residenceCapteur);
+		
+		lblResidence = new JLabel("R\\u00E9sidence :"); 
+		lblResidence.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		lblResidence.setBounds(381, 403, 152, 28);
+		this.add(lblResidence); 
+		
+		pieceCapteur = new JComboBox<String>(); 
+		pieceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		pieceCapteur.setModel(modelPiece);
+		pieceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
+		pieceCapteur.setBounds(571, 556, 265, 42);
+		this.add(pieceCapteur); 
+		
+		lblPiece = new JLabel("Pi\u00E8ce :");
+		lblPiece.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		lblPiece.setBounds(381, 563, 152, 28);
+		this.add(lblPiece); 
+		
+		zoneCapteur = new JComboBox<String>(); 
+		zoneCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		zoneCapteur.setModel(modelZone);
+		zoneCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(6).toString());
+		zoneCapteur.setBounds(571, 477, 265, 42);
+		this.add(zoneCapteur); 
+		
+		lblZone = new JLabel("Zone :");
+		lblZone.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		lblZone.setBounds(381, 484, 152, 28);
+		this.add(lblZone); 
+		
+		
 		confirmation = new JCheckBox("Je confirme vouloir modifier cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
 		confirmation.setFont(new Font("Cambria Math", Font.BOLD, 16));
@@ -101,7 +147,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 
 		valider = new JButton("Valider");
 		valider.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		valider.setBounds(558, 626, 165, 42);
+		valider.setBounds(555, 747, 165, 42);
 		valider.setEnabled(false);
 		valider.addActionListener(this);
 		this.add(valider);
@@ -109,18 +155,18 @@ public class ObjectModification extends JPanel implements ActionListener{
 		message = new JLabel();
 		message.setForeground(Color.RED);
 		message.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		message.setBounds(509, 676, 350, 42);
+		message.setBounds(389, 802, 559, 16);
 		message.setEnabled(false);
 		this.add(message);
 
 		JLabel label = new JLabel("------------------------------------------------------------------------------------------------------------------------------------------");
 		label.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		label.setBounds(315, 157, 740, 16);
+		label.setBounds(315, 179, 740, 16);
 		this.add(label);
 
 		JLabel label_1 = new JLabel("-------------------------------------------------------------------------------------------------------------------------------------------");
 		label_1.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		label_1.setBounds(315, 500, 740, 16);
+		label_1.setBounds(315, 632, 740, 16);
 		this.add(label_1);
 
 		returnButton = new JButton("Retour");
