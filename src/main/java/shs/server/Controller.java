@@ -16,6 +16,7 @@ import shs.common.MsgConnection;
 import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
 import shs.common.MsgListObject;
+import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
 public class Controller {
@@ -33,40 +34,50 @@ public class Controller {
 		this.connectionPool = connectionPool;
 		this.connection = connectionPool.getConnection();
 	}
+
 	
 	public void closeController() {
 		connectionPool.closeConnection(connection);
 	}
-
+	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public String treatmentRequest(String request) {
 		Message input = Tool.jsonToMessage(request);
 		Boolean resultBoolean;
 		Integer resultInteger;
 		List<List<String>> resultList; 
 		switch(input.getType()) {
-			case CONNECTION : 
-				resultBoolean = connection(((MsgConnection)input).getUsername(), ((MsgConnection)input).getPassword());
-				MsgBooleanResult answer1 = new MsgBooleanResult(resultBoolean);
-				return Tool.messageToJSON(answer1);
-			case ADDOBJECT :
-				resultBoolean = addObject(((MsgAddObject)input).getObject());
-				MsgBooleanResult answer2 = new MsgBooleanResult(resultBoolean);
-				return Tool.messageToJSON(answer2);
-			case NUMBEROBJECT :
-				resultInteger = nbObject();
-				MsgIntResult answer3 = new MsgIntResult(resultInteger);
-				return Tool.messageToJSON(answer3);
-			case LISTOBJECT : 
-				resultList = listObject(); 
-				MsgListObject answer4 = new MsgListObject(resultList); 
-				return Tool.messageToJSON(answer4);
-			case DELETEOBJECT : 
-				resultList = deleteObeject(((MsgDeleteObject)input).getObject()); 
-				MsgListObject answer5 = new MsgListObject(resultList); 
-				return Tool.messageToJSON(answer5);
-			default:
-				Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
-				return "";
+		case CONNECTION : 
+			resultBoolean = connection(((MsgConnection)input).getUsername(), ((MsgConnection)input).getPassword());
+			MsgBooleanResult answer1 = new MsgBooleanResult(resultBoolean);
+			return Tool.messageToJSON(answer1);
+		case ADDOBJECT :
+			resultBoolean = addObject(((MsgAddObject)input).getObject());
+			MsgBooleanResult answer2 = new MsgBooleanResult(resultBoolean);
+			return Tool.messageToJSON(answer2);
+		case NUMBEROBJECT :
+			resultInteger = nbObject();
+			MsgIntResult answer3 = new MsgIntResult(resultInteger);
+			return Tool.messageToJSON(answer3);
+		case LISTOBJECT : 
+			resultList = listObject(); 
+			MsgListObject answer4 = new MsgListObject(resultList); 
+			return Tool.messageToJSON(answer4);
+		case DELETEOBJECT : 
+			resultList = deleteObeject(((MsgDeleteObject)input).getObject()); 
+			MsgListObject answer5 = new MsgListObject(resultList); 
+			return Tool.messageToJSON(answer5);
+		case UPDATEOBJECT : 
+			resultBoolean = updateObject(((MsgUpdateObject)input).getObject()); 
+			MsgBooleanResult answer6 = new MsgBooleanResult(resultBoolean); 
+			return Tool.messageToJSON(answer6);
+		default:
+			Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
+			return "";
 		}	
 	}
 
@@ -89,18 +100,18 @@ public class Controller {
 			resultat.next(); 
 			if (resultat.getInt(1)==1) {
 				Tool.logger.info("Connection SUCCEED");
-				
+
 				return true; 
 			}
 			else {
 				Tool.logger.info("Connection FAILED");
-				
+
 				return false; 
 			}
 		}catch (SQLException e) {
 			Tool.logger.info("Connection FAILED - SQL EXCEPTION");
 			e.printStackTrace();
-			
+
 			return false; 
 		}
 	}
@@ -113,18 +124,18 @@ public class Controller {
 	public int nbObject() {
 		String request = "Select count(*) from Capteurs";  
 
-		
+
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
 			Tool.logger.info("nbObject SUCCEED");
-			
+
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
 			Tool.logger.info("nbObject FAILED - SQL EXCEPTION");
-			
+
 			return 0; 
 		}
 	}
@@ -142,17 +153,22 @@ public class Controller {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(request);
 			Tool.logger.info("addObject SUCCEED");
-			
+
 			return true; 
 
 		}catch (SQLException e) {
 			Tool.logger.info("addObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
-			
+
 			return false; 
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param idCapteur
+	 * @return
+	 */
 	public List<List<String>> deleteObeject(String idCapteur) {
 		String request = "DELETE FROM Capteurs WHERE ID_Capteur ='" +idCapteur + "'";
 		try {
@@ -166,7 +182,32 @@ public class Controller {
 			return listObject(); 
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param attribute
+	 * @return
+	 */
+	public boolean updateObject(List<String> attribute) {
+		String request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + attribute.get(3) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'"; 
+		System.out.println(request);
+		try {
+			Statement statement = connection.createStatement(); 
+			statement.executeUpdate(request); 
+			Tool.logger.info("updateObject SUCCED");
+			return true; 
+		}catch(SQLException e) {
+			Tool.logger.info("updateObject FAILED - SQL EXCEPTION : " + request);
+			e.printStackTrace();
+			return false; 
+		}
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
 	public List<List<String>> listObject(){
 		String request = "SELECT * FROM Capteurs"; 
 		List<List<String>> list = new ArrayList<List<String>>();
@@ -182,7 +223,7 @@ public class Controller {
 				}
 				list.add(record); 
 			}
-			
+
 			Tool.logger.info("getListObject SUCCED");
 			return list; 
 		}catch (SQLException e) {

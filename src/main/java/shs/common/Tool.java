@@ -45,6 +45,9 @@ public class Tool {
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.DELETEOBJECT.toString())) {
 				return mapper.readValue(json, MsgDeleteObject.class);
 			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.UPDATEOBJECT.toString())) {
+				return mapper.readValue(json, MsgUpdateObject.class); 
+			}
 			// Don't forget messages without a specific class!
 			return mapper.readValue(json, Message.class);
 		} 

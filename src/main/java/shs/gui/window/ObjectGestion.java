@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -21,7 +22,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	private GuiController controller;
 
-	protected JTable objectTable;
+	protected static JTable objectTable;
 	protected JScrollPane scrollPane;
 	protected JLabel addTitleLabel;
 	protected JButton addButton; 
@@ -34,11 +35,12 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JLabel detectorTypeTitleLabel;
 	protected JLabel errorSelection; 
 
+
 	// Raw Table we get by the controller
-	protected List<List<String>> listObject; 
+	protected static List<List<String>> listObject; 
 	// Table used to display our elements after implementation
-	protected Object[][] data; 
-	
+	protected static Object[][] data; 
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -91,24 +93,24 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		addButton.setBounds(970, 438, 162, 41);
 		addButton.addActionListener(this);
 		this.add(addButton);
-		
+
 		deleteButton = new JButton("Supprimer");
 		deleteButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		deleteButton.setBounds(81, 671, 162, 41);
 		deleteButton.addActionListener(this);
 		this.add(deleteButton);
-		
+
 		updateButton = new JButton("Modifier");
 		updateButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		updateButton.setBounds(317, 671, 162, 41);
 		updateButton.addActionListener(this);
 		this.add(updateButton);
-		
+
 		errorSelection = new JLabel("Veuillez sélectionner une ligne dans la table");
 		errorSelection.setForeground(new Color(128, 0, 0));
 		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
 		errorSelection.setBounds(120, 755, 307, 16);
-		
+
 	}
 
 
@@ -128,9 +130,9 @@ public class ObjectGestion extends JPanel implements ActionListener {
 					data[i][j]=column;
 					if(j==2) {
 						if(column.equals("1")) 
-							data[i][2] = "enable"; 
+							data[i][2] = "Enable"; 
 						else 
-							data[i][2] = "disable"; 
+							data[i][2] = "Disable"; 
 					}
 					if(j==3) {
 						if (column.equals("1"))
@@ -159,12 +161,25 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	}
 
 	// Remove all the information label we could have displayed at this point
-		private void clearlabel() {
-			this.remove(errorSelection);
-			
+	private void clearlabel() {
+		this.remove(errorSelection);
+
+	}
+
+	/**
+	 * Method use to get the values of the selected row. It will be use especially in the ObjectModification class
+	 * @return
+	 */
+	protected static List<String> getRowUpdate(){
+		int ligne = objectTable.getSelectedRow(); 
+		List<String> listUpdate = new ArrayList<String>(); 
+		for(int i = 0; i<4; i++) {
+			listUpdate.add(data[ligne][i].toString()); 
 		}
-	
-	
+		return listUpdate;
+	}
+
+
 	public void actionPerformed(ActionEvent event) {
 
 		if(event.getSource().equals(addButton)){
@@ -179,7 +194,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			controller.getGui().repaint();
 			return;
 		}
-		
+
 		if(event.getSource().equals(deleteButton)) {
 			clearlabel();
 			if(objectTable.getSelectedRow()!= -1) {
@@ -199,7 +214,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			}
 			return;
 		}
-		
+
 		if(event.getSource().equals(updateButton)) {
 			if(objectTable.getSelectedRow()!= -1) {
 				controller.getGui().changeWindow(WindowList.OBJECTMODIFICATION);

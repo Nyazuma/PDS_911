@@ -17,6 +17,7 @@ import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
 import shs.common.MsgIntResult;
 import shs.common.MsgListObject;
+import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
 public class GuiController {
@@ -109,6 +110,22 @@ public class GuiController {
 		
 	}
 	
+	public boolean update(List<String> rowUpdate) {
+		MsgUpdateObject update =  new MsgUpdateObject(rowUpdate);  
+		String output = Tool.messageToJSON(update);
+		String answer; 
+		try {
+			answer = contactServer(output); 
+		}catch (ConnectException e) {
+			return false; 
+		}
+		if(answer != null) {
+			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
+			return result.getStatus(); 
+		}
+		return false; 
+	}
+	
 	
 	public List<List<String>> listObjet() {
 		Message listObject = new Message(MessageType.LISTOBJECT);
@@ -136,6 +153,7 @@ public class GuiController {
 		// Get the local address
 		InetAddress address = null;
 		try {
+			//address = InetAddress.getLocalHost(); + mettre dans config 192.168.20.20 et garder le même port
 			address = InetAddress.getByName("192.168.20.20");
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
