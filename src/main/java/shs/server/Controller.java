@@ -109,7 +109,7 @@ public class Controller {
 	 */
 	private boolean connection(String identifiant, String password) {
 
-		String request = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
+		String request = "Select count(*) from Personnels where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
 		
 		Tool.logger.info("Connection - Controller");
 		
@@ -277,10 +277,10 @@ public class Controller {
 	}
 
 	private List<List<String>> listObject(){
-		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, "
-				+ "Zone_emplacement, Piece_Emplacement FROM Capteurs INNER JOIN Emplacement ON "
-				+ "Capteurs.ID_Emplacement=Emplacement.ID_Emplacement INNER JOIN Residences ON "
-				+ "Emplacement.ID_Residence = Residences.ID_Residence;"; 
+		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Piece " + 
+				"FROM Capteurs INNER JOIN Pieces ON Capteurs.ID_Piece=Pieces.ID_Piece " + 
+				"INNER JOIN Etages ON Pieces.ID_Etage=Etages.ID_Etage " + 
+				"INNER JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence"; 
 		return getList(request);
 
 	}
@@ -291,6 +291,7 @@ public class Controller {
 		return getList(request);
 	}
 
+	
 
 	private List<List<String>> listPieces() {
 		String request = "SELECT DISTINCT Piece_Emplacement FROM Emplacement;";
