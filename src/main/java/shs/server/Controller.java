@@ -90,6 +90,10 @@ public class Controller {
 			resultList = listResidences();
 			MsgListObject answer9 = new MsgListObject(resultList); 
 			return Tool.messageToJSON(answer9);
+		case LISTREFERENTIELS :
+			resultList = listReferentiels();
+			MsgListObject answer10 = new MsgListObject(resultList); 
+			return Tool.messageToJSON(answer10);
 		default:
 			Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return "";
@@ -296,6 +300,11 @@ public class Controller {
 
 	private List<List<String>> listZones() {
 		String request = "SELECT DISTINCT Zone_Emplacement FROM Emplacement;";
+		return getList(request);
+	}
+	
+	private List<List<String>> listReferentiels(){
+		String request = "SELECT Type_Capteur FROM Referentiel_Capteurs;";
 		return getList(request);
 	}
 

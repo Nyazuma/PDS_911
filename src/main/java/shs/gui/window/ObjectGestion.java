@@ -72,10 +72,11 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		manageObjectLabel.setFont(new Font("Cambria Math", Font.BOLD, 20));
 		manageObjectLabel.setBounds(525, 25, 291, 41);
 		this.add(manageObjectLabel);
-
+		
 		detectorList = new JComboBox();
 		detectorList.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		detectorList.setModel(new DefaultComboBoxModel(new String[] {"Capteur de temp\u00E9rature", "Capteur de fum\u00E9e", "Capteur ouverture ", "Capteur hygrom\u00E9trique", "Capteur de pr\u00E9sence", "Capteur appel ", "Bracelet"}));
+		// We get the list of Captor types
+		detectorList.setModel(new DefaultComboBoxModel(controller.readReferentiels()));
 		detectorList.setBounds(969, 279, 309, 33);
 		this.add(detectorList);
 
@@ -84,7 +85,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		detectorTypeTitleLabel.setBounds(800, 279, 169, 33);
 		this.add(detectorTypeTitleLabel);
 
-		listObject = controller.listObjet();
+		listObject = controller.readObjects();
 		gestionListObject();
 		this.add(scrollPane, BorderLayout.CENTER);
 
@@ -172,7 +173,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected static List<String> getRowUpdate(){
 		int ligne = objectTable.getSelectedRow(); 
 		List<String> listUpdate = new ArrayList<String>(); 
-		for(int i = 0; i<data.length; i++) {
+		for(int i = 0; i<data[ligne].length; i++) {
 			listUpdate.add(data[ligne][i].toString()); 
 		}
 		return listUpdate;

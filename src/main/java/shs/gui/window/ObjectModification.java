@@ -61,7 +61,8 @@ public class ObjectModification extends JPanel implements ActionListener{
 		labTitre.setBounds(511, 103, 447, 28);
 		this.add(labTitre);
 
-		modelTypeCapteur = new DefaultComboBoxModel<String>(new String[] {"Capteur de température", "Capteur de fumee", "Capteur ouverture ", "Capteur hygrométrique", "Capteur de présence", "Capteur appel ", "Bracelet"});	
+		// We get the list of captor types
+		modelTypeCapteur = new DefaultComboBoxModel<String>(controller.readReferentiels());	
 		typeCapteur = new JComboBox<String>();
 		typeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		typeCapteur.setModel(modelTypeCapteur);
@@ -89,14 +90,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 		this.add(lblEtatCapteur);
 
 		// We get the residences list
-		List<List<String>> listResidences = controller.readResidences();
-		String[] tabResidences = new String[listResidences.size()];
-		int i =0;
-		for(List<String> line : listResidences) {
-			tabResidences[i]=line.get(1);
-			i++;
-		}
-		modelResidence = new DefaultComboBoxModel<String>(tabResidences);
+		modelResidence = new DefaultComboBoxModel<String>(controller.readResidences());
 		residenceCapteur = new JComboBox<String>(); 
 		residenceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		residenceCapteur.setModel(modelResidence);
@@ -110,14 +104,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 		this.add(lblResidence); 
 
 		// We get the list of zones
-		List<List<String>> listZones = controller.readZones();
-		String[] tabZones = new String[listZones.size()];
-		i =0;
-		for(List<String> line : listZones) {
-			tabZones[i]=line.get(0);
-			i++;
-		}
-		modelZone = new DefaultComboBoxModel<String>(tabZones);
+		modelZone = new DefaultComboBoxModel<String>(controller.readZones());
 		zoneCapteur = new JComboBox<String>(); 
 		zoneCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		zoneCapteur.setModel(modelZone);
@@ -126,14 +113,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 		this.add(zoneCapteur); 
 
 		// We get the list of pieces
-		List<List<String>> listPieces = controller.readPieces();
-		String[] tabPieces = new String[listPieces.size()];
-		i =0;
-		for(List<String> line : listPieces) {
-			tabPieces[i]=line.get(0);
-			i++;
-		}
-		modelPiece = new DefaultComboBoxModel<String>(tabPieces);
+		modelPiece = new DefaultComboBoxModel<String>(controller.readPieces());
 		pieceCapteur = new JComboBox<String>(); 
 		pieceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		pieceCapteur.setModel(modelPiece);
@@ -230,6 +210,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 				message.setText("Une erreur est survenue. L'object n'a pas pu être modifié.");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);
+
 			}
 		}
 

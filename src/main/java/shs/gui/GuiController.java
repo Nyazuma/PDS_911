@@ -76,40 +76,6 @@ public class GuiController {
 		return -1;
 	}
 
-	public List<List<String>> addObject(String detectorType) {
-		MsgAddObject addObject = new MsgAddObject(detectorType);
-		String output = Tool.messageToJSON(addObject);
-		String answer;
-		try {
-			answer = contactServer(output);
-		}
-		catch (ConnectException e) {
-			return null;
-		}
-		if(answer!= null) {
-			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
-			return result.getListObject(); 
-		}
-		return null;
-	}
-
-	public List<List<String>> delete(String idObject) {
-		MsgDeleteObject delete = new MsgDeleteObject(idObject); 
-		String output = Tool.messageToJSON(delete);
-		String answer; 
-		try {
-			answer = contactServer(output); 
-		}catch(ConnectException e) {
-			return null; 
-		}
-		if(answer != null) {
-			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
-			return result.getListObject(); 
-		}
-		return null; 
-		
-	}
-	
 	public boolean update(List<String> rowUpdate) {
 		MsgUpdateObject update =  new MsgUpdateObject(rowUpdate);  
 		String output = Tool.messageToJSON(update);
@@ -125,62 +91,69 @@ public class GuiController {
 		}
 		return false; 
 	}
-	
-	public List<List<String>> readResidences() {
-		Message read = new Message(MessageType.LISTRESIDENCES); 
-		String output = Tool.messageToJSON(read);
-		String answer; 
-		try {
-			answer = contactServer(output); 
-		}catch(ConnectException e) {
-			return null; 
-		}
-		if(answer != null) {
-			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
-			return result.getListObject(); 
-		}
-		return null; 
-		
+
+	public List<List<String>> addObject(String detectorType) {
+		MsgAddObject addObject = new MsgAddObject(detectorType);
+		return readGeneric(addObject);
 	}
-	
-	public List<List<String>> readZones() {
-		Message read = new Message(MessageType.LISTZONES); 
-		String output = Tool.messageToJSON(read);
-		String answer; 
-		try {
-			answer = contactServer(output); 
-		}catch(ConnectException e) {
-			return null; 
-		}
-		if(answer != null) {
-			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
-			return result.getListObject(); 
-		}
-		return null; 
-		
+
+	public List<List<String>> delete(String idObject) {
+		MsgDeleteObject delete = new MsgDeleteObject(idObject);  
+		return readGeneric(delete);
 	}
-	
-	public List<List<String>> readPieces() {
-		Message read = new Message(MessageType.LISTPIECES); 
-		String output = Tool.messageToJSON(read);
-		String answer; 
-		try {
-			answer = contactServer(output); 
-		}catch(ConnectException e) {
-			return null; 
+
+	public String[] readResidences() {
+		List<List<String>> listResidences = readGeneric(new Message(MessageType.LISTRESIDENCES));
+		String[] tabResidences = new String[listResidences.size()];
+		int i =0;
+		for(List<String> line : listResidences) {
+			tabResidences[i]=line.get(1);
+			i++;
 		}
-		if(answer != null) {
-			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer); 
-			return result.getListObject(); 
-		}
-		return null; 
-		
+		return tabResidences;
 	}
-	
-	
-	public List<List<String>> listObjet() {
-		Message listObject = new Message(MessageType.LISTOBJECT);
-		String output = Tool.messageToJSON(listObject);
+
+	public String[] readZones() {
+		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
+		String[] tabZones = new String[listZones.size()];
+		int i =0;
+		for(List<String> line : listZones) {
+			tabZones[i]=line.get(0);
+			i++;
+		}
+		return tabZones;
+	}
+
+	public String[] readPieces() {
+		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
+		String[] tabPieces = new String[listPieces.size()];
+		int i =0;
+		for(List<String> line : listPieces) {
+			tabPieces[i]=line.get(0);
+			i++;
+		}
+		return tabPieces;
+	}
+
+
+	public List<List<String>> readObjects() {
+		return readGeneric(new Message(MessageType.LISTOBJECT));
+	}
+
+	public String[] readReferentiels() {
+		List<List<String>> listReferentiels = readGeneric(new Message(MessageType.LISTREFERENTIELS));
+		String[] tabReferentiels = new String[listReferentiels.size()];
+		int i =0;
+		for(List<String> line : listReferentiels) {
+			tabReferentiels[i]=line.get(0);
+			i++;
+		}
+		return tabReferentiels;
+	}
+
+	// To be called when we expect the message to return a List<List<String>>
+	public List<List<String>> readGeneric(Message message) {
+		String output = Tool.messageToJSON(message);
 		String answer; 
 		try { 
 			answer = contactServer(output);
