@@ -12,6 +12,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import shs.gui.GuiController;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Authentication extends JPanel implements ActionListener {
 
@@ -69,6 +71,13 @@ public class Authentication extends JPanel implements ActionListener {
 		this.add(validateButton);
 
 		passwordField = new JPasswordField();
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()==KeyEvent.VK_ENTER)        
+			        validateButton.doClick();
+			}
+		});
 		passwordField.setBounds(637, 371, 223, 26);
 		this.add(passwordField);
 
