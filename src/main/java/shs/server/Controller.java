@@ -106,8 +106,9 @@ public class Controller {
 	private boolean connection(String identifiant, String password) {
 
 		String request = "Select count(*) from Personnel where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
-
+		
 		Tool.logger.info("Connection - Controller");
+		
 
 		try {
 			Statement statement = connection.createStatement();
@@ -125,6 +126,7 @@ public class Controller {
 			}
 		}catch (SQLException e) {
 			Tool.logger.info("Connection FAILED - SQL EXCEPTION");
+			System.out.println(request);
 			e.printStackTrace();
 
 			return false; 

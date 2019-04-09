@@ -32,7 +32,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JLabel objectNumberTitleLabel;
 	protected JLabel objectNumberLabel; 
 	protected JLabel manageObjectLabel;
-	protected JLabel detectorTypeTitleLabel;
+	protected JLabel detectorTypeTitleLabel;                           
 	protected JLabel errorSelection; 
 
 
@@ -172,7 +172,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected static List<String> getRowUpdate(){
 		int ligne = objectTable.getSelectedRow(); 
 		List<String> listUpdate = new ArrayList<String>(); 
-		for(int i = 0; i<data[ligne].length; i++) {
+		for(int i = 0; i<data.length; i++) {
 			listUpdate.add(data[ligne][i].toString()); 
 		}
 		return listUpdate;

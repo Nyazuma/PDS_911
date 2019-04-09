@@ -27,6 +27,7 @@ public class ServerAcceptor {
 				System.out.println("SHS Server : a new connection was initialized!");
 				
 				// We open a new Thread to serve the request
+				// TODO check if the connection is null, don't launch the handler if so
 				Controller controller = new Controller(connectionPool);
 				RequestHandler service = new RequestHandler(socket, controller);
 				Thread thread = new Thread(service);

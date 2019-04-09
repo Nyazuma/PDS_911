@@ -222,7 +222,7 @@ public class GuiController {
 			requestServer.writeUTF(request);
 			requestServer.flush();
 			// We get the answer 
-			//TODO : put a timmer before awfull exception
+			//TODO : put a timer before awfull exception
 			rawAnswerServer= new DataInputStream(socket.getInputStream());
 			answerServer = rawAnswerServer.readUTF();
 		}
