@@ -52,7 +52,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
 		setLayout(null);
 
-		objectNumberTitleLabel = new JLabel("Nombre d'objects connect\u00E9s : ");
+		objectNumberTitleLabel = new JLabel("Nombre d'objets connect\u00E9s : ");
 		objectNumberTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectNumberTitleLabel.setBounds(48, 184, 246, 28);
 		this.add(objectNumberTitleLabel);
