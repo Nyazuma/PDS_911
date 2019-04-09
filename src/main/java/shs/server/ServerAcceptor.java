@@ -28,7 +28,7 @@ public class ServerAcceptor {
 				
 				// We open a new Thread to serve the request
 				Controller controller = new Controller(connectionPool);
-				ServerHandler service = new ServerHandler(socket, controller);
+				RequestHandler service = new RequestHandler(socket, controller);
 				Thread thread = new Thread(service);
 				thread.start();
 			} catch (IOException e) {

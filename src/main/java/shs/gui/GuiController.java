@@ -204,8 +204,8 @@ public class GuiController {
 		// Get the local address
 		InetAddress address = null;
 		try {
-			//address = InetAddress.getLocalHost(); //+ mettre dans config 192.168.20.20 et garder le même port
-			address = InetAddress.getByName("192.168.20.20");
+			address = InetAddress.getLocalHost(); //+ mettre dans config 192.168.20.20 et garder le même port
+			//address = InetAddress.getByName("192.168.20.20");
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}

@@ -11,9 +11,10 @@ import shs.common.Tool;
 
 
 public class DataConfig {
-	
+
 	private static final String PROPERTIES_FILE = "configuration"; 
 	private static  String PROPERTY_URL; 
+	private static  String PORT; 
 	private static  String PROPERTY_DB; 
 	private static  String PROPERTY_DRIVER;
 	private static  String PROPERTY_USERNAME;
@@ -21,16 +22,16 @@ public class DataConfig {
 	private static  String PROPERTY_NB_CONNEXION; 
 	private static  String PROPERTY_USER_ADMIN; 
 	private static  String PROPERTY_PASSWORD_ADMIN; 
-
-
+	
+	
 	public static void getInstanceConfig() {
 		Properties properties = new Properties();
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream fichierConfiguration = classLoader.getResourceAsStream(PROPERTIES_FILE);
-		
+
 		if (fichierConfiguration == null) {
-			
+
 			Tool.logger.info("The properties file " + PROPERTIES_FILE + " wasn't found." );
 		}
 
@@ -38,6 +39,7 @@ public class DataConfig {
 			Tool.logger.info("Properties file loading");
 			properties.load(fichierConfiguration);
 			PROPERTY_URL = properties.getProperty("PROPERTY_URL");
+			PORT = properties.getProperty("PORT");
 			PROPERTY_DB = properties.getProperty("PROPERTY_DB");
 			PROPERTY_DRIVER = properties.getProperty("PROPERTY_DRIVER");
 			PROPERTY_USERNAME = properties.getProperty("PROPERTY_USERNAME");
@@ -46,12 +48,12 @@ public class DataConfig {
 			PROPERTY_USER_ADMIN = properties.getProperty("PROPERTY_USER_ADMIN"); 
 			PROPERTY_PASSWORD_ADMIN = properties.getProperty("PROPERTY_PASSWORD_ADMIN"); 
 
-			
+
 
 		} catch ( FileNotFoundException e ) {
 			Tool.logger.info( "The properties file " + PROPERTIES_FILE + " wasn't found.");
 		} catch ( IOException e ) {
-			
+
 			Tool.logger.info( "Impossible to load the properties file " + PROPERTIES_FILE, e );
 		}
 
@@ -63,6 +65,14 @@ public class DataConfig {
 	}
 	public static void setPROPERTY_URL(String NEW_PROPERTY_URL) {
 		PROPERTY_URL = NEW_PROPERTY_URL;
+	}
+
+	public static int getPORT() {
+		return Integer.parseInt(PORT); 
+	}
+	
+	public static void setPORT(String NEW_PORT) {
+		PORT = NEW_PORT;
 	}
 	
 	public static String getPROPERTY_DB() {
@@ -79,23 +89,23 @@ public class DataConfig {
 		PROPERTY_DRIVER = NEW_PROPERTY_DRIVER;
 	}
 
-	
+
 	public static String getPROPERTY_USERNAME() {
 		return PROPERTY_USERNAME;
 	}
 	public static void setPROPERTY_USERNAME(String NEW_PROPERTY_USERNAME) {
 		PROPERTY_USERNAME = NEW_PROPERTY_USERNAME;
 	}
-	
-	
+
+
 	public static String getPROPERTY_PASSWORD() {
 		return PROPERTY_PASSWORD;
 	}
 	public static void setPROPERTY_PASSWORD(String NEW_PROPERTY_PASSWORD) {
 		PROPERTY_PASSWORD = NEW_PROPERTY_PASSWORD;
 	}
-	
-	
+
+
 	public static String getPROPERTY_NB_CONNEXION() {
 		return PROPERTY_NB_CONNEXION;
 	}

@@ -7,12 +7,12 @@ import java.net.Socket;
 
 import shs.common.Tool;
 
-public class ServerHandler implements Runnable{
+public class RequestHandler implements Runnable{
 
 	protected Socket socket;
 	protected Controller controller;
 
-	public ServerHandler(Socket clientSocket, Controller controller) {
+	public RequestHandler(Socket clientSocket, Controller controller) {
 		this.socket = clientSocket;
 		this.controller = controller;
 	}
