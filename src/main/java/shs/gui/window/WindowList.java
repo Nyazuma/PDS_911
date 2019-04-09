@@ -5,5 +5,5 @@ public enum WindowList {
 	/**
 	 * List of all the possible screen of the application
 	 */
-	AUTHENTICATION, OBJECTGESTION, OBJECTMODIFICATION
+	AUTHENTICATION, OBJECTGESTION, OBJECTMODIFICATION, MENU
 }

@@ -29,6 +29,11 @@ public class Gui extends JFrame{
 	 */
 	public void changeWindow(WindowList newWindow) {
 		switch(newWindow) {
+		case MENU : 
+			this.setContentPane(new Authentication(controller));
+			repaint();
+			setVisible(true);
+			break;
 		case AUTHENTICATION : 
 			this.setContentPane(new Authentication(controller));
 			repaint();
