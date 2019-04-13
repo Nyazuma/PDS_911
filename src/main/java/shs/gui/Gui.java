@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 import shs.common.Tool;
 import shs.gui.window.Authentication;
+import shs.gui.window.Menu;
 import shs.gui.window.ObjectGestion;
 import shs.gui.window.ObjectModification;
 import shs.gui.window.WindowList;
@@ -30,7 +31,7 @@ public class Gui extends JFrame{
 	public void changeWindow(WindowList newWindow) {
 		switch(newWindow) {
 		case MENU : 
-			this.setContentPane(new Authentication(controller));
+			this.setContentPane(new Menu(controller));
 			repaint();
 			setVisible(true);
 			break;

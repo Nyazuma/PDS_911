@@ -24,8 +24,9 @@ public class JDBCConnectionPool {
 	public boolean init() {
 		Connection connection = null;
 		try{  
-			// Database name (be carefull of the upper/lower case), username, password
-			connection = DriverManager.getConnection(DataConfig.getPROPERTY_DRIVER() + "://" + DataConfig.getPROPERTY_URL() + "/" + DataConfig.getPROPERTY_DB(),
+			// Database name (be carefull of the upper/lower case), username, password	
+			// TODO DataConfig.getPROPERTY_URL() instead of the ip
+			connection = DriverManager.getConnection(DataConfig.getPROPERTY_DRIVER() + "://" + "192.168.20.20" + "/" + DataConfig.getPROPERTY_DB(),
 					DataConfig.getPROPERTY_USERNAME(), DataConfig.getPROPERTY_PASSWORD());
 			listConnections.add(connection);
 		}

@@ -110,7 +110,7 @@ public class Authentication extends JPanel implements ActionListener {
 		if(event.getSource().equals(validateButton)) {
 			Boolean connectionEstablished = controller.connection(loginField.getText(), String.valueOf((passwordField.getPassword())));
 			if(connectionEstablished){
-				controller.getGui().changeWindow(WindowList.OBJECTGESTION);
+				controller.getGui().changeWindow(WindowList.MENU);
 			}
 			else
 				this.add(connectionFailedTitleLabel);
