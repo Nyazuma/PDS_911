@@ -16,7 +16,7 @@ import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
 import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
-import shs.common.MsgListObject;
+import shs.common.MsgListResult;
 import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
@@ -60,19 +60,19 @@ public class Controller {
 			return Tool.messageToJSON(answer1);
 		case ADDOBJECT :
 			resultList = addObject(((MsgAddObject)input).getObject());
-			MsgListObject answer2 = new MsgListObject(resultList); 
+			MsgListResult answer2 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer2);
 		case NUMBEROBJECT :
-			resultInteger = nbObject();
+			resultInteger = nbObjects();
 			MsgIntResult answer3 = new MsgIntResult(resultInteger);
 			return Tool.messageToJSON(answer3);
-		case LISTOBJECT : 
-			resultList = listObject(); 
-			MsgListObject answer4 = new MsgListObject(resultList); 
+		case LISTOBJECTS : 
+			resultList = listObjects(); 
+			MsgListResult answer4 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer4);
 		case DELETEOBJECT : 
-			resultList = deleteObeject(((MsgDeleteObject)input).getObject()); 
-			MsgListObject answer5 = new MsgListObject(resultList); 
+			resultList = deleteObject(((MsgDeleteObject)input).getObject()); 
+			MsgListResult answer5 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer5);
 		case UPDATEOBJECT : 
 			resultBoolean = updateObject(((MsgUpdateObject)input).getObject()); 
@@ -80,19 +80,19 @@ public class Controller {
 			return Tool.messageToJSON(answer6);
 		case LISTZONES :
 			resultList = listZones();
-			MsgListObject answer7 = new MsgListObject(resultList); 
+			MsgListResult answer7 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer7);
 		case LISTPIECES :
 			resultList = listPieces();
-			MsgListObject answer8 = new MsgListObject(resultList); 
+			MsgListResult answer8 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer8);
 		case LISTRESIDENCES :
 			resultList = listResidences();
-			MsgListObject answer9 = new MsgListObject(resultList); 
+			MsgListResult answer9 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer9);
 		case LISTREFERENTIELS :
 			resultList = listReferentiels();
-			MsgListObject answer10 = new MsgListObject(resultList); 
+			MsgListResult answer10 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer10);
 		default:
 			Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
@@ -142,7 +142,7 @@ public class Controller {
 	 * 
 	 * @return
 	 */
-	private int nbObject() {
+	private int nbObjects() {
 		String request = "Select count(*) from Capteurs";  
 
 
@@ -175,13 +175,13 @@ public class Controller {
 			statement.executeUpdate(request);
 			Tool.logger.info("addObject SUCCEED");
 
-			return listObject(); 
+			return listObjects(); 
 
 		}catch (SQLException e) {
 			Tool.logger.info("addObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
 
-			return listObject(); 
+			return listObjects(); 
 		}
 	}
 
@@ -190,17 +190,17 @@ public class Controller {
 	 * @param idCapteur
 	 * @return
 	 */
-	private List<List<String>> deleteObeject(String idCapteur) {
+	private List<List<String>> deleteObject(String idCapteur) {
 		String request = "DELETE FROM Capteurs WHERE ID_Capteur ='" +idCapteur + "'";
 		try {
 			Statement statement = connection.createStatement(); 
 			statement.executeUpdate(request); 
 			Tool.logger.info("deleteObject SUCCED");
-			return listObject(); 
+			return listObjects(); 
 		}catch(SQLException e) {
 			Tool.logger.info("deleteObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
-			return listObject(); 
+			return listObjects(); 
 		}
 	}
 
@@ -276,7 +276,7 @@ public class Controller {
 		}
 	}
 
-	private List<List<String>> listObject(){
+	private List<List<String>> listObjects(){
 		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement " + 
 				"FROM Capteurs INNER JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
 				"INNER JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 

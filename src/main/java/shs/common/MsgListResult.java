@@ -6,16 +6,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MsgListResult extends Message {
-
-	protected List<Object> list;
+	
+	protected List<List<String>> listResult;
 	
 	@JsonCreator
-	public MsgListResult(@JsonProperty("list") List<Object> list) {
+	public MsgListResult(@JsonProperty("listResult") List<List<String>> listResult) {
 		super(MessageType.LISTRESULT);
-		this.list=list;
+		this.listResult = listResult;
 	}
-	
-	public List<Object> getList() {
-		return list;
+
+	public List<List<String>> getListResult() {
+		return listResult;
 	}
+
 }

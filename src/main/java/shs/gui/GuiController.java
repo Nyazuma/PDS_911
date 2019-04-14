@@ -16,7 +16,7 @@ import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
 import shs.common.MsgIntResult;
-import shs.common.MsgListObject;
+import shs.common.MsgListResult;
 import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
@@ -137,7 +137,7 @@ public class GuiController {
 
 
 	public List<List<String>> readObjects() {
-		return readGeneric(new Message(MessageType.LISTOBJECT));
+		return readGeneric(new Message(MessageType.LISTOBJECTS));
 	}
 
 	public String[] readReferentiels() {
@@ -158,8 +158,8 @@ public class GuiController {
 		try { 
 			answer = contactServer(output);
 			if(answer!= null) {
-				MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer);
-				return result.getListObject();
+				MsgListResult result = (MsgListResult)Tool.jsonToMessage(answer);
+				return result.getListResult();
 			}
 		}
 		catch (ConnectException e) {
