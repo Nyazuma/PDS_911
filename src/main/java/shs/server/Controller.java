@@ -305,7 +305,7 @@ public class Controller {
 	}
 	
 	private List<List<String>> listReferentiels(){
-		String request = "SELECT Type_Capteur FROM Referentiel_Capteurs;";
+		String request = "SELECT Type_Capteur FROM Referentiel_Capteurs ORDER BY Type_Capteur;";
 		return getList(request);
 	}
 
