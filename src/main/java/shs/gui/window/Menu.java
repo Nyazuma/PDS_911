@@ -16,11 +16,11 @@ public class Menu extends JPanel implements ActionListener{
 
 	private GuiController controller; 
 
-	private JLabel lblTitre;
-	private JButton btnGestionObjet; 
-	private JButton btnSurveillance; 
-	private JButton btnPlan; 
-	private JButton btnStatistique; 
+	private JLabel titleLabel;
+	private JButton ObjectGestionButton; 
+	private JButton monitoringButton; 
+	private JButton mapButton; 
+	private JButton statisticsButton; 
 
 	public Menu(GuiController controller) {
 		this.controller = controller; 
@@ -29,52 +29,52 @@ public class Menu extends JPanel implements ActionListener{
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
 		setLayout(null);
 
-		lblTitre = new JLabel("Veuillez indiquer l'action que vous souhaitez r\u00E9aliser : ");
-		lblTitre.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblTitre.setBounds(541, 128, 320, 22);
-		this.add(lblTitre);
+		titleLabel = new JLabel("Veuillez indiquer l'action que vous souhaitez r\u00E9aliser : ");
+		titleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		titleLabel.setBounds(541, 128, 400, 22);
+		this.add(titleLabel);
 
-		btnGestionObjet = new JButton("Gestion des objets");
-		btnGestionObjet.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		btnGestionObjet.setBounds(703, 449, 320, 164);
-		btnGestionObjet.setBackground(new Color(0, 204, 153));
-		btnGestionObjet.addActionListener(this); 
-		this.add(btnGestionObjet);
+		ObjectGestionButton = new JButton("Gestion des objets");
+		ObjectGestionButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		ObjectGestionButton.setBounds(703, 449, 320, 164);
+		ObjectGestionButton.setBackground(new Color(0, 204, 153));
+		ObjectGestionButton.addActionListener(this); 
+		this.add(ObjectGestionButton);
 
-		btnSurveillance = new JButton("Surveillance des objets");
-		btnSurveillance.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		btnSurveillance.setBounds(703, 260, 320, 175);
-		btnSurveillance.setBackground(new Color(255, 153, 204));
-		btnSurveillance.addActionListener(this); 
-		this.add(btnSurveillance);
+		monitoringButton = new JButton("Surveillance des objets");
+		monitoringButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		monitoringButton.setBounds(703, 260, 320, 175);
+		monitoringButton.setBackground(new Color(255, 153, 204));
+		monitoringButton.addActionListener(this); 
+		this.add(monitoringButton);
 
-		btnPlan = new JButton("Plan de la r\u00E9sidence");
-		btnPlan.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		btnPlan.setBounds(363, 261, 328, 173);
-		btnPlan.setBackground(new Color(255, 102, 102));
-		btnPlan.addActionListener(this); 
-		this.add(btnPlan);
+		mapButton = new JButton("Plan de la r\u00E9sidence");
+		mapButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		mapButton.setBounds(363, 261, 328, 173);
+		mapButton.setBackground(new Color(255, 102, 102));
+		mapButton.addActionListener(this); 
+		this.add(mapButton);
 
-		btnStatistique = new JButton("Statistique des objets");
-		btnStatistique.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		btnStatistique.setBounds(363, 447, 328, 166);
-		btnStatistique.setBackground(new Color(153, 255, 204));
-		btnStatistique.addActionListener(this); 
-		this.add(btnStatistique);
+		statisticsButton = new JButton("Statistiques des objets");
+		statisticsButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		statisticsButton.setBounds(363, 447, 328, 166);
+		statisticsButton.setBackground(new Color(153, 255, 204));
+		statisticsButton.addActionListener(this); 
+		this.add(statisticsButton);
 	}
 	
 	public void actionPerformed(ActionEvent event) {
-		if(event.getSource().equals(btnGestionObjet)) {
+		if(event.getSource().equals(ObjectGestionButton)) {
 			controller.getGui().changeWindow(WindowList.OBJECTGESTION);
 		}
 		
-		if(event.getSource().equals(btnSurveillance)) {
+		if(event.getSource().equals(monitoringButton)) {
+			controller.getGui().changeWindow(WindowList.MONITORING);
+		}
+		if(event.getSource().equals(mapButton)) {
 			
 		}
-		if(event.getSource().equals(btnPlan)) {
-			
-		}
-		if(event.getSource().equals(btnStatistique)) {
+		if(event.getSource().equals(statisticsButton)) {
 			
 		}
 		

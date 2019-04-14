@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import shs.common.Tool;
 import shs.gui.window.Authentication;
 import shs.gui.window.Menu;
+import shs.gui.window.Monitoring;
 import shs.gui.window.ObjectGestion;
 import shs.gui.window.ObjectModification;
 import shs.gui.window.WindowList;
@@ -47,6 +48,11 @@ public class Gui extends JFrame{
 			break;
 		case OBJECTMODIFICATION :
 			this.setContentPane(new ObjectModification(controller));
+			repaint();
+			setVisible(true);
+			break;
+		case MONITORING :
+			this.setContentPane(new Monitoring(controller));
 			repaint();
 			setVisible(true);
 			break;
