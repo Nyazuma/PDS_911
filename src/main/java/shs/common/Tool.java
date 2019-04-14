@@ -48,6 +48,27 @@ public class Tool {
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.UPDATEOBJECT.toString())) {
 				return mapper.readValue(json, MsgUpdateObject.class); 
 			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTRFID.toString())) {
+				return mapper.readValue(json, MsgReportRFID.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTCALL.toString())) {
+				return mapper.readValue(json, MsgReportCall.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTHYGRO.toString())) {
+				return mapper.readValue(json, MsgReportHygro.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTMOTION.toString())) {
+				return mapper.readValue(json, MsgReportMotion.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTOPENING.toString())) {
+				return mapper.readValue(json, MsgReportOpening.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTSMOKE.toString())) {
+				return mapper.readValue(json, MsgReportSmoke.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTTEMPERATURE.toString())) {
+				return mapper.readValue(json, MsgReportTemperature.class); 
+			}
 			// Don't forget messages without a specific class!
 			return mapper.readValue(json, Message.class);
 		} 

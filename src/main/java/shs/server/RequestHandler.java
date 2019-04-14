@@ -25,10 +25,12 @@ public class RequestHandler implements Runnable{
 
 		// Call to the controller
 		String answer = controller.treatmentRequest(requestJSON);
-		
-		// Send the answer
-		System.out.println("I'm sending the answer : " + answer);
-		sendAnswer(answer);
+
+		// Send the answer if necessary
+		if(answer!=null) {
+			System.out.println("I'm sending the answer : " + answer);
+			sendAnswer(answer);
+		}
 
 		// The end, we close the socket
 		try {
@@ -40,7 +42,7 @@ public class RequestHandler implements Runnable{
 	}
 
 	private String requestDecrypted() {
-		
+
 		DataInputStream rawInput=null;
 		String decodedInput = "";
 
@@ -48,7 +50,7 @@ public class RequestHandler implements Runnable{
 		try {
 			rawInput = new DataInputStream(socket.getInputStream());
 		} catch (IOException e) {
-			Tool.logger.info("ServerService : socket problem");
+			Tool.logger.error("ServerService : socket problem");
 		}
 
 		// Reading phase

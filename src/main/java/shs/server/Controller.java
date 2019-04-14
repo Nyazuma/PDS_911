@@ -17,6 +17,7 @@ import shs.common.MsgConnection;
 import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
+import shs.common.MsgReportRFID;
 import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
@@ -94,11 +95,15 @@ public class Controller {
 			resultList = listReferentiels();
 			MsgListResult answer10 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer10);
+		case REPORTRFID :
+			reportRFID(((MsgReportRFID)input).getID());
+			return null;
 		default:
-			Tool.logger.info("#Error : Controller > treatmentRequest : Unknow request " + request);
-			return "";
+			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
+			return null;
 		}	
 	}
+
 
 	/**
 	 * Check connection. 
@@ -110,9 +115,9 @@ public class Controller {
 	private boolean connection(String identifiant, String password) {
 
 		String request = "Select count(*) from Personnels where Identifiant_Personnel='" + identifiant + "' and MotDePasse_Personnel = '" + password + "'"; 
-		
+
 		Tool.logger.info("Connection - Controller");
-		
+
 
 		try {
 			Statement statement = connection.createStatement();
@@ -129,7 +134,7 @@ public class Controller {
 				return false; 
 			}
 		}catch (SQLException e) {
-			Tool.logger.info("Connection FAILED - SQL EXCEPTION");
+			Tool.logger.error("Connection FAILED - SQL EXCEPTION");
 			System.out.println(request);
 			e.printStackTrace();
 
@@ -155,7 +160,7 @@ public class Controller {
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
-			Tool.logger.info("nbObject FAILED - SQL EXCEPTION");
+			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
 
 			return 0; 
 		}
@@ -178,7 +183,7 @@ public class Controller {
 			return listObjects(); 
 
 		}catch (SQLException e) {
-			Tool.logger.info("addObject FAILED - SQL EXCEPTION : " + request);
+			Tool.logger.error("addObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
 
 			return listObjects(); 
@@ -198,7 +203,7 @@ public class Controller {
 			Tool.logger.info("deleteObject SUCCED");
 			return listObjects(); 
 		}catch(SQLException e) {
-			Tool.logger.info("deleteObject FAILED - SQL EXCEPTION : " + request);
+			Tool.logger.error("deleteObject FAILED - SQL EXCEPTION : " + request);
 			e.printStackTrace();
 			return listObjects(); 
 		}
@@ -228,7 +233,7 @@ public class Controller {
 				statement.executeUpdate(createEmplacement); 
 				// We get the ID from the "Emplacement" we just created
 				String requestEmplacementNew = "SELECT ID_Emplacement FROM Emplacement WHERE Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'"
-												+ " AND ID_Residence='" + id + "'";
+						+ " AND ID_Residence='" + id + "'";
 				ResultSet resultEmplacementNew = statement.executeQuery(requestEmplacementNew); 
 				resultEmplacementNew.next();
 				int idNew = resultEmplacementNew.getInt(1);
@@ -237,7 +242,7 @@ public class Controller {
 			else {
 				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + resultEmplacement.getInt(1) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
 			}
-			
+
 			statement.executeUpdate(request); 
 			return true; 
 		}catch(SQLException e) {
@@ -270,7 +275,7 @@ public class Controller {
 
 			return list; 
 		}catch (SQLException e) {
-			Tool.logger.info("getList FAILED - SQL EXCEPTION :\n " + sql);
+			Tool.logger.error("getList FAILED - SQL EXCEPTION :\n " + sql);
 			e.printStackTrace();
 			return null; 
 		}
@@ -291,7 +296,7 @@ public class Controller {
 		return getList(request);
 	}
 
-	
+
 
 	private List<List<String>> listPieces() {
 		String request = "SELECT DISTINCT Piece_Emplacement FROM Emplacement;";
@@ -303,10 +308,23 @@ public class Controller {
 		String request = "SELECT DISTINCT Zone_Emplacement FROM Emplacement;";
 		return getList(request);
 	}
-	
+
 	private List<List<String>> listReferentiels(){
 		String request = "SELECT Type_Capteur FROM Referentiel_Capteurs ORDER BY Type_Capteur;";
 		return getList(request);
+	}
+
+	private void reportRFID(Integer id) {
+		String message = "Le bracelet a généré un appel!";
+		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
+				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch(SQLException e) {
+			Tool.logger.error("reportRFID FAILED - SQL EXCEPTION");
+		}
+
 	}
 
 }
