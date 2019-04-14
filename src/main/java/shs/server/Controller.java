@@ -277,9 +277,9 @@ public class Controller {
 	}
 
 	private List<List<String>> listObject(){
-		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Piece " + 
-				"FROM Capteurs INNER JOIN Pieces ON Capteurs.ID_Piece=Pieces.ID_Piece " + 
-				"INNER JOIN Etages ON Pieces.ID_Etage=Etages.ID_Etage " + 
+		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement " + 
+				"FROM Capteurs INNER JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
+				"INNER JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
 				"INNER JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence"; 
 		return getList(request);
 
