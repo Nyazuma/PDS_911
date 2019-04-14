@@ -48,15 +48,15 @@ public class GuiController {
 		String answer;
 		try {
 			answer = contactServer(output);
+			if(answer!= null) {
+				MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer);
+				return result.getStatus();
+			}
+			return false;	
 		}
 		catch (ConnectException e) {
 			return false;
 		}
-		if(answer!= null) {
-			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer);
-			return result.getStatus();
-		}
-		return false;	
 	}
 
 	public int nbObject() {
@@ -65,13 +65,13 @@ public class GuiController {
 		String answer;
 		try {
 			answer = contactServer(output);
+			if(answer!= null) {
+				MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
+				return result.getNumber();
+			}
 		}
 		catch (ConnectException e) {
 			return -1;
-		}
-		if(answer!= null) {
-			MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
-			return result.getNumber();
 		}
 		return -1;
 	}
@@ -82,12 +82,12 @@ public class GuiController {
 		String answer; 
 		try {
 			answer = contactServer(output); 
+			if(answer != null) {
+				MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
+				return result.getStatus(); 
+			}
 		}catch (ConnectException e) {
 			return false; 
-		}
-		if(answer != null) {
-			MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
-			return result.getStatus(); 
 		}
 		return false; 
 	}
@@ -157,13 +157,13 @@ public class GuiController {
 		String answer; 
 		try { 
 			answer = contactServer(output);
+			if(answer!= null) {
+				MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer);
+				return result.getListObject();
+			}
 		}
 		catch (ConnectException e) {
 			return null;
-		}
-		if(answer!= null) {
-			MsgListObject result = (MsgListObject)Tool.jsonToMessage(answer);
-			return result.getListObject();
 		}
 		return null;
 	}

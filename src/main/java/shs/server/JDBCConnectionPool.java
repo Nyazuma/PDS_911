@@ -65,5 +65,9 @@ public class JDBCConnectionPool {
 	public int statusConnection() {
 		return listConnections.size();
 	}
+	
+	public boolean isEmpty() {
+		return statusConnection()==0;
+	}
 }
 
