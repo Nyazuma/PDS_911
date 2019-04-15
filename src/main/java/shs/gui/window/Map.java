@@ -1,5 +1,6 @@
 package shs.gui.window;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,15 +9,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import shs.gui.GuiController;
 
 public class Map extends JPanel implements ActionListener{
 	
 	private BufferedImage image; 
-	JButton btnRetour; 
+	private JButton btnRetour; 
+	private JTable table;
+	JComboBox<String> comboStage; 
 	
 	private GuiController controller; 
 	
@@ -25,6 +31,7 @@ public class Map extends JPanel implements ActionListener{
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		this.controller.getGui().setSize(screensize);
 		this.controller.getGui().setLocationRelativeTo(null);
+		setBackground(new Color(95, 158, 160));
 		this.setLayout(null);
 		
 		btnRetour = new JButton("Retour");
@@ -32,6 +39,17 @@ public class Map extends JPanel implements ActionListener{
 		btnRetour.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		btnRetour.addActionListener(this);
 		this.add(btnRetour);
+		
+		table = new JTable();
+		table.setBounds(12, 99, 438, 527);
+		table.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(table);
+		
+		comboStage = new JComboBox();
+		comboStage.setModel(new DefaultComboBoxModel(new String[] {"Etage 1", "Etage 2"}));
+		comboStage.setBounds(108, 661, 204, 44);
+		comboStage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(comboStage);
 		
 	}
 
