@@ -3,15 +3,19 @@ package shs.gui.window;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
@@ -19,13 +23,29 @@ import shs.gui.GuiController;
 
 public class Map extends JPanel implements ActionListener{
 	
+	//TODO Revoir la taille des JLabel qui n'augmentent pas !
+	//TODO Aller chercher l'image sur le serveur 
+	//TODO Placer les boutons sur l'image
+	//TODO récupérer la liste des objets sans emplacements
+	//TODO gérer l'affectation des objets sur un emplacement 
+	//TODO afficher un récapitulatif pour chaque objet
+	//TODO gérer la libération d'un capteur 
+	//TODO mettre une légende 
+
+	/**
+	 * Image variables
+	 */
 	private BufferedImage image; 
+	private JLabel picLabel;
+	private ImageIcon imageIcon; 
+
+
 	private JButton btnRetour; 
 	private JTable table;
 	JComboBox<String> comboStage; 
-	
+
 	private GuiController controller; 
-	
+
 	public Map(GuiController controller) {
 		this.controller = controller; 
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
@@ -33,36 +53,80 @@ public class Map extends JPanel implements ActionListener{
 		this.controller.getGui().setLocationRelativeTo(null);
 		setBackground(new Color(95, 158, 160));
 		this.setLayout(null);
-		
+
+		//this.controller.getGui().getContentPane().add(this); 
 		btnRetour = new JButton("Retour");
 		btnRetour.setBounds(12, 15, 90, 44);
 		btnRetour.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		btnRetour.addActionListener(this);
 		this.add(btnRetour);
-		
+
 		table = new JTable();
 		table.setBounds(12, 99, 438, 527);
 		table.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		this.add(table);
-		
+
 		comboStage = new JComboBox();
 		comboStage.setModel(new DefaultComboBoxModel(new String[] {"Etage 1", "Etage 2"}));
 		comboStage.setBounds(108, 661, 204, 44);
 		comboStage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		comboStage.addActionListener(this);
 		this.add(comboStage);
+
+		try {
+			image = ImageIO.read(new File("C:\\Users\\33677\\OneDrive\\Bureau\\ESIPE\\PDS\\testImage.jpg"));
+		}catch(Exception e) {
+			System.out.println("ERROR - IMAGE NOT FOUND");
+			e.printStackTrace();
+		}
+//		BufferedImage myPicture = ImageIO.read(new File("path-to-file"));
+//		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+//		add(picLabel);
 		
+		imageIcon = new ImageIcon(image); 
+		picLabel = new JLabel(imageIcon); 
+		picLabel.setBounds(470, 0, 1500, 1000);
+		this.add(picLabel);
+
 	}
 
+
 	public void actionPerformed(ActionEvent event) {
+		
+		
 		if(event.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
 			controller.getGui().changeWindow(WindowList.MENU);
 		}
-		
+
+		if(event.getSource().equals(comboStage)) {
+
+			if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+				System.out.println("Je suis la !!!");
+				try {
+					image = ImageIO.read(new File("C:\\Users\\33677\\OneDrive\\Bureau\\ESIPE\\PDS\\testImage.jpg"));
+				} catch (IOException e) {
+					System.out.println("ERROR - IMAGE NOT FOUND");
+					e.printStackTrace();
+				}
+				imageIcon.setImage(image);
+				picLabel.setIcon(imageIcon);
+			}
+
+			if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
+				try {
+					image = ImageIO.read(new File("C:\\Users\\33677\\OneDrive\\Bureau\\ESIPE\\PDS\\testImage2.png"));
+				} catch (IOException e) {
+					System.out.println("ERROR - IMAGE NOT FOUND");
+					e.printStackTrace();
+				}
+				imageIcon.setImage(image);
+				picLabel.setIcon(imageIcon);
+
+			}
+			picLabel.repaint();
+		}
+
 	}
 
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(image, 0, 0, this); // see javadoc for more info on the parameters            
-	}
 }
