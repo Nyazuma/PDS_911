@@ -9,6 +9,7 @@ import shs.gui.window.Menu;
 import shs.gui.window.Monitoring;
 import shs.gui.window.ObjectGestion;
 import shs.gui.window.ObjectModification;
+import shs.gui.window.Statistics;
 import shs.gui.window.WindowList;
 
 
@@ -62,7 +63,12 @@ public class Gui extends JFrame{
 			this.setContentPane(new Map(controller));
 			repaint();  
 			setVisible(true); 
-			break; 
+			break;
+		case STATISTICS : 
+			this.setContentPane(new Statistics(controller));
+			repaint();  
+			setVisible(true); 
+			break;
 		default :
 			Tool.logger.info("#ERROR : Gui > ChangeWindow : Unknow window");
 		}

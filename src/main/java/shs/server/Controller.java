@@ -292,7 +292,7 @@ public class Controller {
 
 
 	private List<List<String>> listResidences() {
-		String request = "SELECT * FROM Residences INNER JOIN Adresse ON Residences.ID_Addresse=Adresse.ID_Addresse;"; 
+		String request = "SELECT * FROM Residences INNER JOIN Adresses ON Residences.ID_Addresse=Adresses.ID_Addresse;"; 
 		return getList(request);
 	}
 
