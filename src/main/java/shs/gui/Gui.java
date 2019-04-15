@@ -25,7 +25,7 @@ public class Gui extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		changeWindow(WindowList.AUTHENTICATION);
 		setLocationRelativeTo(null);
-		this.setVisible(true);
+		this.setVisible(true); 
 	}
 	
 	/**
