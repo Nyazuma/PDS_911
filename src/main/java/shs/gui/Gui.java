@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 import shs.common.Tool;
 import shs.gui.window.Authentication;
+import shs.gui.window.Map;
 import shs.gui.window.Menu;
 import shs.gui.window.Monitoring;
 import shs.gui.window.ObjectGestion;
@@ -23,6 +24,7 @@ public class Gui extends JFrame{
 		this.setBounds(100, 100, 1400, 900);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		changeWindow(WindowList.AUTHENTICATION);
+		setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 	
@@ -56,6 +58,11 @@ public class Gui extends JFrame{
 			repaint();
 			setVisible(true);
 			break;
+		case MAP : 
+			this.setContentPane(new Map(controller));
+			repaint();  
+			setVisible(true); 
+			break; 
 		default :
 			Tool.logger.info("#ERROR : Gui > ChangeWindow : Unknow window");
 		}
