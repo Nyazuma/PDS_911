@@ -79,14 +79,7 @@ public class Controller {
 			resultBoolean = updateObject(((MsgUpdateObject)input).getObject()); 
 			MsgBooleanResult answer6 = new MsgBooleanResult(resultBoolean); 
 			return Tool.messageToJSON(answer6);		
-		case LISTEMPLACEMENTS : 
-			resultList = listEmplacements(); 
-			MsgListResult answer7 = new MsgListResult(resultList); 
-			return Tool.messageToJSON(answer7);
-		case LISTETAGES : 
-			resultList = listEtages(); 
-			MsgListResult answer8 = new MsgListResult(resultList); 
-			return Tool.messageToJSON(answer8);
+
 //		case LISTZONES :
 //			resultList = listZones();
 //			MsgListResult answer7 = new MsgListResult(resultList); 
@@ -317,16 +310,6 @@ public class Controller {
 
 
 
-	private List<List<String>> listEtages() {
-		String request = "SELECT Niveau_Etage  FROM Etages;";
-		return getList(request);
-	}
-
-
-	private List<List<String>> listEmplacements() {
-		String request = "SELECT Nom_Emplacement FROM Emplacements;";
-		return getList(request);
-	}
 
 	private List<List<String>> listReferentiels(){
 		String request = "SELECT Type_Capteur FROM Referentiel_Capteurs ORDER BY Type_Capteur;";
