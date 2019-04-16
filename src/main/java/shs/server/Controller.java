@@ -78,15 +78,23 @@ public class Controller {
 		case UPDATEOBJECT : 
 			resultBoolean = updateObject(((MsgUpdateObject)input).getObject()); 
 			MsgBooleanResult answer6 = new MsgBooleanResult(resultBoolean); 
-			return Tool.messageToJSON(answer6);
-		case LISTZONES :
-			resultList = listZones();
+			return Tool.messageToJSON(answer6);		
+		case LISTEMPLACEMENTS : 
+			resultList = listEmplacements(); 
 			MsgListResult answer7 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer7);
-		case LISTPIECES :
-			resultList = listPieces();
+		case LISTETAGES : 
+			resultList = listEtages(); 
 			MsgListResult answer8 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer8);
+//		case LISTZONES :
+//			resultList = listZones();
+//			MsgListResult answer7 = new MsgListResult(resultList); 
+//			return Tool.messageToJSON(answer7);
+//		case LISTPIECES :
+//			resultList = listPieces();
+//			MsgListResult answer8 = new MsgListResult(resultList); 
+//			return Tool.messageToJSON(answer8);
 		case LISTRESIDENCES :
 			resultList = listResidences();
 			MsgListResult answer9 = new MsgListResult(resultList); 
@@ -164,8 +172,7 @@ public class Controller {
 
 			return 0; 
 		}
-	}
-
+	}//
 	/**
 	 * Add an object to the base.
 	 * 
@@ -173,7 +180,7 @@ public class Controller {
 	 * @return
 	 */
 	private List<List<String>> addObject(String typeCapteur) {
-		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement) VALUES ('"+ typeCapteur +"', 1, 1)"; 
+		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', 1, 1,HELLA)"; 
 
 		try {
 			Statement statement = connection.createStatement();
@@ -215,13 +222,13 @@ public class Controller {
 	 * @return
 	 */
 	private boolean updateObject(List<String> attribute) {
-		String requestEmplacement = "SELECT ID_Emplacement FROM Emplacement INNER JOIN Residences ON Residences.ID_Residence=Emplacement.ID_Residence "
-				+ "					WHERE Nom_Residence='" + attribute.get(3) + "' AND Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'";
-		String request = "";
+//		String requestEmplacement = "SELECT ID_Emplacement FROM Emplacements INNER JOIN Residences ON Residences.ID_Residence=Emplacements.ID_Residence "
+//				+ "					WHERE Nom_Residence='" + attribute.get(3) + "' AND Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'";
+     String request = "";
 		try {
 			Statement statement = connection.createStatement(); 
-			ResultSet resultEmplacement = statement.executeQuery(requestEmplacement); 
-			if(!resultEmplacement.next()) {
+//			ResultSet resultEmplacement = statement.executeQuery(requestEmplacement); 
+			//if(!resultEmplacement.next()) {
 				// The "Emplacement" doesn't exit, we have to create it
 				// We get the Residence ID
 				String requestResidence = "SELECT ID_Residence FROM Residences WHERE Nom_Residence='" + attribute.get(3) + "'";
@@ -229,19 +236,24 @@ public class Controller {
 				resultResidence.next();
 				int id = resultResidence.getInt(1);
 				// We create the "Emplacement" with the Residence ID
-				String createEmplacement = "INSERT INTO Emplacement(Piece_Emplacement, Zone_Emplacement, ID_Residence) VALUES('" +attribute.get(5) + "', '" + attribute.get(4)+ "', '" + id + "')" ;
-				statement.executeUpdate(createEmplacement); 
+//				String createEmplacement = "INSERT INTO Emplacements(Piece_Emplacement, Zone_Emplacement, ID_Residence) VALUES('" +attribute.get(5) + "', '" + attribute.get(4)+ "', '" + id + "')" ;
+//				statement.executeUpdate(createEmplacement); 
 				// We get the ID from the "Emplacement" we just created
-				String requestEmplacementNew = "SELECT ID_Emplacement FROM Emplacement WHERE Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'"
-						+ " AND ID_Residence='" + id + "'";
-				ResultSet resultEmplacementNew = statement.executeQuery(requestEmplacementNew); 
-				resultEmplacementNew.next();
-				int idNew = resultEmplacementNew.getInt(1);
-				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + idNew + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-			}
-			else {
-				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + resultEmplacement.getInt(1) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-			}
+//				String requestEmplacementNew = "SELECT ID_Emplacement FROM Emplacements WHERE Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'"
+//						+ " AND ID_Residence='" + id + "'";
+//				ResultSet resultEmplacementNew = statement.executeQuery(requestEmplacementNew); 
+//				resultEmplacementNew.next();
+			//	int idNew = resultEmplacementNew.getInt(1);
+//				int idNew = 6 ;
+				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + "', Mac_Capteur = '"+ attribute.get(0) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+//			}
+				
+//				int idNew = 6 ;
+//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + idNew + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+//			}
+//			else {
+//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + resultEmplacement.getInt(1) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+//			}
 
 			statement.executeUpdate(request); 
 			return true; 
@@ -292,20 +304,20 @@ public class Controller {
 
 
 	private List<List<String>> listResidences() {
-		String request = "SELECT * FROM Residences INNER JOIN Adresse ON Residences.ID_Addresse=Adresse.ID_Addresse;"; 
+		String request = "SELECT * FROM Residences INNER JOIN Adresses ON Residences.ID_Addresse=Adresses.ID_Addresse;"; 
 		return getList(request);
 	}
 
 
 
-	private List<List<String>> listPieces() {
-		String request = "SELECT DISTINCT Piece_Emplacement FROM Emplacement;";
+	private List<List<String>> listEtages() {
+		String request = "SELECT Niveau_Etage  FROM Etages;";
 		return getList(request);
 	}
 
 
-	private List<List<String>> listZones() {
-		String request = "SELECT DISTINCT Zone_Emplacement FROM Emplacement;";
+	private List<List<String>> listEmplacements() {
+		String request = "SELECT Nom_Emplacement FROM Emplacements;";
 		return getList(request);
 	}
 
