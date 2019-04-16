@@ -121,7 +121,7 @@ public class GuiController {
 		String[] tabEmplacements = new String[listEmplacements.size()];
 		int i =0;
 		for(List<String> line : listEmplacements) {
-			tabEmplacements[i]=line.get(0);
+			tabEmplacements[i]=line.get(1);
 			i++;
 		}
 		return tabEmplacements;
@@ -134,7 +134,7 @@ public class GuiController {
 		String[] tabEtages = new String[listEtages.size()];
 		int i =0;
 		for(List<String> line : listEtages) {
-			tabEtages[i]=line.get(0);
+			tabEtages[i]=line.get(1);
 			i++;
 		}
 		return tabEtages;
