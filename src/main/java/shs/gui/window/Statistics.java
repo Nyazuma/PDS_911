@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -13,6 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import shs.gui.GuiController;
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 
 public class Statistics extends JPanel implements ActionListener{
 	
@@ -27,6 +32,7 @@ public class Statistics extends JPanel implements ActionListener{
 	private DefaultComboBoxModel<String> modelEtage; 
 	private DefaultComboBoxModel<String> modelEmplacement; 
 	private JComboBox<String> etatCapteur; 
+	private JLabel objectNumberLabel;
 	
 	private GuiController controller;
 	
@@ -48,8 +54,14 @@ public class Statistics extends JPanel implements ActionListener{
 		btnRetour.addActionListener(this);
 		this.add(btnRetour);
 		
+		objectNumberLabel = new JLabel("");
+		objectNumberLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectNumberLabel.setBounds(267, 437, 55, 28);
+		objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
+		this.add(objectNumberLabel);
+		
 		JLabel lblTypeCapteur = new JLabel("Type capteur");
-		lblTypeCapteur.setBounds(34, 101, 116, 16);
+		lblTypeCapteur.setBounds(88, 101, 116, 16);
 		add(lblTypeCapteur);
 		
 		// We get the list of captor types
@@ -58,11 +70,11 @@ public class Statistics extends JPanel implements ActionListener{
 		typeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		typeCapteur.setModel(modelTypeCapteur);
 		//typeCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(1).toString());
-		typeCapteur.setBounds(12, 130, 134, 32);
+		typeCapteur.setBounds(12, 130, 233, 32);
 		this.add(typeCapteur);
 		
 		JLabel lblEtatCapteur = new JLabel("Etat capteur");
-		lblEtatCapteur.setBounds(222, 101, 116, 16);
+		lblEtatCapteur.setBounds(364, 101, 116, 16);
 		add(lblEtatCapteur);
 		
 		modelEtatCapteur = new DefaultComboBoxModel<String>(new String[] {"Enable", "Disable"});
@@ -70,12 +82,12 @@ public class Statistics extends JPanel implements ActionListener{
 		etatCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etatCapteur.setModel(modelEtatCapteur);
 		//etatCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(2).toString());
-		etatCapteur.setBounds(222, 130, 116, 32);
+		etatCapteur.setBounds(351, 130, 116, 32);
 		this.add(etatCapteur);
 		
 		
 		JLabel lblResidence = new JLabel("Residence");
-		lblResidence.setBounds(413, 101, 116, 16);
+		lblResidence.setBounds(548, 101, 116, 16);
 		add(lblResidence);
 		
 		// We get the residences list
@@ -84,16 +96,16 @@ public class Statistics extends JPanel implements ActionListener{
 		residence.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		residence.setModel(modelResidence);
 		//residence.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		residence.setBounds(395, 130, 134, 32);
+		residence.setBounds(530, 130, 134, 32);
 		this.add(residence);
 		
 		JLabel lblNombresDeCapteurs = new JLabel("Nombres de capteurs");
-		lblNombresDeCapteurs.setBounds(365, 25, 122, 16);
+		lblNombresDeCapteurs.setBounds(583, 29, 177, 16);
 		add(lblNombresDeCapteurs);
 		
 		
 		JLabel lblEmplacement = new JLabel("Emplacement");
-		lblEmplacement.setBounds(598, 101, 116, 16);
+		lblEmplacement.setBounds(753, 101, 116, 16);
 		add(lblEmplacement);
 		
 		// We get the list of zones
@@ -101,11 +113,11 @@ public class Statistics extends JPanel implements ActionListener{
 		zone = new JComboBox<String>(); 
 		zone.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		zone.setModel(modelEmplacement);
-		zone.setBounds(565, 130, 134, 32);
+		zone.setBounds(735, 130, 134, 32);
 		this.add(zone); 
 	
 		JLabel lblEtage = new JLabel("Etage");
-		lblEtage.setBounds(793, 101, 116, 16);
+		lblEtage.setBounds(996, 101, 116, 16);
 		add(lblEtage);
 		
 		// We get the list of pieces
@@ -113,20 +125,68 @@ public class Statistics extends JPanel implements ActionListener{
 		etage = new JComboBox<String>(); 
 		etage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etage.setModel(modelEtage);
-		etage.setBounds(758, 130, 161, 32);
+		etage.setBounds(963, 130, 161, 32);
 		this.add(etage);
 		
 		JLabel lblNombreDeLogements = new JLabel("Nombre de logements");
-		lblNombreDeLogements.setBounds(97, 412, 134, 26);
+		lblNombreDeLogements.setBounds(88, 489, 134, 26);
 		add(lblNombreDeLogements);
 		
-		JLabel lblNombreDeCapteurs = new JLabel("Nombre de capteurs");
-		lblNombreDeCapteurs.setBounds(97, 463, 134, 26);
-		add(lblNombreDeCapteurs);
-		
 		JLabel lblResultat = new JLabel("Resultat :");
-		lblResultat.setBounds(222, 249, 134, 26);
+		lblResultat.setBounds(375, 268, 134, 26);
 		add(lblResultat);
+		
+		JLabel lblNombresTotalDe = new JLabel("Nombre total de capteurs");
+		lblNombresTotalDe.setBounds(88, 438, 192, 26);
+		add(lblNombresTotalDe);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(758, 371, 96, 22);
+		add(dateChooser);
+		
+		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.setBounds(576, 371, 96, 22);
+		add(dateChooser_1);
+		
+		JLabel lblFrom = new JLabel("De");
+		lblFrom.setBounds(530, 371, 56, 16);
+		add(lblFrom);
+		
+		JLabel lblTo = new JLabel("A");
+		lblTo.setBounds(704, 371, 56, 16);
+		add(lblTo);
+		
+		JLabel lblCaptorDeleted = new JLabel("Capteurs ajoute :");
+		lblCaptorDeleted.setBounds(530, 443, 123, 16);
+		add(lblCaptorDeleted);
+		
+		JLabel lblCapteursSupprimes = new JLabel("Capteurs supprimes :");
+		lblCapteursSupprimes.setBounds(807, 443, 123, 16);
+		add(lblCapteursSupprimes);
+		
+		JLabel lblCapteursModifies = new JLabel("Capteurs modifies :");
+		lblCapteursModifies.setBounds(530, 499, 123, 16);
+		add(lblCapteursModifies);
+		
+		JButton btnValider = new JButton("Valider");
+		btnValider.setBounds(918, 371, 97, 25);
+		add(btnValider);
+		
+		JLabel lblAlertes = new JLabel("Alertes :");
+		lblAlertes.setBounds(807, 499, 56, 16);
+		add(lblAlertes);
+		
+		JButton btnDetails = new JButton("Details");
+		btnDetails.setBounds(686, 560, 97, 25);
+		add(btnDetails);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(537, 612, 540, 226);
+		add(scrollPane);
+		
+		JLabel lblSocksRestants = new JLabel("Socks restants :");
+		lblSocksRestants.setBounds(88, 547, 134, 16);
+		add(lblSocksRestants);
 		
 	}
 

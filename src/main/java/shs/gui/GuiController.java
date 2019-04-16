@@ -91,27 +91,9 @@ public class GuiController {
 		}
 		return false; 
 	}
-	public String addresseMac() {
-		String mac = "";
-		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-		for(int y=0;y<5;y++) {
-			for(int x=0;x<2;x++)
-			{
-				int i = (int)Math.floor(Math.random() * 36); 
-				mac += chars.charAt(i);
-			}
-			if(y!=4)
-				mac+=":";
-		}
-		System.out.println(mac);
-		return mac;
-
-
-
-	}
 
 	public List<List<String>> addObject(String detectorType) {
-		MsgAddObject addObject = new MsgAddObject(detectorType, addresseMac());
+		MsgAddObject addObject = new MsgAddObject(detectorType);
 		return readGeneric(addObject);
 	}
 
@@ -147,6 +129,7 @@ public class GuiController {
 
 
 
+
 	public String[] readEtages() {
 		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
 		String[] tabEtages = new String[listEtages.size()];
@@ -157,16 +140,16 @@ public class GuiController {
 		}
 		return tabEtages;
 	}
-
+	
 	public String[] readEtageImage() {
-		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
-		String[] tabImage = new String[listEtages.size()];
-		int i =0;
-		for(List<String> line : listEtages) {
-			tabImage[i]=line.get(3);
+		List<List<String>> listImage = readGeneric(new Message(MessageType.LISTETAGES)); 
+		String[] tabImage = new String[listImage.size()];
+		int i =0; 
+		for(List<String>line : listImage) {
+			tabImage[i]=line.get(3); 
 			i++;
 		}
-		return tabImage;
+		return tabImage;  
 	}
 
 	//	public String[] readZones() {
@@ -191,6 +174,7 @@ public class GuiController {
 	//		return tabPieces;
 	//	}
 	//
+
 
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));
