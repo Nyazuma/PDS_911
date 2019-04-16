@@ -99,6 +99,10 @@ public class Controller {
 			resultList = listEmplacements();
 			MsgListResult answer11 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer11);
+		case LISTETAGES :
+			resultList = listEtages();
+			MsgListResult answer12 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer12);
 		case REPORTRFID :
 			reportRFID(((MsgReportRFID)input).getID());
 			return null;
@@ -320,6 +324,11 @@ public class Controller {
 	
 	private List<List<String>> listEmplacements(){
 		String request = "SELECT Nom_Emplacement FROM Emplacements;";
+		return getList(request);
+	}
+	
+	private List<List<String>> listEtages(){
+		String request = "SELECT Niveau_Etage FROM Etages;";
 		return getList(request);
 	}
 

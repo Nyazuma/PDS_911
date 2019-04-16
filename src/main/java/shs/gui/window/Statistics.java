@@ -1,8 +1,9 @@
 package shs.gui.window;
 
 import java.awt.Color;
-
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -18,16 +19,24 @@ public class Statistics extends JPanel implements ActionListener{
 	private JComboBox<String> typeCapteur;
 	private JComboBox<String> residence;
 	private JComboBox<String> zone;
-	private JComboBox<String> piece;
+	private JComboBox<String> etage;
 	private JButton btnRetour; 
 	private DefaultComboBoxModel<String> modelTypeCapteur;
 	private DefaultComboBoxModel<String> modelEtatCapteur; 
 	private DefaultComboBoxModel<String> modelResidence; 
-	private DefaultComboBoxModel<String> modelPiece; 
+	private DefaultComboBoxModel<String> modelEtage; 
 	private DefaultComboBoxModel<String> modelEmplacement; 
 	private JComboBox<String> etatCapteur; 
 	
+	private GuiController controller;
+	
 	public Statistics(GuiController controller) {
+		this.controller = controller; 
+		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
+		this.controller.getGui().setSize(screensize);
+		this.controller.getGui().setLocationRelativeTo(null);
+		setBackground(new Color(95, 158, 160));
+		this.setLayout(null);
 		
 		setBackground(new Color(95, 158, 160));
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
@@ -96,18 +105,18 @@ public class Statistics extends JPanel implements ActionListener{
 		zone.setBounds(565, 130, 134, 32);
 		this.add(zone); 
 	
-		JLabel lblPiece = new JLabel("Piece");
-		lblPiece.setBounds(793, 101, 116, 16);
-		add(lblPiece);
+		JLabel lblEtage = new JLabel("Etage");
+		lblEtage.setBounds(793, 101, 116, 16);
+		add(lblEtage);
 		
 		// We get the list of pieces
-		//modelPiece = new DefaultComboBoxModel<String>(controller.readPieces());
-		//piece = new JComboBox<String>(); 
-		//piece.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		//piece.setModel(modelPiece);
-		//piece.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
-		//piece.setBounds(758, 130, 161, 32);
-		//this.add(piece); 
+		modelEtage = new DefaultComboBoxModel<String>(controller.readEtages());
+		etage = new JComboBox<String>(); 
+		etage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		etage.setModel(modelEtage);
+		//etage.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
+		etage.setBounds(758, 130, 161, 32);
+		this.add(etage); 
 		
 		
 		JLabel lblMoyenne = new JLabel("Moyenne");
@@ -129,7 +138,10 @@ public class Statistics extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource().equals(btnRetour)) {
+			this.controller.getGui().setBounds(100, 100, 1400, 900);
+			controller.getGui().changeWindow(WindowList.MENU);
+		}
 		
 	}
 }
