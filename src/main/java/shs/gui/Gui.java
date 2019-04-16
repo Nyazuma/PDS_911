@@ -70,7 +70,7 @@ public class Gui extends JFrame{
 			setVisible(true); 
 			break;
 		default :
-			Tool.logger.info("#ERROR : Gui > ChangeWindow : Unknow window");
+			Tool.logger.error("#ERROR : Gui > ChangeWindow : Unknow window");
 		}
 	}
 
