@@ -60,7 +60,7 @@ public class Controller {
 			MsgBooleanResult answer1 = new MsgBooleanResult(resultBoolean);
 			return Tool.messageToJSON(answer1);
 		case ADDOBJECT :
-			resultList = addObject(((MsgAddObject)input).getObject());
+			resultList = addObject(((MsgAddObject)input).getObject(), ((MsgAddObject)input).getAddresseMac());
 			MsgListResult answer2 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer2);
 		case NUMBEROBJECT :
@@ -180,8 +180,8 @@ public class Controller {
 	 * @param typeCapteur
 	 * @return
 	 */
-	private List<List<String>> addObject(String typeCapteur) {
-		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', 1, 1,HELLA)"; 
+	private List<List<String>> addObject(String typeCapteur, String addresseMac) {
+		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', 1, 1,'" + addresseMac + "')"; 
 
 		try {
 			Statement statement = connection.createStatement();
@@ -295,7 +295,7 @@ public class Controller {
 	}
 
 	private List<List<String>> listObjects(){
-		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement " + 
+		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement, Mac_Capteur " + 
 				"FROM Capteurs INNER JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
 				"INNER JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
 				"INNER JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence"; 

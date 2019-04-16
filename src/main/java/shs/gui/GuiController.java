@@ -157,7 +157,7 @@ public class GuiController {
 		}
 		return tabEtages;
 	}
-	
+
 	public String[] readEtageImage() {
 		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
 		String[] tabImage = new String[listEtages.size()];

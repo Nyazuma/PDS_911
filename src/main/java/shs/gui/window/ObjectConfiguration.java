@@ -1,3 +1,4 @@
+
 package shs.gui.window;
 
 import java.awt.BorderLayout;
@@ -18,7 +19,7 @@ import javax.swing.JTable;
 
 import shs.gui.GuiController;
 
-public class ObjectGestion extends JPanel implements ActionListener {
+public class ObjectConfiguration extends JPanel implements ActionListener {
 
 	private GuiController controller;
 
@@ -35,7 +36,8 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JLabel manageObjectLabel;
 	protected JLabel detectorTypeTitleLabel;                           
 	protected JLabel errorSelection; 
-
+	private JButton btnRetour; 
+	private JLabel message; 
 
 	// Raw Table we get by the controller
 	protected static List<List<String>> listObject; 
@@ -45,7 +47,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public ObjectGestion(GuiController controller) {
+	public ObjectConfiguration(GuiController controller) {
 
 		this.controller = controller;
 
@@ -53,15 +55,12 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
 		setLayout(null);
 
-		objectNumberTitleLabel = new JLabel("Nombre d'objets connect\u00E9s : ");
+		objectNumberTitleLabel = new JLabel("Nombre d'objets à configurer : ");
 		objectNumberTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectNumberTitleLabel.setBounds(48, 184, 246, 28);
 		this.add(objectNumberTitleLabel);
 
-		addTitleLabel = new JLabel("Ajouter un nouvel objet :");
-		addTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		addTitleLabel.setBounds(843, 219, 236, 16);
-		this.add(addTitleLabel);
+
 
 		objectNumberLabel = new JLabel("");
 		objectNumberLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
@@ -69,7 +68,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
 		this.add(objectNumberLabel);
 
-		manageObjectLabel = new JLabel("Gestion des nouveaux objets");
+		manageObjectLabel = new JLabel("Configuration des objets");
 		manageObjectLabel.setFont(new Font("Cambria Math", Font.BOLD, 20));
 		manageObjectLabel.setBounds(525, 25, 291, 41);
 		this.add(manageObjectLabel);
@@ -90,28 +89,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		gestionListObject();
 		this.add(scrollPane, BorderLayout.CENTER);
 
-		addButton = new JButton("Ajouter");
-		addButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		addButton.setBounds(970, 438, 162, 41);
-		addButton.addActionListener(this);
-		this.add(addButton);
 
-		configButton = new JButton("Configurer");
-		configButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		configButton.setBounds(970, 538, 162, 41);
-		configButton.addActionListener(this);
-		this.add(configButton);
-		
-		errorSelection = new JLabel("Veuillez sélectionner une ligne ");
-		errorSelection.setForeground(new Color(126, 0, 0));
-		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
-		errorSelection.setBounds(120, 755, 307, 16);
-		
-		deleteButton = new JButton("Supprimer");
-		deleteButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		deleteButton.setBounds(81, 671, 162, 41);
-		deleteButton.addActionListener(this);
-		this.add(deleteButton);
 
 		updateButton = new JButton("Modifier");
 		updateButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
@@ -123,12 +101,17 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		errorSelection.setForeground(new Color(128, 0, 0));
 		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
 		errorSelection.setBounds(120, 755, 307, 16);
-
+		
+		btnRetour = new JButton("Retour");
+		btnRetour.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		btnRetour.setBounds(56, 40, 98, 48);
+		btnRetour.addActionListener(this);
+		this.add(btnRetour);
 	}
 
 
 	public void gestionListObject() {
-		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Residence", "Etage", "Emplacement","Mac"}; 
+		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Residence", "Emplacement", "Etage","Mac"}; 
 		Integer x = listObject.size(); 
 		Integer y;
 		if(x>0) { 
@@ -193,6 +176,11 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent event) {
+		
+		if(event.getSource().equals(btnRetour)) {
+			this.controller.getGui().setBounds(100, 100, 1400, 900);
+			controller.getGui().changeWindow(WindowList.MENU);
+		}
 
 		if(event.getSource().equals(addButton)){
 			clearlabel();
