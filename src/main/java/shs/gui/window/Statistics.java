@@ -24,7 +24,7 @@ public class Statistics extends JPanel implements ActionListener{
 	private DefaultComboBoxModel<String> modelEtatCapteur; 
 	private DefaultComboBoxModel<String> modelResidence; 
 	private DefaultComboBoxModel<String> modelPiece; 
-	private DefaultComboBoxModel<String> modelZone; 
+	private DefaultComboBoxModel<String> modelEmplacement; 
 	private JComboBox<String> etatCapteur; 
 	
 	public Statistics(GuiController controller) {
@@ -83,18 +83,18 @@ public class Statistics extends JPanel implements ActionListener{
 		add(lblNombresDeCapteurs);
 		
 		
-		JLabel lblEtage = new JLabel("Etage");
-		lblEtage.setBounds(598, 101, 116, 16);
-		add(lblEtage);
+		JLabel lblEmplacement = new JLabel("Emplacement");
+		lblEmplacement.setBounds(598, 101, 116, 16);
+		add(lblEmplacement);
 		
 		// We get the list of zones
-		// = new DefaultComboBoxModel<String>(controller.readZones());
-		//zone = new JComboBox<String>(); 
-		//zone.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		//zone.setModel(modelZone);
+		modelEmplacement = new DefaultComboBoxModel<String>(controller.readEmplacements());
+		zone = new JComboBox<String>(); 
+		zone.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		zone.setModel(modelEmplacement);
 		//zone.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
-		//zone.setBounds(565, 130, 134, 32);
-		//this.add(zone); 
+		zone.setBounds(565, 130, 134, 32);
+		this.add(zone); 
 	
 		JLabel lblPiece = new JLabel("Piece");
 		lblPiece.setBounds(793, 101, 116, 16);
