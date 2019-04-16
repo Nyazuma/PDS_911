@@ -13,4 +13,9 @@ public class MsgReportCall extends Message {
 		this.id=id;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	
 }

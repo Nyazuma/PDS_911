@@ -47,11 +47,11 @@ public class Simulation {
 		}
 		
 		
-		CategoryRFID categoryRFID = new CategoryRFID(listReferentiels.get(0).get(0), sortedCaptors.get(0), 5);
+		CategoryRFID categoryRFID = new CategoryRFID(listReferentiels.get(0).get(0), sortedCaptors.get(0));
 		Thread threadRFID = new Thread(categoryRFID);
 		threadRFID.start();
 		
-		CategoryCall categoryCall = new CategoryCall(listReferentiels.get(1).get(0), sortedCaptors.get(0), 2);
+		CategoryCall categoryCall = new CategoryCall(listReferentiels.get(1).get(0), sortedCaptors.get(0));
 		Thread threadCall = new Thread(categoryCall);
 		threadCall.start();
 	}

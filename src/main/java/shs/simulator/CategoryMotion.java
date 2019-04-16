@@ -2,12 +2,12 @@ package shs.simulator;
 
 import java.util.List;
 
-import shs.common.MsgReportRFID;
+import shs.common.MsgReportMotion;
 import shs.common.Tool;
 
-public class CategoryRFID extends CategoryObject implements Runnable {
+public class CategoryMotion extends CategoryObject implements Runnable{
 
-	public CategoryRFID(String referencedName, List<String> listObjects) {
+	public CategoryMotion(String referencedName, List<String> listObjects) {
 		super(referencedName, listObjects);
 	}
 
@@ -15,14 +15,13 @@ public class CategoryRFID extends CategoryObject implements Runnable {
 		
 		try {
 			while(true) {
-				MsgReportRFID update = new MsgReportRFID(waiting());
+				MsgReportMotion update = new MsgReportMotion(waiting());
 				Connector.contactServer(Tool.messageToJSON(update));
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-
 	}
+	
 
 }
