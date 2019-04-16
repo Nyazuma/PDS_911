@@ -29,19 +29,22 @@ public class ObjectModification extends JPanel implements ActionListener{
 	private JButton valider; 
 	private JButton returnButton; 
 	private JLabel message; 
-	private JComboBox<String> zoneCapteur; 
-	private JLabel lblZone; 
-	private JComboBox<String> pieceCapteur; 
-	private JLabel lblPiece; 
+	private JComboBox<String> emplacementCapteur; 
+	private JLabel lblEmplacement; 
+	private JComboBox<String> etageCapteur; 
+	private JLabel lblEtage; 
 	private JComboBox<String> residenceCapteur; 
 	private JLabel lblResidence; 
+//	private JComboBox<String> macCapteur; 
+//	private JLabel lblMacCapteur; 	
 
 	//Initialization of the JComboBox with a model
 	private DefaultComboBoxModel<String> modelTypeCapteur;
 	private DefaultComboBoxModel<String> modelEtatCapteur; 
+//	private DefaultComboBoxModel<String> modelMacCapteur;
 	private DefaultComboBoxModel<String> modelResidence; 
-	private DefaultComboBoxModel<String> modelPiece; 
-	private DefaultComboBoxModel<String> modelZone; 
+	private DefaultComboBoxModel<String> modelEtage; 
+	private DefaultComboBoxModel<String> modelEmplacement; 
 
 
 
@@ -103,34 +106,66 @@ public class ObjectModification extends JPanel implements ActionListener{
 		lblResidence.setBounds(381, 403, 152, 28);
 		this.add(lblResidence); 
 
-		// We get the list of zones
-		modelZone = new DefaultComboBoxModel<String>(controller.readZones());
-		zoneCapteur = new JComboBox<String>(); 
-		zoneCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		zoneCapteur.setModel(modelZone);
-		zoneCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
-		zoneCapteur.setBounds(571, 477, 265, 42);
-		this.add(zoneCapteur); 
+//		// We get the list of zones
+//		modelZone = new DefaultComboBoxModel<String>(controller.readZones());
+//		zoneCapteur = new JComboBox<String>(); 
+//		zoneCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		zoneCapteur.setModel(modelZone);
+//		zoneCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
+//		zoneCapteur.setBounds(571, 477, 265, 42);
+//		this.add(zoneCapteur); 
+//
+//		// We get the list of pieces
+//		modelPiece = new DefaultComboBoxModel<String>(controller.readPieces());
+//		pieceCapteur = new JComboBox<String>(); 
+//		pieceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		pieceCapteur.setModel(modelPiece);
+//		pieceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
+//		pieceCapteur.setBounds(571, 556, 265, 42);
+//		this.add(pieceCapteur); 
 
-		// We get the list of pieces
-		modelPiece = new DefaultComboBoxModel<String>(controller.readPieces());
-		pieceCapteur = new JComboBox<String>(); 
-		pieceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		pieceCapteur.setModel(modelPiece);
-		pieceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
-		pieceCapteur.setBounds(571, 556, 265, 42);
-		this.add(pieceCapteur); 
+		lblEtage = new JLabel("Etage :");
+		lblEtage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		lblEtage.setBounds(381, 484, 152, 28);
+		this.add(lblEtage); 
 
-		lblPiece = new JLabel("Pi\u00E8ce :");
-		lblPiece.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblPiece.setBounds(381, 563, 152, 28);
-		this.add(lblPiece); 
 
-		lblZone = new JLabel("Zone :");
-		lblZone.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblZone.setBounds(381, 484, 152, 28);
-		this.add(lblZone); 
+		modelEtage = new DefaultComboBoxModel<String>(new String[] {"RDC", "1er etage"});
+		etageCapteur = new JComboBox<String>(); 
+		etageCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		etageCapteur.setModel(modelEtage);
+		etageCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+		etageCapteur.setBounds(571, 477, 265, 42);
+		this.add(etageCapteur);
 
+		lblEmplacement = new JLabel("Emplacement:");
+		lblEmplacement.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		lblEmplacement.setBounds(381, 563, 152, 28);
+		this.add(lblEmplacement); 
+		
+		modelEmplacement = new DefaultComboBoxModel<String>(controller.readEmplacements());
+		emplacementCapteur = new JComboBox<String>(); 
+		emplacementCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		emplacementCapteur.setModel(modelEmplacement);
+		emplacementCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+		emplacementCapteur.setBounds(571, 563, 265, 42);
+		this.add(emplacementCapteur);
+
+		// List of MAC adresses !! Compléter avec la création de l'adresse
+		
+//		modelMacCapteur = new DefaultComboBoxModel<String>(new String[] {"TEST", "HELLA"});
+//		macCapteur = new JComboBox<String>();
+//		macCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		macCapteur.setModel(modelMacCapteur);
+//		macCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
+//		macCapteur.setBounds(571, 600, 265, 42);
+//		this.add(macCapteur);
+
+
+//		lblMacCapteur = new JLabel("Mac du capteur : ");
+//		lblMacCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		lblMacCapteur.setBounds(381, 700, 152, 28);
+//		this.add(lblMacCapteur);
 
 		confirmation = new JCheckBox("Je confirme vouloir modifier cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
@@ -179,8 +214,9 @@ public class ObjectModification extends JPanel implements ActionListener{
 		else 
 			listValues.add("0"); 
 		listValues.add(residenceCapteur.getSelectedItem().toString());
-		listValues.add(zoneCapteur.getSelectedItem().toString()); 
-		listValues.add(pieceCapteur.getSelectedItem().toString()); 
+		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
+		listValues.add(etageCapteur.getSelectedItem().toString()); 
+//		listValues.add(macCapteur.getSelectedItem().toString()); 
 		return listValues; 
 
 	}
