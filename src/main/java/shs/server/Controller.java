@@ -323,7 +323,7 @@ public class Controller {
 	}
 	
 	private List<List<String>> listEmplacements(){
-		String request = "SELECT Nom_Emplacement FROM Emplacements;";
+		String request = "SELECT * FROM Emplacements;";
 		return getList(request);
 	}
 	
