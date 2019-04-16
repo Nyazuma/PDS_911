@@ -163,6 +163,29 @@ public class GuiController {
 //		return tabPieces;
 //	}
 //
+=======
+	public String[] readPieces() {
+		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
+		String[] tabPieces = new String[listPieces.size()];
+		int i =0;
+		for(List<String> line : listPieces) {
+			tabPieces[i]=line.get(0);
+			i++;
+		}
+		return tabPieces;
+	}
+
+	public String[] readEtageImage() {
+		List<List<String>> listImage = readGeneric(new Message(MessageType.LISTETAGES)); 
+		String[] tabImage = new String[listImage.size()];
+		int i =0; 
+		for(List<String>line : listImage) {
+			tabImage[i]=line.get(3); 
+			i++;
+		}
+		return tabImage;  
+	}
+>>>>>>> branche_Justin
 
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));
