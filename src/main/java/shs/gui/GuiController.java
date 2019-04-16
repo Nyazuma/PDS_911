@@ -157,6 +157,16 @@ public class GuiController {
 		return tabPieces;
 	}
 
+	public String[] readEtageImage() {
+		List<List<String>> listImage = readGeneric(new Message(MessageType.LISTETAGES)); 
+		String[] tabImage = new String[listImage.size()];
+		int i =0; 
+		for(List<String>line : listImage) {
+			tabImage[i]=line.get(3); 
+			i++;
+		}
+		return tabImage;  
+	}
 
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));

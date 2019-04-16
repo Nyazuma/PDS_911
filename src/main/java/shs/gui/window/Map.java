@@ -23,7 +23,7 @@ import javax.swing.JTable;
 import shs.gui.GuiController;
 
 public class Map extends JPanel implements ActionListener{
-	
+
 	//TODO Revoir la taille des JLabel qui n'augmentent pas !
 	//TODO Aller chercher l'image sur le serveur 
 	//TODO Placer les boutons sur l'image
@@ -46,9 +46,14 @@ public class Map extends JPanel implements ActionListener{
 	JComboBox<String> comboStage; 
 
 	private GuiController controller; 
+	private String[] tabImage; 
+
 
 	public Map(GuiController controller) {
 		this.controller = controller; 
+
+		
+
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		this.controller.getGui().setSize(screensize);
 		this.controller.getGui().setLocationRelativeTo(null);
@@ -73,27 +78,30 @@ public class Map extends JPanel implements ActionListener{
 		comboStage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		comboStage.addActionListener(this);
 		this.add(comboStage);
-
+		
+		//Get table Etage and read Image on line 
+		tabImage = controller.readEtageImage(); 
+		
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream input = classLoader.getResourceAsStream("Etage1.JPG");
 		try {
-			image = ImageIO.read(getClass().getResource("/images/Etage1.JPG"));  
+			image = ImageIO.read(getClass().getResource("/images/" + tabImage[0]));  
 		}catch(Exception e) {
 			System.out.println("ERROR - IMAGE NOT FOUND");
 			e.printStackTrace();
 		}
-			
+
 		imageIcon = new ImageIcon(image); 
 		picLabel = new JLabel(imageIcon); 
-		picLabel.setBounds(470, 0, 1500, 1000);
+		picLabel.setBounds(490, 98, 1500, 1000);
 		this.add(picLabel);
 
 	}
 
 
 	public void actionPerformed(ActionEvent event) {
-		
-		
+
+
 		if(event.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
 			controller.getGui().changeWindow(WindowList.MENU);
@@ -103,7 +111,7 @@ public class Map extends JPanel implements ActionListener{
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
 				try {
-					image = ImageIO.read(getClass().getResource("/images/Etage1.JPG"));  
+					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[0]));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
@@ -114,7 +122,7 @@ public class Map extends JPanel implements ActionListener{
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
 				try {
-					image = ImageIO.read(getClass().getResource("/images/Etage2.png"));  
+					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[1]));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
