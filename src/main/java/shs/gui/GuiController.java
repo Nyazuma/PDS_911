@@ -134,6 +134,17 @@ public class GuiController {
 		}
 		return tabEmplacements;
 	}
+	
+	public String[] readEtages() {
+		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
+		String[] tabEtages = new String[listEtages.size()];
+		int i =0;
+		for(List<String> line : listEtages) {
+			tabEtages[i]=line.get(0);
+			i++;
+		}
+		return tabEtages;
+	}
 
 	public String[] readPieces() {
 		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
