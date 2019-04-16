@@ -101,7 +101,6 @@ public class Statistics extends JPanel implements ActionListener{
 		zone = new JComboBox<String>(); 
 		zone.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		zone.setModel(modelEmplacement);
-		//zone.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
 		zone.setBounds(565, 130, 134, 32);
 		this.add(zone); 
 	
@@ -114,7 +113,6 @@ public class Statistics extends JPanel implements ActionListener{
 		etage = new JComboBox<String>(); 
 		etage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etage.setModel(modelEtage);
-		//etage.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
 		etage.setBounds(758, 130, 161, 32);
 		this.add(etage); 
 		

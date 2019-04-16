@@ -328,7 +328,7 @@ public class Controller {
 	}
 	
 	private List<List<String>> listEtages(){
-		String request = "SELECT Niveau_Etage FROM Etages;";
+		String request = "SELECT * FROM Etages;";
 		return getList(request);
 	}
 
