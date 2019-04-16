@@ -112,7 +112,7 @@ public class GuiController {
 		}
 		return tabResidences;
 	}
-
+	
 	
 	// Pour etage et rdc emplacements 
 	
@@ -138,6 +138,17 @@ public class GuiController {
 			i++;
 		}
 		return tabEtages;
+	}
+	
+	public String[] readEtageImage() {
+		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
+		String[] tabImage = new String[listEtages.size()];
+		int i =0;
+		for(List<String> line : listEtages) {
+			tabImage[i]=line.get(3);
+			i++;
+		}
+		return tabImage;
 	}
 
 <<<<<<< HEAD
