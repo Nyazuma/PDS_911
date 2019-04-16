@@ -23,7 +23,6 @@ public class CategoryTemperature extends CategoryObject implements Runnable {
 			e.printStackTrace();
 		}
 
-
 	}
 
 }
