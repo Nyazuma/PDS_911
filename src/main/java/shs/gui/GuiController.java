@@ -126,9 +126,7 @@ public class GuiController {
 		}
 		return tabEmplacements;
 	}
-	
 
-	
 	public String[] readEtages() {
 		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
 		String[] tabEtages = new String[listEtages.size()];
@@ -141,52 +139,6 @@ public class GuiController {
 	}
 	
 	public String[] readEtageImage() {
-		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
-		String[] tabImage = new String[listEtages.size()];
-		int i =0;
-		for(List<String> line : listEtages) {
-			tabImage[i]=line.get(3);
-			i++;
-		}
-		return tabImage;
-	}
-
-<<<<<<< HEAD
-//	public String[] readZones() {
-//		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
-//		String[] tabZones = new String[listZones.size()];
-//		int i =0;
-//		for(List<String> line : listZones) {
-//			tabZones[i]=line.get(0);
-//			i++;
-//		}
-//		return tabZones;
-//	}
-//
-//	public String[] readPieces() {
-//		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
-//		String[] tabPieces = new String[listPieces.size()];
-//		int i =0;
-//		for(List<String> line : listPieces) {
-//			tabPieces[i]=line.get(0);
-//			i++;
-//		}
-//		return tabPieces;
-//	}
-//
-=======
-	public String[] readPieces() {
-		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
-		String[] tabPieces = new String[listPieces.size()];
-		int i =0;
-		for(List<String> line : listPieces) {
-			tabPieces[i]=line.get(0);
-			i++;
-		}
-		return tabPieces;
-	}
-
-	public String[] readEtageImage() {
 		List<List<String>> listImage = readGeneric(new Message(MessageType.LISTETAGES)); 
 		String[] tabImage = new String[listImage.size()];
 		int i =0; 
@@ -196,7 +148,7 @@ public class GuiController {
 		}
 		return tabImage;  
 	}
->>>>>>> branche_Justin
+
 
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));
