@@ -140,6 +140,7 @@ public class GuiController {
 		return tabEtages;
 	}
 
+<<<<<<< HEAD
 //	public String[] readZones() {
 //		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
 //		String[] tabZones = new String[listZones.size()];
