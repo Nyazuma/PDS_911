@@ -91,9 +91,27 @@ public class GuiController {
 		}
 		return false; 
 	}
+	public String addresseMac() {
+		String mac = "";
+		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		for(int y=0;y<5;y++) {
+			for(int x=0;x<2;x++)
+			{
+				int i = (int)Math.floor(Math.random() * 36); 
+				mac += chars.charAt(i);
+			}
+			if(y!=4)
+				mac+=":";
+		}
+		System.out.println(mac);
+		return mac;
+
+
+
+	}
 
 	public List<List<String>> addObject(String detectorType) {
-		MsgAddObject addObject = new MsgAddObject(detectorType);
+		MsgAddObject addObject = new MsgAddObject(detectorType, addresseMac());
 		return readGeneric(addObject);
 	}
 
@@ -112,10 +130,10 @@ public class GuiController {
 		}
 		return tabResidences;
 	}
-	
-	
+
+
 	// Pour etage et rdc emplacements 
-	
+
 	public String[] readEmplacements() {
 		List<List<String>> listEmplacements = readGeneric(new Message(MessageType.LISTEMPLACEMENTS));
 		String[] tabEmplacements = new String[listEmplacements.size()];
@@ -126,9 +144,9 @@ public class GuiController {
 		}
 		return tabEmplacements;
 	}
-	
 
-	
+
+
 	public String[] readEtages() {
 		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
 		String[] tabEtages = new String[listEtages.size()];
@@ -151,28 +169,28 @@ public class GuiController {
 		return tabImage;
 	}
 
-//	public String[] readZones() {
-//		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
-//		String[] tabZones = new String[listZones.size()];
-//		int i =0;
-//		for(List<String> line : listZones) {
-//			tabZones[i]=line.get(0);
-//			i++;
-//		}
-//		return tabZones;
-//	}
-//
-//	public String[] readPieces() {
-//		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
-//		String[] tabPieces = new String[listPieces.size()];
-//		int i =0;
-//		for(List<String> line : listPieces) {
-//			tabPieces[i]=line.get(0);
-//			i++;
-//		}
-//		return tabPieces;
-//	}
-//
+	//	public String[] readZones() {
+	//		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
+	//		String[] tabZones = new String[listZones.size()];
+	//		int i =0;
+	//		for(List<String> line : listZones) {
+	//			tabZones[i]=line.get(0);
+	//			i++;
+	//		}
+	//		return tabZones;
+	//	}
+	//
+	//	public String[] readPieces() {
+	//		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
+	//		String[] tabPieces = new String[listPieces.size()];
+	//		int i =0;
+	//		for(List<String> line : listPieces) {
+	//			tabPieces[i]=line.get(0);
+	//			i++;
+	//		}
+	//		return tabPieces;
+	//	}
+	//
 
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));
