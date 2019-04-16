@@ -91,7 +91,24 @@ public class GuiController {
 		}
 		return false; 
 	}
+	public String addresseMac() {
+		String mac = "";
+		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		for(int y=0;y<5;y++) {
+			for(int x=0;x<2;x++)
+			{
+				int i = (int)Math.floor(Math.random() * 36); 
+				mac += chars.charAt(i);
+			}
+			if(y!=4)
+				mac+=":";
+		}
+		System.out.println(mac);
+		return mac;
 
+
+
+	}
 	public List<List<String>> addObject(String detectorType) {
 		MsgAddObject addObject = new MsgAddObject(detectorType, addresseMac());
 		return readGeneric(addObject);
