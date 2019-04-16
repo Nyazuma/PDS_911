@@ -95,6 +95,10 @@ public class Controller {
 			resultList = listReferentiels();
 			MsgListResult answer10 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer10);
+		case LISTEMPLACEMENTS :
+			resultList = listEmplacements();
+			MsgListResult answer11 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer11);
 		case REPORTRFID :
 			reportRFID(((MsgReportRFID)input).getID());
 			return null;
@@ -292,7 +296,7 @@ public class Controller {
 
 
 	private List<List<String>> listResidences() {
-		String request = "SELECT * FROM Residences INNER JOIN Adresse ON Residences.ID_Addresse=Adresse.ID_Addresse;"; 
+		String request = "SELECT * FROM Residences INNER JOIN Adresses ON Residences.ID_Addresse=Adresses.ID_Addresse;"; 
 		return getList(request);
 	}
 
@@ -311,6 +315,11 @@ public class Controller {
 
 	private List<List<String>> listReferentiels(){
 		String request = "SELECT Type_Capteur FROM Referentiel_Capteurs ORDER BY Type_Capteur;";
+		return getList(request);
+	}
+	
+	private List<List<String>> listEmplacements(){
+		String request = "SELECT Nom_Emplacement FROM Emplacements;";
 		return getList(request);
 	}
 
