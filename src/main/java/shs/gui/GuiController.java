@@ -93,7 +93,7 @@ public class GuiController {
 	}
 
 	public List<List<String>> addObject(String detectorType) {
-		MsgAddObject addObject = new MsgAddObject(detectorType);
+		MsgAddObject addObject = new MsgAddObject(detectorType, addresseMac());
 		return readGeneric(addObject);
 	}
 
