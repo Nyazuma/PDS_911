@@ -75,7 +75,7 @@ public class Menu extends JPanel implements ActionListener{
 			controller.getGui().changeWindow(WindowList.MAP);
 		}
 		if(event.getSource().equals(statisticsButton)) {
-			
+			controller.getGui().changeWindow(WindowList.STATISTICS);
 		}
 		
 	}
