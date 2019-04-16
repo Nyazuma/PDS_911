@@ -113,50 +113,55 @@ public class GuiController {
 		return tabResidences;
 	}
 
-	public String[] readZones() {
-		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
-		String[] tabZones = new String[listZones.size()];
-		int i =0;
-		for(List<String> line : listZones) {
-			tabZones[i]=line.get(0);
-			i++;
-		}
-		return tabZones;
-	}
+	
+	// Pour etage et rdc emplacements 
 	
 	public String[] readEmplacements() {
 		List<List<String>> listEmplacements = readGeneric(new Message(MessageType.LISTEMPLACEMENTS));
 		String[] tabEmplacements = new String[listEmplacements.size()];
 		int i =0;
 		for(List<String> line : listEmplacements) {
-			tabEmplacements[i]=line.get(0);
+			tabEmplacements[i]=line.get(1);
 			i++;
 		}
 		return tabEmplacements;
 	}
+	
+
 	
 	public String[] readEtages() {
 		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
 		String[] tabEtages = new String[listEtages.size()];
 		int i =0;
 		for(List<String> line : listEtages) {
-			tabEtages[i]=line.get(0);
+			tabEtages[i]=line.get(1);
 			i++;
 		}
 		return tabEtages;
 	}
 
-	public String[] readPieces() {
-		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
-		String[] tabPieces = new String[listPieces.size()];
-		int i =0;
-		for(List<String> line : listPieces) {
-			tabPieces[i]=line.get(0);
-			i++;
-		}
-		return tabPieces;
-	}
-
+//	public String[] readZones() {
+//		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
+//		String[] tabZones = new String[listZones.size()];
+//		int i =0;
+//		for(List<String> line : listZones) {
+//			tabZones[i]=line.get(0);
+//			i++;
+//		}
+//		return tabZones;
+//	}
+//
+//	public String[] readPieces() {
+//		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
+//		String[] tabPieces = new String[listPieces.size()];
+//		int i =0;
+//		for(List<String> line : listPieces) {
+//			tabPieces[i]=line.get(0);
+//			i++;
+//		}
+//		return tabPieces;
+//	}
+//
 
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));

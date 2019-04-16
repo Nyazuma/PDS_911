@@ -27,7 +27,8 @@ public class ObjectGestion extends JPanel implements ActionListener {
 	protected JLabel addTitleLabel;
 	protected JButton addButton; 
 	protected JButton deleteButton; 
-	protected JButton updateButton; 
+	protected JButton updateButton;
+	protected JButton configButton; 
 	protected JComboBox<?> detectorList;
 	protected JLabel objectNumberTitleLabel;
 	protected JLabel objectNumberLabel; 
@@ -95,6 +96,17 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		addButton.addActionListener(this);
 		this.add(addButton);
 
+		configButton = new JButton("Configurer");
+		configButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		configButton.setBounds(970, 538, 162, 41);
+		configButton.addActionListener(this);
+		this.add(configButton);
+		
+		errorSelection = new JLabel("Veuillez sélectionner une ligne ");
+		errorSelection.setForeground(new Color(126, 0, 0));
+		errorSelection.setFont(new Font("Cambria Math", Font.PLAIN, 16));
+		errorSelection.setBounds(120, 755, 307, 16);
+		
 		deleteButton = new JButton("Supprimer");
 		deleteButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		deleteButton.setBounds(81, 671, 162, 41);

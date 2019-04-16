@@ -114,12 +114,7 @@ public class Statistics extends JPanel implements ActionListener{
 		etage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etage.setModel(modelEtage);
 		etage.setBounds(758, 130, 161, 32);
-		this.add(etage); 
-		
-		
-		JLabel lblMoyenne = new JLabel("Moyenne");
-		lblMoyenne.setBounds(97, 361, 134, 26);
-		add(lblMoyenne);
+		this.add(etage);
 		
 		JLabel lblNombreDeLogements = new JLabel("Nombre de logements");
 		lblNombreDeLogements.setBounds(97, 412, 134, 26);
