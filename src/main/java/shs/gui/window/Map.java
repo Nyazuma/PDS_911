@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
@@ -66,23 +67,22 @@ public class Map extends JPanel implements ActionListener{
 		table.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		this.add(table);
 
-		comboStage = new JComboBox();
+		comboStage = new JComboBox<String>();
 		comboStage.setModel(new DefaultComboBoxModel(new String[] {"Etage 1", "Etage 2"}));
 		comboStage.setBounds(108, 661, 204, 44);
 		comboStage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		comboStage.addActionListener(this);
 		this.add(comboStage);
 
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream input = classLoader.getResourceAsStream("Etage1.JPG");
 		try {
-			image = ImageIO.read(new File("C:\\Users\\33677\\OneDrive\\Bureau\\ESIPE\\PDS\\testImage.jpg"));
+			image = ImageIO.read(getClass().getResource("/images/Etage1.JPG"));  
 		}catch(Exception e) {
 			System.out.println("ERROR - IMAGE NOT FOUND");
 			e.printStackTrace();
 		}
-//		BufferedImage myPicture = ImageIO.read(new File("path-to-file"));
-//		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-//		add(picLabel);
-		
+			
 		imageIcon = new ImageIcon(image); 
 		picLabel = new JLabel(imageIcon); 
 		picLabel.setBounds(470, 0, 1500, 1000);
@@ -102,9 +102,8 @@ public class Map extends JPanel implements ActionListener{
 		if(event.getSource().equals(comboStage)) {
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
-				System.out.println("Je suis la !!!");
 				try {
-					image = ImageIO.read(new File("C:\\Users\\33677\\OneDrive\\Bureau\\ESIPE\\PDS\\testImage.jpg"));
+					image = ImageIO.read(getClass().getResource("/images/Etage1.JPG"));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
@@ -115,7 +114,7 @@ public class Map extends JPanel implements ActionListener{
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
 				try {
-					image = ImageIO.read(new File("C:\\Users\\33677\\OneDrive\\Bureau\\ESIPE\\PDS\\testImage2.png"));
+					image = ImageIO.read(getClass().getResource("/images/Etage2.png"));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
