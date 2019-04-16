@@ -153,7 +153,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 
 		// List of MAC adresses !! Compléter avec la création de l'adresse
 		
-//		modelMacCapteur = new DefaultComboBoxModel<String>(new String[] {"TEST", "HELLA"});
+
 //		macCapteur = new JComboBox<String>();
 //		macCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 //		macCapteur.setModel(modelMacCapteur);

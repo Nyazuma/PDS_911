@@ -112,10 +112,10 @@ public class GuiController {
 		}
 		return tabResidences;
 	}
-	
-	
+
+
 	// Pour etage et rdc emplacements 
-	
+
 	public String[] readEmplacements() {
 		List<List<String>> listEmplacements = readGeneric(new Message(MessageType.LISTEMPLACEMENTS));
 		String[] tabEmplacements = new String[listEmplacements.size()];
@@ -126,6 +126,9 @@ public class GuiController {
 		}
 		return tabEmplacements;
 	}
+
+
+
 
 	public String[] readEtages() {
 		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
@@ -148,6 +151,29 @@ public class GuiController {
 		}
 		return tabImage;  
 	}
+
+	//	public String[] readZones() {
+	//		List<List<String>> listZones = readGeneric(new Message(MessageType.LISTZONES));
+	//		String[] tabZones = new String[listZones.size()];
+	//		int i =0;
+	//		for(List<String> line : listZones) {
+	//			tabZones[i]=line.get(0);
+	//			i++;
+	//		}
+	//		return tabZones;
+	//	}
+	//
+	//	public String[] readPieces() {
+	//		List<List<String>> listPieces = readGeneric(new Message(MessageType.LISTPIECES));
+	//		String[] tabPieces = new String[listPieces.size()];
+	//		int i =0;
+	//		for(List<String> line : listPieces) {
+	//			tabPieces[i]=line.get(0);
+	//			i++;
+	//		}
+	//		return tabPieces;
+	//	}
+	//
 
 
 	public List<List<String>> readObjects() {
