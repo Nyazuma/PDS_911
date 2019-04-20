@@ -46,14 +46,32 @@ public class Simulation {
 			}
 		}
 		
-		
 		CategoryRFID categoryRFID = new CategoryRFID(listReferentiels.get(0).get(0), sortedCaptors.get(0));
 		Thread threadRFID = new Thread(categoryRFID);
 		threadRFID.start();
 		
-		CategoryCall categoryCall = new CategoryCall(listReferentiels.get(1).get(0), sortedCaptors.get(0));
+		CategoryCall categoryCall = new CategoryCall(listReferentiels.get(1).get(0), sortedCaptors.get(1));
 		Thread threadCall = new Thread(categoryCall);
 		threadCall.start();
+		
+		CategorySmoke categorySmoke = new CategorySmoke(listReferentiels.get(2).get(0), sortedCaptors.get(2));
+		categorySmoke.randomFire();
+		
+		CategoryMotion categoryMotion = new CategoryMotion(listReferentiels.get(3).get(0), sortedCaptors.get(3));
+		Thread threadMotion = new Thread(categoryMotion);
+		threadMotion.start();
+
+		CategoryTemperature categoryTemperature = new CategoryTemperature(listReferentiels.get(4).get(0), sortedCaptors.get(4));
+		Thread threadTemperature = new Thread(categoryTemperature);
+		threadTemperature.start();
+		
+		CategoryHygro categoryHygro = new CategoryHygro(listReferentiels.get(5).get(0), sortedCaptors.get(5));
+		Thread threadHygro = new Thread(categoryHygro);
+		threadHygro.start();
+		
+		CategoryOpening categoryOpening = new CategoryOpening(listReferentiels.get(6).get(0), sortedCaptors.get(6));
+		Thread threadOpening = new Thread(categoryOpening);
+		threadOpening.start();
 	}
 	
 }

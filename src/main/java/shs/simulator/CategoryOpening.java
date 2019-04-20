@@ -2,21 +2,20 @@ package shs.simulator;
 
 import java.util.List;
 
-import shs.common.MsgReportHygro;
+import shs.common.MsgReportOpening;
 import shs.common.Tool;
 
-public class CategoryHygro extends CategoryObject implements Runnable {
+public class CategoryOpening extends CategoryObject implements Runnable {
 
-	public CategoryHygro(String referencedName, List<String> listObjects) {
+	public CategoryOpening(String referencedName, List<String> listObjects) {
 		super(referencedName, listObjects);
 	}
-
+	
 	public void run() {
 
 		try {
 			while(true) {
-				Integer hygroValue = (int) (Math.random()*100);
-				MsgReportHygro update = new MsgReportHygro(waiting(), hygroValue);
+				MsgReportOpening update = new MsgReportOpening(waiting());
 				Connector.contactServer(Tool.messageToJSON(update));
 			}
 		} catch (InterruptedException e) {
@@ -24,4 +23,5 @@ public class CategoryHygro extends CategoryObject implements Runnable {
 		}
 
 	}
+
 }
