@@ -13,6 +13,7 @@ import shs.common.Message;
 import shs.common.MessageType;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
+import shs.common.MsgChangeAlert;
 import shs.common.MsgConnection;
 import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
@@ -121,6 +122,12 @@ public class Controller {
 			return null;
 		case REPORTOPENING :
 			reportOpening(((MsgReportOpening) input).getId());
+			return null;
+		case MONITORING :
+			//monitoring();
+			return null;
+		case CHANGEALERT :
+			changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
 			return null;
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
@@ -422,6 +429,10 @@ public class Controller {
 		}catch(SQLException e) {
 			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
 		}
+	}
+	
+	private void changeAlert(Integer id, Boolean status) {
+		
 	}
 
 
