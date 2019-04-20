@@ -17,7 +17,13 @@ import shs.common.MsgConnection;
 import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
+import shs.common.MsgReportCall;
+import shs.common.MsgReportHygro;
+import shs.common.MsgReportMotion;
+import shs.common.MsgReportOpening;
 import shs.common.MsgReportRFID;
+import shs.common.MsgReportSmoke;
+import shs.common.MsgReportTemperature;
 import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
@@ -79,15 +85,6 @@ public class Controller {
 			resultBoolean = updateObject(((MsgUpdateObject)input).getObject()); 
 			MsgBooleanResult answer6 = new MsgBooleanResult(resultBoolean); 
 			return Tool.messageToJSON(answer6);		
-
-//		case LISTZONES :
-//			resultList = listZones();
-//			MsgListResult answer7 = new MsgListResult(resultList); 
-//			return Tool.messageToJSON(answer7);
-//		case LISTPIECES :
-//			resultList = listPieces();
-//			MsgListResult answer8 = new MsgListResult(resultList); 
-//			return Tool.messageToJSON(answer8);
 		case LISTRESIDENCES :
 			resultList = listResidences();
 			MsgListResult answer9 = new MsgListResult(resultList); 
@@ -105,14 +102,31 @@ public class Controller {
 			MsgListResult answer12 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer12);
 		case REPORTRFID :
-			reportRFID(((MsgReportRFID)input).getID());
+			reportRFID(((MsgReportRFID)input).getId());
+			return null;
+		case REPORTCALL :
+			reportCall(((MsgReportCall) input).getId());
+			return null;
+		case REPORTSMOKE :
+			reportSmoke(((MsgReportSmoke) input).getId(), ((MsgReportSmoke)input).getSmokeValue());
+			return null;
+		case REPORTMOTION :
+			reportMotion(((MsgReportMotion) input).getId());
+			return null;
+		case REPORTTEMPERATURE :
+			reportTemperature(((MsgReportTemperature) input).getId(), ((MsgReportTemperature) input).getTemperature());
+			return null;
+		case REPORTHYGRO :
+			reportHygro(((MsgReportHygro) input).getId(), ((MsgReportHygro) input).getHygroValue());
+			return null;
+		case REPORTOPENING :
+			reportOpening(((MsgReportOpening) input).getId());
 			return null;
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
 		}	
 	}
-
 
 	/**
 	 * Check connection. 
@@ -223,38 +237,38 @@ public class Controller {
 	 * @return
 	 */
 	private boolean updateObject(List<String> attribute) {
-//		String requestEmplacement = "SELECT ID_Emplacement FROM Emplacements INNER JOIN Residences ON Residences.ID_Residence=Emplacements.ID_Residence "
-//				+ "					WHERE Nom_Residence='" + attribute.get(3) + "' AND Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'";
-     String request = "";
+		//		String requestEmplacement = "SELECT ID_Emplacement FROM Emplacements INNER JOIN Residences ON Residences.ID_Residence=Emplacements.ID_Residence "
+		//				+ "					WHERE Nom_Residence='" + attribute.get(3) + "' AND Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'";
+		String request = "";
 		try {
 			Statement statement = connection.createStatement(); 
-//			ResultSet resultEmplacement = statement.executeQuery(requestEmplacement); 
+			//			ResultSet resultEmplacement = statement.executeQuery(requestEmplacement); 
 			//if(!resultEmplacement.next()) {
-				// The "Emplacement" doesn't exit, we have to create it
-				// We get the Residence ID
-				String requestResidence = "SELECT ID_Residence FROM Residences WHERE Nom_Residence='" + attribute.get(3) + "'";
-				ResultSet resultResidence = statement.executeQuery(requestResidence); 
-				resultResidence.next();
-				int id = resultResidence.getInt(1);
-				// We create the "Emplacement" with the Residence ID
-//				String createEmplacement = "INSERT INTO Emplacements(Piece_Emplacement, Zone_Emplacement, ID_Residence) VALUES('" +attribute.get(5) + "', '" + attribute.get(4)+ "', '" + id + "')" ;
-//				statement.executeUpdate(createEmplacement); 
-				// We get the ID from the "Emplacement" we just created
-//				String requestEmplacementNew = "SELECT ID_Emplacement FROM Emplacements WHERE Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'"
-//						+ " AND ID_Residence='" + id + "'";
-//				ResultSet resultEmplacementNew = statement.executeQuery(requestEmplacementNew); 
-//				resultEmplacementNew.next();
+			// The "Emplacement" doesn't exit, we have to create it
+			// We get the Residence ID
+			String requestResidence = "SELECT ID_Residence FROM Residences WHERE Nom_Residence='" + attribute.get(3) + "'";
+			ResultSet resultResidence = statement.executeQuery(requestResidence); 
+			resultResidence.next();
+			int id = resultResidence.getInt(1);
+			// We create the "Emplacement" with the Residence ID
+			//				String createEmplacement = "INSERT INTO Emplacements(Piece_Emplacement, Zone_Emplacement, ID_Residence) VALUES('" +attribute.get(5) + "', '" + attribute.get(4)+ "', '" + id + "')" ;
+			//				statement.executeUpdate(createEmplacement); 
+			// We get the ID from the "Emplacement" we just created
+			//				String requestEmplacementNew = "SELECT ID_Emplacement FROM Emplacements WHERE Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'"
+			//						+ " AND ID_Residence='" + id + "'";
+			//				ResultSet resultEmplacementNew = statement.executeQuery(requestEmplacementNew); 
+			//				resultEmplacementNew.next();
 			//	int idNew = resultEmplacementNew.getInt(1);
-//				int idNew = 6 ;
-				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + "', Mac_Capteur = '"+ attribute.get(0) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-//			}
-				
-//				int idNew = 6 ;
-//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + idNew + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-//			}
-//			else {
-//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + resultEmplacement.getInt(1) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-//			}
+			//				int idNew = 6 ;
+			request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + "', Mac_Capteur = '"+ attribute.get(0) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+			//			}
+
+			//				int idNew = 6 ;
+			//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + idNew + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+			//			}
+			//			else {
+			//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + resultEmplacement.getInt(1) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+			//			}
 
 			statement.executeUpdate(request); 
 			return true; 
@@ -308,19 +322,16 @@ public class Controller {
 		return getList(request);
 	}
 
-
-
-
 	private List<List<String>> listReferentiels(){
 		String request = "SELECT Type_Capteur FROM Referentiel_Capteurs ORDER BY Type_Capteur;";
 		return getList(request);
 	}
-	
+
 	private List<List<String>> listEmplacements(){
 		String request = "SELECT * FROM Emplacements;";
 		return getList(request);
 	}
-	
+
 	private List<List<String>> listEtages(){
 		String request = "SELECT * FROM Etages;";
 		return getList(request);
@@ -336,7 +347,82 @@ public class Controller {
 		}catch(SQLException e) {
 			Tool.logger.error("reportRFID FAILED - SQL EXCEPTION");
 		}
-
 	}
+
+	private void reportCall(Integer id) {
+		String message = "Le bouton appel a généré une alerte!";
+		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
+				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch(SQLException e) {
+			Tool.logger.error("reportCall FAILED - SQL EXCEPTION");
+		}
+	}
+
+
+	private void reportSmoke(Integer id, Integer smokeValue) {
+		if(MemoryCache.addCacheData(id)) {
+			String message = "L'alarme incendie est active! (" + smokeValue + "% de fumée sur la dernière alerte)";
+			String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
+					+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+			try {
+				Statement statement = connection.createStatement();
+				statement.executeUpdate(request);
+			}catch(SQLException e) {
+				Tool.logger.error("reportSmoke FAILED - SQL EXCEPTION");
+			}
+		}
+	}
+
+	private void reportMotion(Integer id) {
+		String message = "Un mouvement a été détecté!";
+		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
+				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch(SQLException e) {
+			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
+		}
+	}
+	
+	private void reportTemperature(Integer id, float temperature ) {
+		String message = "Une température anormale a été détectée";
+		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
+				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch(SQLException e) {
+			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
+		}
+	}
+	
+	private void reportHygro(Integer id, Integer hygroValue) {
+		String message = "Un taux d''humidité anormal a été détecté!";
+		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
+				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch(SQLException e) {
+			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
+		}
+	}
+	
+	private void reportOpening(Integer id) {
+		String message = "Une ouverture de porte/fenêtre a été détecté!";
+		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
+				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch(SQLException e) {
+			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
+		}
+	}
+
 
 }
