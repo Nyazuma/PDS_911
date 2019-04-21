@@ -128,9 +128,8 @@ public class Controller {
 			MsgListResult answer13 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer13);
 		case CHANGEALERT :
-			resultList = changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
-			MsgListResult answer14 = new MsgListResult(resultList); 
-			return Tool.messageToJSON(answer14);
+			changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
+			return null;
 		case LISTCAPTEURS : 
 			resultList = listCapteurs();
 			MsgListResult answer15 = new MsgListResult(resultList); 
@@ -408,7 +407,7 @@ public class Controller {
 		report(id, message);
 	}
 
-	private List<List<String>> changeAlert(Integer id, Boolean status) {
+	private void changeAlert(Integer id, Boolean status) {
 		String request = "UPDATE Notifications SET Etat_Notification=" +  Boolean.toString(status) + " WHERE ID_Notification=" + id;
 		try {
 			Statement statement = connection.createStatement();
@@ -417,8 +416,6 @@ public class Controller {
 			Tool.logger.error("changeAlert FAILED - SQL EXCEPTION");
 			e.printStackTrace();
 		}
-
-		return monitoring();
 	}
 
 	private List<List<String>> monitoring() {

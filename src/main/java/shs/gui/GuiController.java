@@ -209,8 +209,13 @@ public class GuiController {
 		return readGeneric(new Message(MessageType.MONITORING));
 	}
 	
-	public List<List<String>> changeAlert(Integer id, Boolean status){
-		return readGeneric(new MsgChangeAlert(id, status));
+	public void changeAlert(Integer id, Boolean status){
+		MsgChangeAlert msg = new MsgChangeAlert(id, status);
+		String output = Tool.messageToJSON(msg);
+		try {
+			contactServer(output);
+		}
+		catch (Throwable e) {}
 	}
 
 	public String[] readReferentiels() {
@@ -272,9 +277,7 @@ public class GuiController {
 			rawAnswerServer= new DataInputStream(socket.getInputStream());
 			answerServer = rawAnswerServer.readUTF();
 		}
-		catch(IOException e){
-			e.printStackTrace();
-		}
+		catch(IOException e){}
 		finally{
 			try {
 				socket.close();

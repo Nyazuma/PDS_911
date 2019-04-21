@@ -69,6 +69,9 @@ public class Tool {
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTTEMPERATURE.toString())) {
 				return mapper.readValue(json, MsgReportTemperature.class); 
 			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.CHANGEALERT.toString())) {
+				return mapper.readValue(json, MsgChangeAlert.class); 
+			}
 			// Don't forget messages without a specific class!
 			return mapper.readValue(json, Message.class);
 		} 
