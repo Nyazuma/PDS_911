@@ -128,8 +128,9 @@ public class Controller {
 			MsgListResult answer13 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer13);
 		case CHANGEALERT :
-			changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
-			return null;
+			resultList = changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
+			MsgListResult answer14 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer14);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -396,7 +397,13 @@ public class Controller {
 	}
 	
 	private List<List<String>> changeAlert(Integer id, Boolean status) {
-		
+		String request = "UPDATE Notifications SET Etat_Notification=" + Boolean.toString(status) + "where ID_Notification=" + id;
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch(SQLException e) {
+			Tool.logger.error("changeAlert - SQL EXCEPTION");
+		}
 		return monitoring();
 	}
 	
