@@ -128,8 +128,9 @@ public class Controller {
 			MsgListResult answer13 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer13);
 		case CHANGEALERT :
-			changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
-			return null;
+			resultList = changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
+			MsgListResult answer14 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer14);
 		case LISTCAPTEURS : 
 			resultList = listCapteurs();
 			MsgListResult answer14 = new MsgListResult(resultList); 
