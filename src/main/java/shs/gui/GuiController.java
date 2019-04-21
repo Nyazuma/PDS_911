@@ -129,10 +129,13 @@ public class GuiController {
 		}
 		return tabResidences;
 	}
+	
+	public List<List<String>> EmplacementFull(){
+		return readGeneric(new Message(MessageType.LISTEMPLACEMENTS)); 
+	}
 
 
 	// Pour etage et rdc emplacements 
-
 	public String[] readEmplacements() {
 		List<List<String>> listEmplacements = readGeneric(new Message(MessageType.LISTEMPLACEMENTS));
 		String[] tabEmplacements = new String[listEmplacements.size()];
@@ -163,7 +166,7 @@ public class GuiController {
 		String[] tabImage = new String[listImage.size()];
 		int i =0; 
 		for(List<String>line : listImage) {
-			tabImage[i]=line.get(3); 
+			tabImage[i]=line.get(1); 
 			i++;
 		}
 		return tabImage;  
