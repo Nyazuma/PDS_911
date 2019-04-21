@@ -411,8 +411,14 @@ public class Controller {
 	}
 	
 	private List<List<String>> monitoring() {
-		String request = "SELECT * FROM Notifications WHERE Date_Notification >= DATE_SUB(now(), INTERVAL 3 DAY)"
-					   + " ORDER BY Date_Notification;";	
+		String request = "SELECT ID_Notification, Niveau_Notification, Date_Notification, Message_Notification, Etat_Notification, Notifications.ID_Capteur, Type_Capteur, " +
+				"Mac_Capteur, Capteurs.ID_Emplacement, Nom_Emplacement, Niveau_Etage, Nom_Residence FROM Notifications " +
+				"INNER JOIN Capteurs ON Notifications.ID_Capteur=Capteurs.ID_Capteur " + 
+				"LEFT JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
+				"LEFT JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
+				"LEFT JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence " + 
+				"WHERE Date_Notification >= DATE_SUB(now(), INTERVAL 3 DAY) " + 
+				"ORDER BY Date_Notification DESC ";
 		return getList(request);
 	}
 
