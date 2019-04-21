@@ -59,18 +59,18 @@ public class Map extends JPanel implements ActionListener{
 	private List<List<String>> listObject = new ArrayList<List<String>>(); 
 	private Object[][] data;
 	private JScrollPane scrollPane;
-	
+
 	/**
 	 * Gestion Emplacements
 	 */
 	private List<List<String>> listEmplacement;
 	private List<JButton> listJButtonsEtage1; 
-	
+
 
 	public Map(GuiController controller) {
 		this.controller = controller; 
 
-		
+
 
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		this.controller.getGui().setSize(screensize);
@@ -85,12 +85,12 @@ public class Map extends JPanel implements ActionListener{
 		btnRetour.addActionListener(this);
 		this.add(btnRetour);
 
-//		table = new JTable();
-//		table.setBounds(12, 99, 438, 527);
-//		table.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		this.add(table);
-		
-		listObject = controller.readObjects();
+		//		table = new JTable();
+		//		table.setBounds(12, 99, 438, 527);
+		//		table.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		//		this.add(table);
+
+		listObject = controller.listCapteurs();
 		gestionListObject();
 		this.add(scrollPane, BorderLayout.CENTER);
 
@@ -100,20 +100,20 @@ public class Map extends JPanel implements ActionListener{
 		comboStage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		comboStage.addActionListener(this);
 		this.add(comboStage);
-		
+
 		listEmplacement = controller.EmplacementFull(); 
 		listJButtonsEtage1 = new ArrayList<JButton>();
-		
+
 		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
 			if(listEmplacement.get(ligne).get(2).toString().equals("1")  && comboStage.getSelectedItem().toString().equals("Etage 1") ) {
-			JButton newButton = new JButton(); 
-			newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)), Integer.parseInt(listEmplacement.get(ligne).get(4)), Integer.parseInt(listEmplacement.get(ligne).get(5)), Integer.parseInt(listEmplacement.get(ligne).get(6)));
-			listJButtonsEtage1.add(newButton); 
-			this.add(newButton);
+				JButton newButton = new JButton(); 
+				newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)), Integer.parseInt(listEmplacement.get(ligne).get(4)), Integer.parseInt(listEmplacement.get(ligne).get(5)), Integer.parseInt(listEmplacement.get(ligne).get(6)));
+				listJButtonsEtage1.add(newButton); 
+				this.add(newButton);
 			}
 		}
-		
-		
+
+
 		//Get table Etage and read Image on line 
 		tabImage = controller.readEtageImage(); 
 		try {
@@ -122,7 +122,7 @@ public class Map extends JPanel implements ActionListener{
 			System.out.println("ERROR - IMAGE NOT FOUND");
 			e.printStackTrace();
 		}
-		
+
 
 		imageIcon = new ImageIcon(image); 
 		picLabel = new JLabel(imageIcon); 
@@ -130,35 +130,44 @@ public class Map extends JPanel implements ActionListener{
 		this.add(picLabel);
 
 	}
-	
+
 	public void gestionListObject() {
-		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Mac"}; 
+		String[] header = {"ID_capteur", "Type du capteur", "Etat capteur", "Mac"}; 
 		Integer x = listObject.size(); 
 		Integer y;
 		if(x>0) { 
 			// If the result is not empty, we could fill our table
-			y = listObject.get(0).size();
+			y = listObject.get(0).size()-1; //we don't want the "Emplacement" ID
 			data = new Object[x][y]; 
-			Integer i = 0;
-			Integer j = 0;
+			Integer lineNumber = 0;
+			Integer columnNumber = 0;
 			for(List<String> line : listObject) {
 				for(String column : line) {
-					if(j==3 || j==4 || j==5) {
-						continue; 
+					if(columnNumber<=1) {
+						data[lineNumber][columnNumber]=column;
+						columnNumber++;
+						continue;
 					}
-					if(j!=2)
-						data[i][j]=column;
-					else {
-						// Status
-						if(column.equals("1")) 
-							data[i][2] = "Enable"; 
-						else 
-							data[i][2] = "Disable"; 
+					if(columnNumber==2) {
+						if(column.equals("0"))
+							data[lineNumber][columnNumber]="Disable";
+						else
+							data[lineNumber][columnNumber]="Enable";
+						columnNumber++;
+						continue;
 					}
-					j++;
+					if(columnNumber==3) {
+						// We don't want the "emplacement ID"
+						columnNumber++;
+						continue;
+					}
+					if(columnNumber==4) {
+						data[lineNumber][columnNumber-1]=column;
+						columnNumber++;
+					}
 				}
-				j=0;
-				i++;
+				columnNumber=0;
+				lineNumber++;
 			}
 
 			objectTable = new JTable(data, header);
