@@ -14,6 +14,7 @@ import shs.common.MsgDeleteObject;
 import shs.common.MessageType;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
+import shs.common.MsgChangeAlert;
 import shs.common.MsgConnection;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
@@ -202,6 +203,14 @@ public class GuiController {
 	
 	public List<List<String>> listCapteurs(){
 		return readGeneric(new Message(MessageType.LISTCAPTEURS));
+	}
+	
+	public List<List<String>> listNotifications(){
+		return readGeneric(new Message(MessageType.MONITORING));
+	}
+	
+	public List<List<String>> changeAlert(Integer id, Boolean status){
+		return readGeneric(new MsgChangeAlert(id, status));
 	}
 
 	public String[] readReferentiels() {
