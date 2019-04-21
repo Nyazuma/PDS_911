@@ -4,13 +4,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 
+import shs.common.Tool;
 import shs.gui.GuiController;
 
 public class Monitoring extends JPanel implements ActionListener{
@@ -22,8 +27,8 @@ public class Monitoring extends JPanel implements ActionListener{
 	protected JButton displayMapButton;
 	protected JButton disableAlertButton;
 	protected JButton refreshButton;
-	protected JPanel lowAlertIconPanel;
-	protected JPanel highAlertIconPanel;
+	protected JLabel lowAlertIconPanel;
+	protected JLabel highAlertIconPanel;
 	protected JLabel lowAlertLabel;
 	protected JLabel highAlertLabel;
 	protected JButton modifySensorButton;
@@ -32,6 +37,8 @@ public class Monitoring extends JPanel implements ActionListener{
 	protected JButton detailsButton;
 	protected JTextPane detailAlertText;
 	protected JLabel listAlertsLabel;
+	
+	private Boolean displayDisabledAlerts;
 	
 	public Monitoring(GuiController controller) {
 		
@@ -61,25 +68,39 @@ public class Monitoring extends JPanel implements ActionListener{
 		add(disableAlertButton);
 		
 		refreshButton = new JButton("Rafraichir manuellement");
-		refreshButton.setBounds(374, 156, 217, 25);
+		refreshButton.setBounds(365, 156, 227, 25);
 		add(refreshButton);
 		
-		lowAlertIconPanel = new JPanel();
-		lowAlertIconPanel.setLayout(null);
-		lowAlertIconPanel.setBounds(840, 74, 196, 97);
-		add(lowAlertIconPanel);
+		URL url = null;
+		ImageIcon imageIcon = null;
+		try {
+			url = this.getClass().getResource("/images/lowAlert.gif");
+			imageIcon = new ImageIcon(url);
+			lowAlertIconPanel = new JLabel(imageIcon);
+			lowAlertIconPanel.setBounds(860, 60, 150, 150);
+			add(lowAlertIconPanel);
+		}catch(Exception e) {
+			Tool.logger.error("ERROR - IMAGE NOT FOUND");
+			e.printStackTrace();
+		}
 		
-		highAlertIconPanel = new JPanel();
-		highAlertIconPanel.setBounds(1105, 74, 196, 97);
-		add(highAlertIconPanel);
-		highAlertIconPanel.setLayout(null);
+		try {
+			url = this.getClass().getResource("/images/highAlert.gif");
+			imageIcon = new ImageIcon(url);
+			highAlertIconPanel = new JLabel(imageIcon);
+			highAlertIconPanel.setBounds(1125, 60, 150, 150);
+			add(highAlertIconPanel);
+		}catch(Exception e) {
+			Tool.logger.error("ERROR - IMAGE NOT FOUND");
+			e.printStackTrace();
+		}
 		
 		lowAlertLabel = new JLabel("Une alarme de niveau 1 ou 2 est active!");
-		lowAlertLabel.setBounds(822, 173, 236, 36);
+		lowAlertLabel.setBounds(822, 220, 236, 36);
 		add(lowAlertLabel);
 		
 		highAlertLabel = new JLabel("Une alarme de niveau 3 est active!");
-		highAlertLabel.setBounds(1105, 173, 207, 36);
+		highAlertLabel.setBounds(1105, 220, 207, 36);
 		add(highAlertLabel);
 		
 		modifySensorButton = new JButton("Modifier le capteur");
@@ -89,11 +110,12 @@ public class Monitoring extends JPanel implements ActionListener{
 		
 		toggleDisabledAlertsButton = new JButton("Afficher les alertes désactivées");
 		toggleDisabledAlertsButton.addActionListener(this);
-		toggleDisabledAlertsButton.setBounds(374, 184, 217, 25);
+		toggleDisabledAlertsButton.setBounds(365, 184, 227, 25);
 		add(toggleDisabledAlertsButton);
 		
 		detailsAlertLabel = new JLabel("Alerte sélectionnée :");
-		detailsAlertLabel.setBounds(776, 327, 133, 16);
+		detailsAlertLabel.setFont(new Font("Cambria Math", Font.BOLD, 20));
+		detailsAlertLabel.setBounds(776, 327, 200, 16);
 		add(detailsAlertLabel);
 		
 		detailsButton = new JButton(">> Détails");
@@ -105,11 +127,17 @@ public class Monitoring extends JPanel implements ActionListener{
 		detailAlertText.setBounds(770, 357, 522, 343);
 		add(detailAlertText);
 		
-		listAlertsLabel = new JLabel("Liste des derni\u00E8res alertes :");
-		listAlertsLabel.setBounds(62, 183, 175, 16);
+		listAlertsLabel = new JLabel("Liste des dernières alertes :");
+		listAlertsLabel.setFont(new Font("Cambria Math", Font.BOLD, 20));
+		listAlertsLabel.setBounds(62, 183, 265, 16);
 		add(listAlertsLabel);
+		
+		displayDisabledAlerts = false;
 	}
 
+	private void refreshTableAlert() {
+		
+	}
 	
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource().equals(returnButton)) {
@@ -130,6 +158,13 @@ public class Monitoring extends JPanel implements ActionListener{
 			return;
 		}
 		if(event.getSource().equals(toggleDisabledAlertsButton)) {
+			if(displayDisabledAlerts) {
+				displayDisabledAlerts = false;
+				toggleDisabledAlertsButton.setText("Afficher les alertes désactivées");		
+			}else {
+				displayDisabledAlerts = true;
+				toggleDisabledAlertsButton.setText("Masquer les alertes désactivées");
+			}
 			return;
 		}
 		if(event.getSource().equals(detailsButton)) {
