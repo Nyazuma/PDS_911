@@ -81,19 +81,18 @@ public class Map extends JPanel implements ActionListener{
 		
 		//Get table Etage and read Image on line 
 		tabImage = controller.readEtageImage(); 
-		
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream input = classLoader.getResourceAsStream("Etage1.JPG");
 		try {
 			image = ImageIO.read(getClass().getResource("/images/" + tabImage[0]));  
 		}catch(Exception e) {
 			System.out.println("ERROR - IMAGE NOT FOUND");
 			e.printStackTrace();
 		}
+		
+		
 
 		imageIcon = new ImageIcon(image); 
 		picLabel = new JLabel(imageIcon); 
-		picLabel.setBounds(490, 98, 1500, 1000);
+		picLabel.setBounds(491, 99, 1345, 824);
 		this.add(picLabel);
 
 	}
