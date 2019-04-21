@@ -330,7 +330,7 @@ public class Controller {
 		return getList(request);
 
 	}
-	
+
 	private List<List<String>> listCapteurs(){
 		String request ="Select * from Capteurs"; 
 		return getList(request); 
@@ -366,7 +366,7 @@ public class Controller {
 			Tool.logger.error("report FAILED - SQL EXCEPTION");
 		}
 	}
-	
+
 	private void reportRFID(Integer id) {
 		String message = "Le bracelet a généré un appel!";
 		report(id, message);
@@ -379,6 +379,7 @@ public class Controller {
 
 
 	private void reportSmoke(Integer id, Integer smokeValue) {
+		//TODO check smoke value
 		if(MemoryCache.addCacheData(id)) {
 			String message = "L'alarme incendie est active! (" + smokeValue + "% de fumée sur la dernière alerte)";
 			report(id, message);
@@ -389,27 +390,37 @@ public class Controller {
 		String message = "Un mouvement a été détecté!";
 		report(id, message);
 	}
-	
+
 	private void reportTemperature(Integer id, float temperature ) {
+		//TODO check the temperature
 		String message = "Une température anormale a été détectée";
 		report(id, message);
 	}
-	
+
 	private void reportHygro(Integer id, Integer hygroValue) {
+		//TODO check the hygro
 		String message = "Un taux d''humidité anormal a été détecté!";
 		report(id, message);
 	}
-	
+
 	private void reportOpening(Integer id) {
-		String message = "Une ouverture de porte/fenêtre a été détecté!";
+		String message = "Une ouverture de porte/fenêtre a été détectée!";
 		report(id, message);
 	}
-	
+
 	private List<List<String>> changeAlert(Integer id, Boolean status) {
-		
+		String request = "UPDATE Notifications SET Etat_Notification=" +  Boolean.toString(status) + " WHERE ID_Notification=" + id;
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+		}catch (SQLException e) {
+			Tool.logger.error("changeAlert FAILED - SQL EXCEPTION");
+			e.printStackTrace();
+		}
+
 		return monitoring();
 	}
-	
+
 	private List<List<String>> monitoring() {
 		String request = "SELECT ID_Notification, Niveau_Notification, Date_Notification, Message_Notification, Etat_Notification, Notifications.ID_Capteur, Type_Capteur, " +
 				"Mac_Capteur, Capteurs.ID_Emplacement, Nom_Emplacement, Niveau_Etage, Nom_Residence FROM Notifications " +
