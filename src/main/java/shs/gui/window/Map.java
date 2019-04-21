@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
@@ -48,6 +50,10 @@ public class Map extends JPanel implements ActionListener{
 	private GuiController controller; 
 	private String[] tabImage; 
 
+	private List<List<String>> listObject; 
+	private List<List<String>> listEmplacement;
+	private List<JButton> listJButtons; 
+	
 
 	public Map(GuiController controller) {
 		this.controller = controller; 
@@ -79,21 +85,32 @@ public class Map extends JPanel implements ActionListener{
 		comboStage.addActionListener(this);
 		this.add(comboStage);
 		
+		listEmplacement = controller.EmplacementFull(); 
+		listJButtons = new ArrayList<JButton>();
+		
+		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
+			if(listEmplacement.get(ligne).get(2).toString().equals("1")  && comboStage.getSelectedItem().toString().equals("Etage 1") ) {
+			JButton newButton = new JButton(); 
+			newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)), Integer.parseInt(listEmplacement.get(ligne).get(4)), Integer.parseInt(listEmplacement.get(ligne).get(5)), Integer.parseInt(listEmplacement.get(ligne).get(6)));
+			listJButtons.add(newButton); 
+			this.add(newButton);
+			}
+		}
+		
+		
 		//Get table Etage and read Image on line 
 		tabImage = controller.readEtageImage(); 
-		
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream input = classLoader.getResourceAsStream("Etage1.JPG");
 		try {
 			image = ImageIO.read(getClass().getResource("/images/" + tabImage[0]));  
 		}catch(Exception e) {
 			System.out.println("ERROR - IMAGE NOT FOUND");
 			e.printStackTrace();
 		}
+		
 
 		imageIcon = new ImageIcon(image); 
 		picLabel = new JLabel(imageIcon); 
-		picLabel.setBounds(490, 98, 1500, 1000);
+		picLabel.setBounds(491, 99, 1345, 824);
 		this.add(picLabel);
 
 	}
