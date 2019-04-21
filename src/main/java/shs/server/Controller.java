@@ -133,8 +133,8 @@ public class Controller {
 			return Tool.messageToJSON(answer14);
 		case LISTCAPTEURS : 
 			resultList = listCapteurs();
-			MsgListResult answer14 = new MsgListResult(resultList); 
-			return Tool.messageToJSON(answer14);
+			MsgListResult answer15 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer15);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
