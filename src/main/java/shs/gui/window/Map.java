@@ -136,7 +136,6 @@ public class Map extends JPanel implements ActionListener{
 		Integer x = listObject.size(); 
 		Integer y;
 		if(x>0) { 
-			System.out.println("Je suis la ");
 			// If the result is not empty, we could fill our table
 			y = listObject.get(0).size();
 			data = new Object[x][y]; 
@@ -144,6 +143,9 @@ public class Map extends JPanel implements ActionListener{
 			Integer j = 0;
 			for(List<String> line : listObject) {
 				for(String column : line) {
+					if(j==3 || j==4 || j==5) {
+						continue; 
+					}
 					if(j!=2)
 						data[i][j]=column;
 					else {
