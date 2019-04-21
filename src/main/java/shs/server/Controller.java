@@ -131,6 +131,10 @@ public class Controller {
 			resultList = changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
 			MsgListResult answer14 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer14);
+		case LISTCAPTEURS : 
+			resultList = listCapteurs();
+			MsgListResult answer14 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer14);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -326,6 +330,11 @@ public class Controller {
 		return getList(request);
 
 	}
+	
+	private List<List<String>> listCapteurs(){
+		String request ="Select * from Capteurs"; 
+		return getList(request); 
+	}
 
 	private List<List<String>> listResidences() {
 		String request = "SELECT * FROM Residences INNER JOIN Adresses ON Residences.ID_Addresse=Adresses.ID_Addresse;"; 
@@ -397,13 +406,7 @@ public class Controller {
 	}
 	
 	private List<List<String>> changeAlert(Integer id, Boolean status) {
-		String request = "UPDATE Notifications SET Etat_Notification=" + Boolean.toString(status) + "where ID_Notification=" + id;
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(request);
-		}catch(SQLException e) {
-			Tool.logger.error("changeAlert - SQL EXCEPTION");
-		}
+		
 		return monitoring();
 	}
 	
