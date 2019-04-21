@@ -22,6 +22,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	private GuiController controller;
 
+	protected JButton returnButton; 
 	protected static JTable objectTable;
 	protected JScrollPane scrollPane;
 	protected JLabel addTitleLabel;
@@ -52,6 +53,12 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		setBackground(new Color(95, 158, 160));
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
 		setLayout(null);
+		
+		returnButton = new JButton("Retour");
+		returnButton.setBounds(12, 15, 90, 44);
+		returnButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		returnButton.addActionListener(this);
+		this.add(returnButton);
 
 		objectNumberTitleLabel = new JLabel("Nombre d'objets connect\u00E9s : ");
 		objectNumberTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
@@ -197,6 +204,12 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent event) {
 
+		if(event.getSource().equals(returnButton)) {
+			this.controller.getGui().setBounds(100, 100, 1400, 900);
+			controller.getGui().changeWindow(WindowList.MENU);
+			return;
+		}
+		
 		if(event.getSource().equals(addButton)){
 			clearlabel();
 			listObject = controller.addObject(detectorList.getSelectedItem().toString());
