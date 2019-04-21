@@ -186,7 +186,10 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		int ligne = objectTable.getSelectedRow(); 
 		List<String> listUpdate = new ArrayList<String>(); 
 		for(int i = 0; i<data[ligne].length; i++) {
-			listUpdate.add(data[ligne][i].toString()); 
+			if(data[ligne][i]!=null)
+				listUpdate.add(data[ligne][i].toString()); 
+			else
+				listUpdate.add(null);
 		}
 		return listUpdate;
 	}

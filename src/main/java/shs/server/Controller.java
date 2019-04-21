@@ -204,7 +204,7 @@ public class Controller {
 	 * @return
 	 */
 	private List<List<String>> addObject(String typeCapteur, String addresseMac) {
-		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', 1, 1,'" + addresseMac + "')"; 
+		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', TRUE, null,'" + addresseMac + "')"; 
 
 		try {
 			Statement statement = connection.createStatement();
@@ -319,9 +319,9 @@ public class Controller {
 
 	private List<List<String>> listObjects(){
 		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement, Mac_Capteur " + 
-				"FROM Capteurs INNER JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
-				"INNER JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
-				"INNER JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence"; 
+				"FROM Capteurs LEFT JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
+				"LEFT JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
+				"LEFT JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence"; 
 		return getList(request);
 
 	}
@@ -346,99 +346,63 @@ public class Controller {
 		return getList(request);
 	}
 
-	private void reportRFID(Integer id) {
-		String message = "Le bracelet a généré un appel!";
-		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
-				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
+	private void report(Integer id, String message) {
+		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Etat_Notification, ID_Capteur)" 
+				+ " VALUES(2, now(), '" + message + "', TRUE,'" + id + "');";
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(request);
 		}catch(SQLException e) {
-			Tool.logger.error("reportRFID FAILED - SQL EXCEPTION");
+			Tool.logger.error("report FAILED - SQL EXCEPTION");
 		}
+	}
+	
+	private void reportRFID(Integer id) {
+		String message = "Le bracelet a généré un appel!";
+		report(id, message);
 	}
 
 	private void reportCall(Integer id) {
 		String message = "Le bouton appel a généré une alerte!";
-		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
-				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(request);
-		}catch(SQLException e) {
-			Tool.logger.error("reportCall FAILED - SQL EXCEPTION");
-		}
+		report(id, message);
 	}
 
 
 	private void reportSmoke(Integer id, Integer smokeValue) {
 		if(MemoryCache.addCacheData(id)) {
 			String message = "L'alarme incendie est active! (" + smokeValue + "% de fumée sur la dernière alerte)";
-			String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
-					+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
-			try {
-				Statement statement = connection.createStatement();
-				statement.executeUpdate(request);
-			}catch(SQLException e) {
-				Tool.logger.error("reportSmoke FAILED - SQL EXCEPTION");
-			}
+			report(id, message);
 		}
 	}
 
 	private void reportMotion(Integer id) {
 		String message = "Un mouvement a été détecté!";
-		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
-				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(request);
-		}catch(SQLException e) {
-			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
-		}
+		report(id, message);
 	}
 	
 	private void reportTemperature(Integer id, float temperature ) {
 		String message = "Une température anormale a été détectée";
-		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
-				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(request);
-		}catch(SQLException e) {
-			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
-		}
+		report(id, message);
 	}
 	
 	private void reportHygro(Integer id, Integer hygroValue) {
 		String message = "Un taux d''humidité anormal a été détecté!";
-		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
-				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(request);
-		}catch(SQLException e) {
-			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
-		}
+		report(id, message);
 	}
 	
 	private void reportOpening(Integer id) {
 		String message = "Une ouverture de porte/fenêtre a été détecté!";
-		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Numerique_Notification, ID_Capteur)" 
-				+ " VALUES(2, now(), '" + message + "', null,'" + id + "');";
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(request);
-		}catch(SQLException e) {
-			Tool.logger.error("reportMotion FAILED - SQL EXCEPTION");
-		}
+		report(id, message);
 	}
 	
-	private void changeAlert(Integer id, Boolean status) {
+	private List<List<String>> changeAlert(Integer id, Boolean status) {
 		
+		return monitoring();
 	}
 	
 	private List<List<String>> monitoring() {
-		String request = "SELECT * FROM Notifications;";
+		String request = "SELECT * FROM Notifications WHERE Date_Notification >= DATE_SUB(now(), INTERVAL 3 DAY)"
+					   + " ORDER BY Date_Notification;";	
 		return getList(request);
 	}
 
