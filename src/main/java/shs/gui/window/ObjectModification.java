@@ -105,6 +105,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 		residenceCapteur = new JComboBox<String>(); 
 		residenceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		residenceCapteur.setModel(modelResidence);
+		if(ObjectGestion.getRowUpdate().get(3)!=null)
 		residenceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
 		residenceCapteur.setBounds(371, 396, 265, 42);
 		this.add(residenceCapteur);
@@ -188,7 +189,8 @@ public class ObjectModification extends JPanel implements ActionListener{
 		etageCapteur = new JComboBox<String>(); 
 		etageCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etageCapteur.setModel(modelEtage);
-		etageCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+		if(ObjectGestion.getRowUpdate().get(4)!=null)
+			etageCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
 		etageCapteur.setBounds(371, 477, 265, 42);
 		this.add(etageCapteur);
 
@@ -201,7 +203,8 @@ public class ObjectModification extends JPanel implements ActionListener{
 		emplacementCapteur = new JComboBox<String>(); 
 		emplacementCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		emplacementCapteur.setModel(modelEmplacement);
-		emplacementCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+		if(ObjectGestion.getRowUpdate().get(5)!=null)
+			emplacementCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
 		emplacementCapteur.setBounds(371, 563, 265, 42);
 		this.add(emplacementCapteur);
 
