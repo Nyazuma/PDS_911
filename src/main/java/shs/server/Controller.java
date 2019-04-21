@@ -124,8 +124,9 @@ public class Controller {
 			reportOpening(((MsgReportOpening) input).getId());
 			return null;
 		case MONITORING :
-			//monitoring();
-			return null;
+			resultList = monitoring();
+			MsgListResult answer13 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer13);
 		case CHANGEALERT :
 			changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
 			return null;
@@ -134,6 +135,7 @@ public class Controller {
 			return null;
 		}	
 	}
+
 
 	/**
 	 * Check connection. 
@@ -433,6 +435,11 @@ public class Controller {
 	
 	private void changeAlert(Integer id, Boolean status) {
 		
+	}
+	
+	private List<List<String>> monitoring() {
+		String request = "SELECT * FROM Notifications;";
+		return getList(request);
 	}
 
 
