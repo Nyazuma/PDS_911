@@ -199,6 +199,10 @@ public class GuiController {
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));
 	}
+	
+	public List<List<String>> listCapteurs(){
+		return readGeneric(new Message(MessageType.LISTCAPTEURS));
+	}
 
 	public String[] readReferentiels() {
 		List<List<String>> listReferentiels = readGeneric(new Message(MessageType.LISTREFERENTIELS));

@@ -130,6 +130,10 @@ public class Controller {
 		case CHANGEALERT :
 			changeAlert(((MsgChangeAlert) input).getId(), ((MsgChangeAlert) input).getStatus());
 			return null;
+		case LISTCAPTEURS : 
+			resultList = listCapteurs();
+			MsgListResult answer14 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer14);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -324,6 +328,11 @@ public class Controller {
 				"LEFT JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence"; 
 		return getList(request);
 
+	}
+	
+	private List<List<String>> listCapteurs(){
+		String request ="Select * from Capteurs"; 
+		return getList(request); 
 	}
 
 	private List<List<String>> listResidences() {
