@@ -24,14 +24,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import shs.common.Tool;
 import shs.gui.GuiController;
 
 public class Map extends JPanel implements ActionListener{
 
-	//TODO Revoir la taille des JLabel qui n'augmentent pas !
-	//TODO Aller chercher l'image sur le serveur 
+
 	//TODO Placer les boutons sur l'image
-	//TODO récupérer la liste des objets sans emplacements
 	//TODO gérer l'affectation des objets sur un emplacement 
 	//TODO afficher un récapitulatif pour chaque objet
 	//TODO gérer la libération d'un capteur 
@@ -65,12 +64,11 @@ public class Map extends JPanel implements ActionListener{
 	 */
 	private List<List<String>> listEmplacement;
 	private List<JButton> listJButtonsEtage1; 
+	private List<JButton> listJButtonsEtage2; 
 
 
 	public Map(GuiController controller) {
 		this.controller = controller; 
-
-
 
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		this.controller.getGui().setSize(screensize);
@@ -78,19 +76,20 @@ public class Map extends JPanel implements ActionListener{
 		setBackground(new Color(95, 158, 160));
 		this.setLayout(null);
 
-		//this.controller.getGui().getContentPane().add(this); 
 		btnRetour = new JButton("Retour");
 		btnRetour.setBounds(12, 15, 90, 44);
 		btnRetour.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		btnRetour.addActionListener(this);
 		this.add(btnRetour);
 
-		//		table = new JTable();
-		//		table.setBounds(12, 99, 438, 527);
-		//		table.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		//		this.add(table);
-
-		listObject = controller.listCapteurs();
+		//To get only the objects with an empty emplacement.
+		List<List<String>> tamp = new ArrayList<List<String>>(); 
+		tamp = controller.listCapteurs();
+		for(int i= 0; i<tamp.size(); i++) {
+			if((tamp.get(i).get(3) == null)) {
+				listObject.add(tamp.get(i));
+			}
+		}
 		gestionListObject();
 		this.add(scrollPane, BorderLayout.CENTER);
 
@@ -103,14 +102,21 @@ public class Map extends JPanel implements ActionListener{
 
 		listEmplacement = controller.EmplacementFull(); 
 		listJButtonsEtage1 = new ArrayList<JButton>();
+		listJButtonsEtage2 = new ArrayList<JButton>(); 
 
 		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
-			if(listEmplacement.get(ligne).get(2).toString().equals("1")  && comboStage.getSelectedItem().toString().equals("Etage 1") ) {
-				JButton newButton = new JButton(); 
-				newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)), Integer.parseInt(listEmplacement.get(ligne).get(4)), Integer.parseInt(listEmplacement.get(ligne).get(5)), Integer.parseInt(listEmplacement.get(ligne).get(6)));
+			JButton newButton = new JButton(); 
+			newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)), Integer.parseInt(listEmplacement.get(ligne).get(4)), Integer.parseInt(listEmplacement.get(ligne).get(5)), Integer.parseInt(listEmplacement.get(ligne).get(6)));
+			if(listEmplacement.get(ligne).get(2).toString().equals("1"))
 				listJButtonsEtage1.add(newButton); 
-				this.add(newButton);
-			}
+			else 
+				listJButtonsEtage2.add(newButton); 
+		}
+		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+			displayButton(listJButtonsEtage1);
+		}
+		else {
+			displayButton(listJButtonsEtage2);
 		}
 
 
@@ -129,6 +135,29 @@ public class Map extends JPanel implements ActionListener{
 		picLabel.setBounds(491, 99, 1345, 824);
 		this.add(picLabel);
 
+	}
+
+
+	/**
+	 * 
+	 * @param listButton
+	 */
+	public void displayButton(List<JButton> listButton) {
+		for(int ligne = 0; ligne< listButton.size(); ligne++) {
+			this.add(listButton.get(ligne));
+		}
+		this.revalidate();
+	}
+
+	/**
+	 * 
+	 * @param listButton
+	 */
+	public void removeButton(List<JButton> listButton) {
+		for(int ligne = 0; ligne< listButton.size(); ligne++) {
+			this.remove(listButton.get(ligne));
+		}
+		this.revalidate();
 	}
 
 	public void gestionListObject() {
@@ -200,6 +229,8 @@ public class Map extends JPanel implements ActionListener{
 		if(event.getSource().equals(comboStage)) {
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+				removeButton(listJButtonsEtage2);
+
 				try {
 					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[0]));  
 				} catch (IOException e) {
@@ -208,20 +239,28 @@ public class Map extends JPanel implements ActionListener{
 				}
 				imageIcon.setImage(image);
 				picLabel.setIcon(imageIcon);
+				displayButton(listJButtonsEtage1);
+
+
 			}
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
+				removeButton(listJButtonsEtage1);
+
 				try {
 					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[1]));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
 				}
+				displayButton(listJButtonsEtage2);
 				imageIcon.setImage(image);
 				picLabel.setIcon(imageIcon);
 
+
 			}
 			picLabel.repaint();
+
 		}
 
 	}
