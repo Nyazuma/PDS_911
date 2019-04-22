@@ -379,33 +379,45 @@ public class Controller {
 
 
 	private void reportSmoke(Integer id, Integer smokeValue) {
-		//TODO check smoke value
-		if(MemoryCache.addCacheData(id)) {
-			String message = "Alarme incendie active! (" + smokeValue + "% de fumée dernièrement)";
+		if(MemoryCache.addCacheData(id, (float)smokeValue)) {
+			Float avg = MemoryCache.getAverageValue(id);
+			// TODO We have to compare it with the table
+			// if necessary, a report is sent
+			String message = "Alarme incendie active! (" + Math.round(avg) + "% de fumée dernièrement)";
 			report(id, message, 3);
 		}
 	}
 
 	private void reportMotion(Integer id) {
-		String message = "Un mouvement a été détecté!";
-		report(id, message, 1);
+		if(MemoryCache.addCacheData(id)) {
+			// TODO we have to compare the hour with the table
+			String message = "Un mouvement a été détecté!";
+			report(id, message, 1);
+		}
 	}
 
 	private void reportTemperature(Integer id, float temperature ) {
-		//TODO check the temperature
-		String message = "Une température anormale a été détectée";
-		report(id, message, 1);
+		if(MemoryCache.addCacheData(id, temperature)) {
+			//TODO check the temperature with the table
+			String message = "Une température anormale a été détectée";
+			report(id, message, 1);
+		}
 	}
 
 	private void reportHygro(Integer id, Integer hygroValue) {
-		//TODO check the hygro
-		String message = "Un taux d''humidité anormal a été détecté!";
-		report(id, message, 1);
+		if(MemoryCache.addCacheData(id, (float)hygroValue)) {
+			//TODO check the hygro with the table
+			String message = "Un taux d''humidité anormal a été détecté!";
+			report(id, message, 1);
+		}
 	}
 
 	private void reportOpening(Integer id) {
-		String message = "Une ouverture de porte/fenêtre a été détectée!";
-		report(id, message, 1);
+		if(MemoryCache.addCacheData(id)) {
+			//TODO check the hour with the table
+			String message = "Une ouverture de porte/fenêtre a été détectée!";
+			report(id, message, 1);
+		}
 	}
 
 	private void changeAlert(Integer id, Boolean status) {
