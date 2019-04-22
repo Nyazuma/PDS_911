@@ -246,6 +246,59 @@ CREATE TABLE dependre_de(
 
 ALTER TABLE Notifications CHANGE Date_Notification Date_Notification TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
+-- -----------------------------------------------------
+-- Table `shs`.`historisation`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `shs`.`historisation` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `Type_Capteur` VARCHAR(45) NULL DEFAULT NULL,
+  `Hist_Date` DATE NULL DEFAULT NULL,
+  `Hist_Time` TIME NULL DEFAULT NULL,
+  `Hist_User` VARCHAR(45) NULL DEFAULT NULL,
+  `Hist_comm` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 61
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+USE `shs`;
+
+DELIMITER $$
+USE `shs`$$
+CREATE
+DEFINER=`911_user`@`%`
+TRIGGER `shs`.`Capteurs_AFTER_INSERT`
+AFTER INSERT ON `shs`.`Capteurs`
+FOR EACH ROW
+BEGIN
+	INSERT INTO historisation (id,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
+    (new.ID_Capteur, new.Type_Capteur, current_date(), current_time(), user(), "insert");
+END$$
+
+USE `shs`$$
+CREATE
+DEFINER=`911_user`@`%`
+TRIGGER `shs`.`Capteurs_BEFORE_DELETE`
+BEFORE DELETE ON `shs`.`Capteurs`
+FOR EACH ROW
+BEGIN
+	INSERT INTO historisation (id,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
+    (old.ID_Capteur, old.Type_Capteur, current_date(), current_time(), user(), "delete");
+END$$
+
+USE `shs`$$
+CREATE
+DEFINER=`911_user`@`%`
+TRIGGER `shs`.`Capteurs_BEFORE_UPDATE`
+BEFORE UPDATE ON `shs`.`Capteurs`
+FOR EACH ROW
+BEGIN
+	INSERT INTO historisation (id,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
+    (old.ID_Capteur, old.Type_Capteur, current_date(), current_time(), user(), "update");
+END$$
+
+
 insert into Referentiel_Capteurs(Type_Capteur) values('Capteur de température');
 insert into Referentiel_Capteurs(Type_Capteur) values('Capteur de fumée');
 insert into Referentiel_Capteurs(Type_Capteur) values('Capteur ouverture');
