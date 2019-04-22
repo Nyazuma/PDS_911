@@ -328,7 +328,6 @@ public class Monitoring extends JPanel implements ActionListener{
 	}
 
 	private void constructDetails(Integer line) {
-		System.out.println(line);
 		String message = "Alerte de niveau " + displayedData[line][1] + "  ";
 		if(displayedData[line][4].equals("Active"))
 			message+=" /!\\ ACTIVE /!\\ \n\n";
