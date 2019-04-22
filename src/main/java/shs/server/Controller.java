@@ -210,20 +210,35 @@ public class Controller {
 	 */
 	private List<List<String>> addObject(String typeCapteur, String addresseMac) {
 		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', TRUE, null,'" + addresseMac + "')"; 
-
+		
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(request);
-			Tool.logger.info("addObject SUCCEED");
-
-			return listObjects(); 
-
+			ResultSet generatedKeys = statement.getGeneratedKeys();
+			generatedKeys.next();
+			int id = generatedKeys.getInt(1);
+			request = "";
+			System.out.println(typeCapteur);
+			System.out.println();
+			if(typeCapteur.equals("Bracelet RFID"))
+				request = "INSERT INTO CapteursRFID(ID_CapteurRFID, NiveauAlerte_CapteurRFID) values(" + id + ",2)";
+			if(typeCapteur.equals("Capteur appel"))
+				request = "INSERT INTO CapteursAppel(ID_CapteurAppel, NiveauAlerte_CapteurAppel) values(" + id +", 2)";
+			if(typeCapteur.equals("Capteur de fumée"))
+				request = "INSERT INTO CapteursFumee(ID_CapteurFumee, Seuil_CapteurFumee) values(" + id + ", 50)";
+			if(typeCapteur.equals("Capteur de présence"))
+				request = "INSERT INTO CapteursPresence(ID_CapteurPresence, Debut_CapteurPresence, Fin_CapteurPresence) values(" + id +", '00:00:00', '23:59:59')";
+			if(typeCapteur.equals("Capteur de température"))
+				request = "INSERT INTO CapteursTemperature(ID_CapteurTemperature, Min_CapteurTemperature, Max_CapteurTemperature) values(" + id +", 15, 27)";
+			if(typeCapteur.equals("Capteur hygrométrique"))
+				request = "INSERT INTO CapteursHygro(ID_CapteurHygro, Seuil_CapteurHygro) values(" + id + ", 90)";
+			if(typeCapteur.equals("Capteur ouverture"))
+				request = "INSERT INTO CapteursOuverture(ID_CapteurOuverture, Debut_CapteurOuverture, Fin_CapteurOuverture) values(" + id +", '00:00:00', '23:59:59')";
+			statement.executeUpdate(request);
 		}catch (SQLException e) {
 			Tool.logger.error("addObject FAILED - SQL EXCEPTION : " + request);
-			e.printStackTrace();
-
-			return listObjects(); 
 		}
+		return listObjects(); 
 	}
 
 	/**
