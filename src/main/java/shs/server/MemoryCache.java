@@ -23,8 +23,9 @@ public class MemoryCache implements Runnable {
 			int occurencies = 0;
 			Timestamp limitTime = new Timestamp(System.currentTimeMillis()-delayTime);
 			for(Timestamp time : cache.get(id)) {
-				if(time.after(limitTime))
+				if(time.after(limitTime)) {
 					occurencies++;
+				}
 			}
 			if(occurencies>=occurenciesNecessary)
 				return true;
