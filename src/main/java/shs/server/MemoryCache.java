@@ -14,8 +14,8 @@ public class MemoryCache implements Runnable {
 	private static Map<Integer, List<List<Object>>> cache = new ConcurrentHashMap<Integer, List<List<Object>>>();
 	// TODO : could be useful to put these numbers in the config file
 	final protected static Integer occurenciesNecessary = 3;
-	final protected static Integer delayTime = 5*60*1000; // max delay which defines that two events are linked
-	final protected static Integer frequenceClearTime = 60*60*1000;
+	final protected static Integer delayTime = 2*60*1000; // max delay which defines that two events are linked
+	final protected static Integer frequenceClearTime = 30*1000;
 	
 	public static boolean addCacheData(Integer id) {
 		return addCacheData(id, null);
@@ -35,7 +35,7 @@ public class MemoryCache implements Runnable {
 					occurencies++;
 				}
 			}
-			if(occurencies>=occurenciesNecessary)
+			if(occurencies==occurenciesNecessary)
 				return true;
 			else
 				return false;
@@ -74,7 +74,7 @@ public class MemoryCache implements Runnable {
 
 	public static void clearOldData() {
 		// We will remove all the timestamp which are older than clearTime
-		Timestamp limitDate = new Timestamp(System.currentTimeMillis()-delayTime);
+		Timestamp limitDate = new Timestamp(System.currentTimeMillis()-delayTime/3);
 		Iterator<Integer> iteratorID = cache.keySet().iterator();
 		while(iteratorID.hasNext()){
 			Integer id = iteratorID.next();

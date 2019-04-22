@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -368,55 +369,126 @@ public class Controller {
 	}
 
 	private void reportRFID(Integer id) {
+		Integer level = 3;
+		try {
+			Statement statement = connection.createStatement();
+			String request = "SELECT * FROM CapteursRFID WHERE ID_CapteurRFID=" + id;
+			ResultSet result = statement.executeQuery(request); 
+			result.next();
+			level = result.getInt(2);
+		} catch (SQLException e) {}
 		String message = "Le bracelet a généré un appel!";
-		report(id, message, 2);
+		report(id, message, level);
 	}
 
 	private void reportCall(Integer id) {
+		Integer level = 3;
+		try {
+			Statement statement = connection.createStatement();
+			String request = "SELECT * FROM CapteursAppel WHERE ID_CapteurAppel=" + id;
+			ResultSet result = statement.executeQuery(request); 
+			result.next();
+			level = result.getInt(2);
+		} catch (SQLException e) {}
 		String message = "Le bouton appel a généré une alerte!";
-		report(id, message, 2);
+		report(id, message, level);
 	}
 
 
 	private void reportSmoke(Integer id, Integer smokeValue) {
 		if(MemoryCache.addCacheData(id, (float)smokeValue)) {
 			Float avg = MemoryCache.getAverageValue(id);
-			// TODO We have to compare it with the table
-			// if necessary, a report is sent
-			String message = "Alarme incendie active! (" + Math.round(avg) + "% de fumée dernièrement)";
-			report(id, message, 3);
+			// We get the parameters of the sensor
+			Integer sensibility = -1;
+			try {
+				Statement statement = connection.createStatement();
+				String request = "SELECT * FROM CapteursFumee WHERE ID_CapteurFumee=" + id;
+				ResultSet result = statement.executeQuery(request); 
+				result.next();
+				sensibility = result.getInt(2);
+			} catch (SQLException e) {}
+			if(smokeValue>=sensibility) {
+				String message = "Alarme incendie active! (" + Math.round(avg) + "% de fumée dernièrement)";
+				report(id, message, 3);
+			}
 		}
 	}
 
 	private void reportMotion(Integer id) {
 		if(MemoryCache.addCacheData(id)) {
-			// TODO we have to compare the hour with the table
-			String message = "Un mouvement a été détecté!";
-			report(id, message, 1);
+			Time before = Time.valueOf("00:00:00");
+			Time after = Time.valueOf("23:59:59");
+			try {
+				Statement statement = connection.createStatement();
+				String request = "SELECT * FROM CapteursPresence WHERE ID_CapteurPresence=" + id;
+				ResultSet result = statement.executeQuery(request); 
+				result.next();
+				before = result.getTime(2);
+				after = result.getTime(3);
+			} catch (SQLException e) {}
+			Time current = Time.valueOf(new Time(System.currentTimeMillis()).toString());
+			if(before.before(current) && after.after(current)) {
+				String message = "Un mouvement a été détecté!";
+				report(id, message, 1);
+			}
 		}
 	}
 
 	private void reportTemperature(Integer id, float temperature ) {
 		if(MemoryCache.addCacheData(id, temperature)) {
-			//TODO check the temperature with the table
-			String message = "Une température anormale a été détectée";
-			report(id, message, 1);
+			Integer avg = Math.round(MemoryCache.getAverageValue(id));
+			Integer min = 15;
+			Integer max = 27;
+			try {
+				Statement statement = connection.createStatement();
+				String request = "SELECT * FROM CapteursTemperature WHERE ID_CapteurTemperature=" + id;
+				ResultSet result = statement.executeQuery(request); 
+				result.next();
+				min = result.getInt(2);
+				max = result.getInt(3);
+			} catch (SQLException e) {}
+			if(avg<min || avg>max) {
+				String message = "Une température anormale a été détectée ("  + avg + "°C)";
+				report(id, message, 2);
+			}
 		}
 	}
 
 	private void reportHygro(Integer id, Integer hygroValue) {
 		if(MemoryCache.addCacheData(id, (float)hygroValue)) {
-			//TODO check the hygro with the table
-			String message = "Un taux d''humidité anormal a été détecté!";
-			report(id, message, 1);
+			Integer avg = Math.round(MemoryCache.getAverageValue(id));
+			Integer seuil = 90;
+			try {
+				Statement statement = connection.createStatement();
+				String request = "SELECT * FROM CapteursHygro WHERE ID_CapteurHygro=" + id;
+				ResultSet result = statement.executeQuery(request); 
+				result.next();
+				seuil = result.getInt(2);
+			} catch (SQLException e) {}
+			if(seuil<=avg) {
+				String message = "Un taux d''humidité anormal a été détecté (" + avg + "%)";
+				report(id, message, 1);
+			}
 		}
 	}
 
 	private void reportOpening(Integer id) {
 		if(MemoryCache.addCacheData(id)) {
-			//TODO check the hour with the table
-			String message = "Une ouverture de porte/fenêtre a été détectée!";
-			report(id, message, 1);
+			Time before = Time.valueOf("00:00:00");
+			Time after = Time.valueOf("23:59:59");
+			try {
+				Statement statement = connection.createStatement();
+				String request = "SELECT * FROM CapteursOuverture WHERE ID_CapteurOuverture=" + id;
+				ResultSet result = statement.executeQuery(request); 
+				result.next();
+				before = result.getTime(2);
+				after = result.getTime(3);
+			} catch (SQLException e) {}
+			Time current = Time.valueOf(new Time(System.currentTimeMillis()).toString());
+			if(before.before(current) && after.after(current)) {
+				String message = "Une ouverture de porte/fenêtre a été détectée!";
+				report(id, message, 1);
+			}
 		}
 	}
 
@@ -427,7 +499,6 @@ public class Controller {
 			statement.executeUpdate(request);
 		}catch (SQLException e) {
 			Tool.logger.error("changeAlert FAILED - SQL EXCEPTION");
-			e.printStackTrace();
 		}
 	}
 
