@@ -355,56 +355,57 @@ public class Controller {
 		return getList(request);
 	}
 
-	private void report(Integer id, String message) {
+	private void report(Integer id, String message, Integer level) {
 		String request = "INSERT INTO Notifications(Niveau_Notification, Date_Notification, Message_Notification, Etat_Notification, ID_Capteur)" 
-				+ " VALUES(2, now(), '" + message + "', TRUE,'" + id + "');";
+				+ " VALUES(" + level + ", now(), '" + message + "', TRUE,'" + id + "');";
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(request);
 		}catch(SQLException e) {
+			System.out.println("error : " + request);
 			Tool.logger.error("report FAILED - SQL EXCEPTION");
 		}
 	}
 
 	private void reportRFID(Integer id) {
 		String message = "Le bracelet a généré un appel!";
-		report(id, message);
+		report(id, message, 2);
 	}
 
 	private void reportCall(Integer id) {
 		String message = "Le bouton appel a généré une alerte!";
-		report(id, message);
+		report(id, message, 2);
 	}
 
 
 	private void reportSmoke(Integer id, Integer smokeValue) {
 		//TODO check smoke value
 		if(MemoryCache.addCacheData(id)) {
-			String message = "L'alarme incendie est active! (" + smokeValue + "% de fumée sur la dernière alerte)";
-			report(id, message);
+			String message = "Alarme incendie active! (" + smokeValue + "% de fumée dernièrement)";
+			report(id, message, 3);
 		}
 	}
 
 	private void reportMotion(Integer id) {
 		String message = "Un mouvement a été détecté!";
-		report(id, message);
+		report(id, message, 1);
 	}
 
 	private void reportTemperature(Integer id, float temperature ) {
 		//TODO check the temperature
 		String message = "Une température anormale a été détectée";
-		report(id, message);
+		report(id, message, 1);
 	}
 
 	private void reportHygro(Integer id, Integer hygroValue) {
 		//TODO check the hygro
 		String message = "Un taux d''humidité anormal a été détecté!";
-		report(id, message);
+		report(id, message, 1);
 	}
 
 	private void reportOpening(Integer id) {
 		String message = "Une ouverture de porte/fenêtre a été détectée!";
-		report(id, message);
+		report(id, message, 1);
 	}
 
 	private void changeAlert(Integer id, Boolean status) {
