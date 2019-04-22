@@ -150,8 +150,7 @@ CREATE TABLE Notifications(
 
 CREATE TABLE CapteursFumee(
         ID_CapteurFumee          Int NOT NULL COMMENT "Clé étrangère vers ID_Capteur de Capteur"  ,
-        Sensibilite_CapteurFumee Int NOT NULL ,
-        Intervalle_CapteurFumee  Int NOT NULL
+        Seuil_CapteurFumee Int NOT NULL
 	,CONSTRAINT CapteurFumee_PK PRIMARY KEY (ID_CapteurFumee)
 	,CONSTRAINT CapteurFumee_Capteurs_FK FOREIGN KEY (ID_CapteurFumee) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
@@ -163,9 +162,8 @@ CREATE TABLE CapteursFumee(
 
 CREATE TABLE CapteursTemperature(
         ID_CapteurTemperature           Int NOT NULL ,
-        Reference_CapteurTemperature    Float NOT NULL ,
-        ToleranceMin_CapteurTemperature Float NOT NULL ,
-        ToleranceMax_CapteurTemperature Float NOT NULL 
+        Min_CapteurTemperature 			Float NOT NULL ,
+        Max_CapteurTemperature 			Float NOT NULL 
 	,CONSTRAINT CapteurTemperature_PK PRIMARY KEY (ID_CapteurTemperature)
 	,CONSTRAINT CapteurTemperature_Capteurs_FK FOREIGN KEY (ID_CapteurTemperature) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
@@ -177,7 +175,8 @@ CREATE TABLE CapteursTemperature(
 
 CREATE TABLE CapteursOuverture(
         ID_CapteurOuverture    Int NOT NULL ,
-        Tempo_CapteurOuverture Int
+        Debut_CapteurOuverture Time NOT NULL,
+		Fin_CapteurOuverture   Time NOT NULL
 	,CONSTRAINT CapteurOuverture_PK PRIMARY KEY (ID_CapteurOuverture)
 	,CONSTRAINT CapteurOuverture_Capteurs_FK FOREIGN KEY (ID_CapteurOuverture) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
@@ -189,7 +188,7 @@ CREATE TABLE CapteursOuverture(
 
 CREATE TABLE CapteursHygro(
         ID_CapteurHygro    Int NOT NULL ,
-        Tempo_CapteurHygro Int
+        Seuil_CapteurHygro Int NOT NULL
 	,CONSTRAINT CapteurHygro_PK PRIMARY KEY (ID_CapteurHygro)
 	,CONSTRAINT CapteurHygro_Capteurs_FK FOREIGN KEY (ID_CapteurHygro) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
@@ -201,8 +200,8 @@ CREATE TABLE CapteursHygro(
 
 CREATE TABLE CapteursPresence(
         ID_CapteurPresence    Int NOT NULL ,
-        Tempo_CapteurPresence Int ,
-        ID_Capteur            Int NOT NULL
+        Debut_CapteurPresence Time NOT NULL,
+        Fin_CapteurPresence Time NOT NULL
 	,CONSTRAINT CapteurPresence_PK PRIMARY KEY (ID_CapteurPresence)
 	,CONSTRAINT CapteurPresence_Capteurs_FK FOREIGN KEY (ID_CapteurPresence) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
@@ -214,8 +213,7 @@ CREATE TABLE CapteursPresence(
 
 CREATE TABLE CapteursAppel(
         ID_CapteurAppel           Int NOT NULL ,
-        NiveauAlerte_CapteurAppel Int NOT NULL ,
-        ID_Capteur                Int NOT NULL
+        NiveauAlerte_CapteurAppel Int NOT NULL
 	,CONSTRAINT CapteurAppel_PK PRIMARY KEY (ID_CapteurAppel)
 	,CONSTRAINT CapteurAppel_Capteurs_FK FOREIGN KEY (ID_CapteurAppel) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
@@ -225,10 +223,9 @@ CREATE TABLE CapteursAppel(
 # Table: CapteursRFID
 #------------------------------------------------------------
 
-CREATE TABLE CapteurRFID(
+CREATE TABLE CapteursRFID(
         ID_CapteurRFID              Int NOT NULL ,
-        Tempo_CapteurRFID           Int ,
-        LectureIdentite_CapteurRFID Bool NOT NULL
+        NiveauAlerte_CapteurRFID    Int NOT NULL
 	,CONSTRAINT CapteurRFID_PK PRIMARY KEY (ID_CapteurRFID)
 	,CONSTRAINT CapteurRFID_Capteurs_FK FOREIGN KEY (ID_CapteurRFID) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
