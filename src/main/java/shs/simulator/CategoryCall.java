@@ -19,7 +19,7 @@ public class CategoryCall extends CategoryObject implements Runnable {
 				Connector.contactServer(Tool.messageToJSON(update));
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			System.out.println("There is no '" + referencedName + "' available");
 		}
 	}
 

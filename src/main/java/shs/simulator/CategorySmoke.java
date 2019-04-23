@@ -2,10 +2,11 @@ package shs.simulator;
 
 import java.util.List;
 
+import shs.common.MsgReportCall;
 import shs.common.MsgReportSmoke;
 import shs.common.Tool;
 
-public class CategorySmoke extends CategoryObject{
+public class CategorySmoke extends CategoryObject implements Runnable{
 
 	public CategorySmoke(String referencedName, List<String> listObjects) {
 		super(referencedName, listObjects);
@@ -16,7 +17,7 @@ public class CategorySmoke extends CategoryObject{
 		int id = (int)(Math.random()*listObjects.size());
 		specificID(Integer.parseInt(listObjects.get(id)));
 	}
-	
+
 	public void specificID(int id) {
 		// Choice of the sensor
 		if(!listObjects.contains(Integer.toString(id)))
@@ -29,6 +30,19 @@ public class CategorySmoke extends CategoryObject{
 			try {
 				Thread.sleep((long) (5000 + Math.random()*5000));
 			} catch (InterruptedException e) {}
+		}
+	}
+
+	public void run() {
+
+		try {
+			while(true) {
+				int smokeValue = (int) (50 + Math.random()*50);
+				MsgReportSmoke update = new MsgReportSmoke(waiting(), smokeValue);
+				Connector.contactServer(Tool.messageToJSON(update));
+			}
+		} catch (InterruptedException e) {
+			System.out.println("There is no '" + referencedName + "' available");
 		}
 	}
 

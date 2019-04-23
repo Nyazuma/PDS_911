@@ -15,7 +15,7 @@ public class CategoryObject{
 
 	public Integer waiting() throws InterruptedException {
 		if(listObjects.isEmpty())
-			throw new InterruptedException();
+			Thread.currentThread().interrupt();
 		// Delay
 		Thread.sleep((long) (6000 + Math.random()*10000));
 		// Choice of the sensor
