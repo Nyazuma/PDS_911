@@ -323,6 +323,7 @@ insert into Etages (Image_Etage, Niveau_Etage, ID_Residence) values ('Etage2.JPG
 
 INSERT INTO Emplacements (Nom_Emplacement, ID_Etage, X, Y, Width, Height)
  VALUES
+ ('Couloir 3', '1', 605, 102, 42, 37),
  ('Couloir 3', '1', 605, 144, 42, 37),
  ('Couloir 3', '1', 605, 186, 42, 37),
  ('Couloir 3', '1', 675, 102, 42, 37),
