@@ -137,7 +137,7 @@ public class Controller {
 			MsgListResult answer15 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer15);
 		case UPDATEEMPLACEMENT : 
-			resultBoolean = updateEmplacementObject(((MsgUpdateEmplacement)input).getID_Capteur(), ((MsgUpdateEmplacement)input).getID_Emplacement()); 
+			resultBoolean = updateEmplacementObject(((MsgUpdateEmplacement)input).getSensorID(), ((MsgUpdateEmplacement)input).getLocationID()); 
 			MsgBooleanResult answer16 = new MsgBooleanResult(resultBoolean); 
 			return Tool.messageToJSON(answer16); 
 			
@@ -536,8 +536,9 @@ public class Controller {
 	}
 	
 	private boolean updateEmplacementObject(String ID_Capteur, String ID_Emplacement) {
-		String request = "UPDATE Capteurs SET ID_Emplacement = '" + ID_Emplacement +"' WHERE ID_Capteur = '" + ID_Capteur +"'";
+		String request = "UPDATE Capteurs SET ID_Emplacement =" + ID_Emplacement +" WHERE ID_Capteur =" + ID_Capteur +";";
 		try {
+			System.out.println(request);
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(request);
 			return true; 
