@@ -314,7 +314,12 @@ insert into Personnels (Identifiant_Personnel, MotDePasse_Personnel, Nom_Personn
 insert into Residences (Nom_Residence, ID_Addresse) values ('R1', 1);
 
 insert into Etages (Image_Etage, Niveau_Etage, ID_Residence) values ('Etage1.JPG',0, 1);
-insert into Etages (Image_Etage, Niveau_Etage, ID_Residence) values ('Etage2.png',1, 1);
+insert into Etages (Image_Etage, Niveau_Etage, ID_Residence) values ('Etage2.JPG',1, 1);
+
+#-----------------------------------------
+# FIRST FLOOR VALUES
+#-----------------------------------------
+
 
 INSERT INTO Emplacements (Nom_Emplacement, ID_Etage, X, Y, Width, Height)
  VALUES
@@ -446,6 +451,109 @@ INSERT INTO Emplacements (Nom_Emplacement, ID_Etage, X, Y, Width, Height)
  ('Salle activité', '1', 1643, 113, 42, 37),
  ('Salle activité', '1', 1589, 113, 42, 37),
  ('Salle activité', '1', 1533, 113, 42, 37);
+
+#-----------------------------------------
+# SECOND FLOOR VALUES
+#-----------------------------------------
+
+
+
+INSERT INTO Emplacements (Nom_Emplacement, ID_Etage, X, Y, Width, Height)
+ VALUES
+ 
+ ('Couloir 3', '2', 672, 198, 42, 37),
+ ('Couloir 3', '2', 608, 104, 42, 37),
+ ('Couloir 3', '2', 608, 154, 42, 37),
+ ('Couloir 3', '2', 608, 198, 42, 37),
+ ('Couloir 3', '2', 672, 154, 42, 37),
+ ('Couloir 3', '2',	672, 104, 42, 37),
+ ('Couloir 3', '2', 608, 417, 42, 37),
+ ('Couloir 3', '2', 608, 467, 42, 37),
+ ('Couloir 3', '2', 608, 511, 42, 37),
+ ('Couloir 3', '2', 608, 555, 42, 37),
+ ('Couloir 3', '2', 608, 605, 42, 37),	 
+ ('Couloir 3', '2', 608, 649, 42, 37),
+ ('Couloir 3', '2', 608, 693, 42, 37),
+ ('Couloir 3', '2', 608, 743, 42, 37),
+ ('Couloir 3', '2', 608, 787, 42, 37),	
+ ('Couloir 3', '2', 608, 831, 42, 37),
+ ('Couloir 3', '2', 608, 881, 42, 37),
+ ('Couloir 3', '2', 672, 417, 42, 37),
+ ('Couloir 3', '2', 672, 467, 42, 37),
+ ('Couloir 3', '2', 672, 511, 42, 37),
+ ('Couloir 3', '2', 672, 555, 42, 37),
+ ('Couloir 3', '2', 672, 605, 42, 37),
+ ('Couloir 3', '2', 672, 649, 42, 37),
+ ('Couloir 3', '2', 672, 693, 42, 37),
+ ('Couloir 3', '2', 672, 743, 42, 37),
+ ('Couloir 3', '2', 672, 787, 42, 37),	 
+ ('Couloir 3', '2', 672, 831, 42, 37),
+ ('Couloir 3', '2', 672, 881, 42, 37),
+ ('Couloir 3', '2', 505, 229, 42, 37),
+ ('Couloir 3', '2', 505, 273, 42, 37),	
+ ('Couloir 3', '2', 505, 323, 42, 37),
+ ('Couloir 3', '2', 505, 367, 42, 37),
+ ('Couloir 3', '2', 766, 239, 42, 37),	
+ ('Couloir 3', '2', 766, 367, 42, 37),
+		
+
+ ('Couloir 2', '2', 828, 306, 42, 37),
+ ('Couloir 2', '2', 885, 306, 42, 37),
+ ('Couloir 2', '2', 938, 306, 42, 37),
+ ('Couloir 2', '2', 992, 306, 42, 37),
+ ('Couloir 2', '2', 1046, 306, 42, 37),
+ ('Couloir 2', '2', 1100, 306, 42, 37),
+ ('Couloir 2', '2', 1154, 306, 42, 37),
+ ('Couloir 2', '2', 1424, 306, 42, 37),
+ ('Couloir 2', '2', 1208, 306, 42, 37),
+ ('Couloir 2', '2', 1262, 306, 42, 37),
+ ('Couloir 2', '2', 1316, 306, 42, 37),
+ ('Couloir 2', '2', 1370, 306, 42, 37),
+ ('Couloir 2', '2', 1478, 306, 42, 37),
+
+ ('Couloir 1', '2', 1538, 239, 42, 37),
+ ('Couloir 1', '2', 1538, 367, 42, 37),
+ ('Couloir 1', '2', 1612, 104, 42, 37),
+ ('Couloir 1', '2', 1612, 154, 42, 37),
+ ('Couloir 1', '2', 1612, 198, 42, 37),
+ ('Couloir 1', '2', 1680, 198, 42, 37),
+ ('Couloir 1', '2', 1680, 154, 42, 37),
+ ('Couloir 1', '2', 1680, 104, 42, 37),
+ ('Couloir 1', '2', 2616, 104, 42, 37),
+ ('Couloir 1', '2', 2616, 154, 42, 37),
+ ('Couloir 1', '2', 2616, 198, 42, 37),
+ ('Couloir 1', '2', 1612, 417, 42, 37),
+ ('Couloir 1', '2', 1612, 467, 42, 37),
+ ('Couloir 1', '2', 1612, 511, 42, 37),
+ ('Couloir 1', '2', 1612, 555, 42, 37),
+ ('Couloir 1', '2', 1612, 605, 42, 37),
+ ('Couloir 1', '2', 1612, 649, 42, 37),
+ ('Couloir 1', '2', 1612, 693, 42, 37),
+ ('Couloir 1', '2', 1612, 743, 42, 37),
+ ('Couloir 1', '2', 1612, 787, 42, 37),
+ ('Couloir 1', '2', 1612, 831, 42, 37),
+ ('Couloir 1', '2', 1612, 881, 42, 37),
+ ('Couloir 1', '2', 1676, 881, 42, 37),
+ ('Couloir 1', '2', 1676, 831, 42, 37),
+ ('Couloir 1', '2', 1676, 787, 42, 37),
+ ('Couloir 1', '2', 1676, 743, 42, 37),
+ ('Couloir 1', '2', 1676, 693, 42, 37),
+ ('Couloir 1', '2', 1676, 649, 42, 37),
+ ('Couloir 1', '2', 1676, 605, 42, 37),
+ ('Couloir 1', '2', 1676, 555, 42, 37),
+ ('Couloir 1', '2', 1676, 511, 42, 37),
+ ('Couloir 1', '2', 1676, 467, 42, 37),
+ ('Couloir 1', '2', 1676, 417, 42, 37),
+ ('Couloir 1', '2', 1777, 239, 42, 37),
+ ('Couloir 1', '2', 1777, 283, 42, 37),
+ ('Couloir 1', '2', 1777, 333, 42, 37),
+ ('Couloir 1', '2', 1777, 377, 42, 37),
+ 
+ 
+
+
+
+
 
 
 
