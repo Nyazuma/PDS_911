@@ -30,7 +30,8 @@ import shs.gui.GuiController;
 public class Map extends JPanel implements ActionListener{
 
 
-	//TODO Placer les boutons sur l'image
+	//TODO MAJ Capteur quand affecter à un bouton
+	//TODO surcharger le constructeur pour récupérer la liste des alertes. -map(List<Capteurs>)
 	//TODO gérer l'affectation des objets sur un emplacement 
 	//TODO afficher un récapitulatif pour chaque objet
 	//TODO gérer la libération d'un capteur 
@@ -48,7 +49,7 @@ public class Map extends JPanel implements ActionListener{
 	private JTable table;
 	private JComboBox<String> comboStage;
 	private JLabel lblMessage; 
-	
+
 	/**
 	 * Legend
 	 */
@@ -67,7 +68,8 @@ public class Map extends JPanel implements ActionListener{
 	 * Gestion Table
 	 */
 	private JTable objectTable; 
-	private List<List<String>> listObject = new ArrayList<List<String>>(); 
+	private List<List<String>> listObjectNullEmplacement = new ArrayList<List<String>>(); 
+	List<List<String>> listAllCapteurs = new ArrayList<List<String>>(); 
 	private Object[][] data;
 	private JScrollPane scrollPane;
 
@@ -77,6 +79,7 @@ public class Map extends JPanel implements ActionListener{
 	private List<List<String>> listEmplacement;
 	private List<JButton> listJButtonsEtage1; 
 	private List<JButton> listJButtonsEtage2; 
+	private List<String> listEmplacementOccupied; 
 
 
 	public Map(GuiController controller) {
@@ -95,11 +98,11 @@ public class Map extends JPanel implements ActionListener{
 		this.add(btnRetour);
 
 		//To get only the objects with an empty emplacement.
-		List<List<String>> tamp = new ArrayList<List<String>>(); 
-		tamp = controller.listCapteurs();
-		for(int i= 0; i<tamp.size(); i++) {
-			if((tamp.get(i).get(3) == null)) {
-				listObject.add(tamp.get(i));
+
+		listAllCapteurs = controller.listCapteurs();
+		for(int i= 0; i<listAllCapteurs.size(); i++) {
+			if((listAllCapteurs.get(i).get(3) == null)) {
+				listObjectNullEmplacement.add(listAllCapteurs.get(i));
 			}
 		}
 		gestionListObject();
@@ -112,25 +115,54 @@ public class Map extends JPanel implements ActionListener{
 		comboStage.addActionListener(this);
 		this.add(comboStage);
 
+
+		// Create JButton from the listEmplacement
 		listEmplacement = controller.EmplacementFull(); 
 		listJButtonsEtage1 = new ArrayList<JButton>();
 		listJButtonsEtage2 = new ArrayList<JButton>(); 
+		listEmplacementOccupied = listEmplacementOccupied(listEmplacement);
+		boolean stop = true; 
 
 		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
-			JButton newButton = new JButton(); 
-			newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
-					Integer.parseInt(listEmplacement.get(ligne).get(4)), 
-					Integer.parseInt(listEmplacement.get(ligne).get(5)), 
-					Integer.parseInt(listEmplacement.get(ligne).get(6)));
-			if(listEmplacement.get(ligne).get(2).toString().equals("1"))
-				listJButtonsEtage1.add(newButton); 
-			else 
-				listJButtonsEtage2.add(newButton); 
+			stop = true; 
+			for(int i = 0; i<listEmplacementOccupied.size();  i++) {
+				if(listEmplacement.get(i).get(0).equals(listEmplacementOccupied.get(i))) {
+					JButton newButton = new JButton(); 
+					newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
+							Integer.parseInt(listEmplacement.get(ligne).get(4)), 
+							Integer.parseInt(listEmplacement.get(ligne).get(5)), 
+							Integer.parseInt(listEmplacement.get(ligne).get(6)));
+					newButton.setBackground(Color.GREEN);
+					if(listEmplacement.get(ligne).get(2).toString().equals("1")) {
+						listJButtonsEtage1.add(newButton); stop = false; 
+					}
+					else {
+						listJButtonsEtage2.add(newButton); stop = false; 
+					}
+				}
+
+			}
+			if(stop = true) {
+				JButton newButton = new JButton(); 
+				newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
+						Integer.parseInt(listEmplacement.get(ligne).get(4)), 
+						Integer.parseInt(listEmplacement.get(ligne).get(5)), 
+						Integer.parseInt(listEmplacement.get(ligne).get(6)));
+				newButton.setBackground(Color.GRAY);
+				if(listEmplacement.get(ligne).get(2).toString().equals("1"))
+					listJButtonsEtage1.add(newButton); 
+				else 
+					listJButtonsEtage2.add(newButton); 
+			}
 		}
+
+
 		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+			removeButton(listJButtonsEtage2);
 			displayButton(listJButtonsEtage1);
 		}
 		else {
+			removeButton(listJButtonsEtage1);
 			displayButton(listJButtonsEtage2);
 		}
 
@@ -149,50 +181,50 @@ public class Map extends JPanel implements ActionListener{
 		picLabel = new JLabel(imageIcon); 
 		picLabel.setBounds(491, 99, 1345, 824);
 		this.add(picLabel);
-		
+
 		lblMessage = new JLabel();
 		lblMessage.setBounds(12, 711, 467, 33);
 		lblMessage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMessage.setForeground(Color.RED);
 		this.add(lblMessage);
-		
+
 		freePlace = new JButton();
-		freePlace.setBounds(215, 868, 97, 33);
+		freePlace.setBounds(242, 819, 99, 33);
 		freePlace.setBackground(Color.GRAY); 
 		freePlace.setEnabled(false);
 		this.add(freePlace);
-		
+
 		occupiedPlace = new JButton();
-		occupiedPlace.setBounds(215, 914, 97, 33);
+		occupiedPlace.setBounds(242, 865, 99, 33);
 		occupiedPlace.setBackground(Color.GREEN); 
 		occupiedPlace.setEnabled(false);
 		this.add(occupiedPlace);
-		
+
 		alertPlace = new JButton();
-		alertPlace.setBounds(215, 961, 97, 33);
+		alertPlace.setBounds(242, 912, 99, 33);
 		alertPlace.setBackground(Color.RED); 
 		alertPlace.setEnabled(false);
 		this.add(alertPlace);
-		
-		
-		
+
+
+
 		lblFreePlace = new JLabel("Emplacement libre : ");
-		lblFreePlace.setBounds(12, 879, 191, 25);
+		lblFreePlace.setBounds(39, 830, 302, 25);
 		lblFreePlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		this.add(lblFreePlace);
-		
+
 		lblOccupiedPlace = new JLabel("Emplacement occup\u00E9 : ");
-		lblOccupiedPlace.setBounds(12, 918, 191, 25);
+		lblOccupiedPlace.setBounds(39, 869, 302, 25);
 		lblOccupiedPlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		this.add(lblOccupiedPlace);
-		
+
 		lblAlertPlace = new JLabel("Emplacement en alerte : ");
-		lblAlertPlace.setBounds(12, 965, 191, 25);
+		lblAlertPlace.setBounds(39, 916, 302, 25);
 		lblAlertPlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		this.add(lblAlertPlace);
-		
+
 		lblLegend = new JLabel("L\u00E9gende");
-		lblLegend.setBounds(121, 816, 119, 25);
+		lblLegend.setBounds(148, 767, 193, 25);
 		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		this.add(lblLegend);
 
@@ -207,9 +239,7 @@ public class Map extends JPanel implements ActionListener{
 		for(int ligne = 0; ligne< listButton.size(); ligne++) {
 			listButton.get(ligne).addActionListener(this);
 			this.add(listButton.get(ligne));
-			
 		}
-		
 		this.revalidate();
 	}
 
@@ -224,17 +254,40 @@ public class Map extends JPanel implements ActionListener{
 		this.revalidate();
 	}
 
+
+	/**
+	 * This methode return the list of the Emplacement occupied identify by the ID_Emplacement
+	 * @param listEmplacement
+	 * @return
+	 */
+	public List<String> listEmplacementOccupied(List<List<String>> listEmplacement) {
+
+		List<String> listEmplacementOccupied = new ArrayList<String>(); 
+		for (int i = 0; i<listAllCapteurs.size(); i++) {
+			if(listAllCapteurs.get(i).get(3)!= null) {
+				for(int j=0; j<listEmplacement.size(); j++) {
+					if(listEmplacement.get(j).get(0).equals(listAllCapteurs.get(i).get(3))){
+						listEmplacementOccupied.add(listEmplacement.get(j).get(0)); 
+					}
+
+				}
+			}
+
+		}
+		return listEmplacementOccupied; 
+	}
+
 	public void gestionListObject() {
 		String[] header = {"ID_capteur", "Type du capteur", "Etat capteur", "Mac"}; 
-		Integer x = listObject.size(); 
+		Integer x = listObjectNullEmplacement.size(); 
 		Integer y;
 		if(x>0) { 
 			// If the result is not empty, we could fill our table
-			y = listObject.get(0).size()-1; //we don't want the "Emplacement" ID
+			y = listObjectNullEmplacement.get(0).size()-1; //we don't want the "Emplacement" ID
 			data = new Object[x][y]; 
 			Integer lineNumber = 0;
 			Integer columnNumber = 0;
-			for(List<String> line : listObject) {
+			for(List<String> line : listObjectNullEmplacement) {
 				for(String column : line) {
 					if(columnNumber<=1) {
 						data[lineNumber][columnNumber]=column;
@@ -299,7 +352,7 @@ public class Map extends JPanel implements ActionListener{
 
 
 	public void actionPerformed(ActionEvent event) {
-		
+
 		for(int i = 0; i< listJButtonsEtage1.size(); i++) {
 			if(event.getSource().equals(listJButtonsEtage1.get(i))){
 				if(objectTable.getSelectedRow() != -1) {
@@ -313,7 +366,7 @@ public class Map extends JPanel implements ActionListener{
 				}
 			}
 		}
-		
+
 
 		if(event.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
@@ -352,7 +405,7 @@ public class Map extends JPanel implements ActionListener{
 
 
 			}
-			picLabel.repaint();
+			this.repaint();
 
 		}
 
