@@ -120,7 +120,7 @@ CREATE TABLE Capteurs(
         ID_Capteur     Int  Auto_increment  NOT NULL ,
         Type_Capteur   Varchar(30) NOT NULL COMMENT "Enumeration des différents type de capteur à définir"  ,
         Etat_Capteur   Bool NOT NULL ,
-        ID_Emplacement Int NOT NULL ,
+        ID_Emplacement Int,
         Mac_Capteur VarChar(17) 
 	,CONSTRAINT Capteurs_PK PRIMARY KEY (ID_Capteur)
 	,CONSTRAINT Capteurs_Type_FK FOREIGN KEY (Type_Capteur) REFERENCES Referentiel_Capteurs(Type_Capteur) 
