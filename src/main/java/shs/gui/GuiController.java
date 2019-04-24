@@ -18,6 +18,7 @@ import shs.common.MsgChangeAlert;
 import shs.common.MsgConnection;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
+import shs.common.MsgUpdateEmplacement;
 import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
@@ -30,6 +31,10 @@ public class GuiController {
 		this.gui=new Gui(this);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean ping() {
 		Message ping = new Message(MessageType.PING);
 		String output = Tool.messageToJSON(ping);
@@ -42,7 +47,13 @@ public class GuiController {
 
 		return true;
 	}
-
+	
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
 	public boolean connection(String username, String password) {
 		MsgConnection connection = new MsgConnection(username, password);
 		String output = Tool.messageToJSON(connection);
@@ -59,7 +70,33 @@ public class GuiController {
 			return false;
 		}
 	}
+	
+	/**
+	 * 
+	 * @param ID_Capteur
+	 * @param ID_Emplacement
+	 * @return
+	 */
+	public boolean updateEmplacementObject(String ID_Capteur, String ID_Emplacement) {
+		MsgUpdateEmplacement updateEmplacement = new MsgUpdateEmplacement(ID_Capteur, ID_Emplacement);
+		String output = Tool.messageToJSON(updateEmplacement); 
+		String answer; 
+		try {
+			answer = contactServer(output);
+			if(answer!= null) {
+				MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer);
+				return result.getStatus();
+			}
+			return false;	
+		}catch (ConnectException e) {
+			return false;
+		}
+	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int nbObject() {
 		Message nbObject = new Message(MessageType.NUMBEROBJECT);
 		String output = Tool.messageToJSON(nbObject);
@@ -77,6 +114,11 @@ public class GuiController {
 		return -1;
 	}
 
+	/**
+	 * 
+	 * @param rowUpdate
+	 * @return
+	 */
 	public boolean update(List<String> rowUpdate) {
 		MsgUpdateObject update =  new MsgUpdateObject(rowUpdate);  
 		String output = Tool.messageToJSON(update);
@@ -92,6 +134,11 @@ public class GuiController {
 		}
 		return false; 
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public String addresseMac() {
 		String mac = "";
 		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -110,16 +157,31 @@ public class GuiController {
 
 
 	}
+	
+	/**
+	 * 
+	 * @param detectorType
+	 * @return
+	 */
 	public List<List<String>> addObject(String detectorType) {
 		MsgAddObject addObject = new MsgAddObject(detectorType, addresseMac());
 		return readGeneric(addObject);
 	}
-
+	
+	/**
+	 * 
+	 * @param idObject
+	 * @return
+	 */
 	public List<List<String>> delete(String idObject) {
 		MsgDeleteObject delete = new MsgDeleteObject(idObject);  
 		return readGeneric(delete);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String[] readResidences() {
 		List<List<String>> listResidences = readGeneric(new Message(MessageType.LISTRESIDENCES));
 		String[] tabResidences = new String[listResidences.size()];
@@ -130,13 +192,20 @@ public class GuiController {
 		}
 		return tabResidences;
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 */
 	public List<List<String>> EmplacementFull(){
 		return readGeneric(new Message(MessageType.LISTEMPLACEMENTS)); 
 	}
 
 
-	// Pour etage et rdc emplacements 
+	/**
+	 * Read stage and RDC emplacement
+	 * @return
+	 */
 	public String[] readEmplacements() {
 		List<List<String>> listEmplacements = readGeneric(new Message(MessageType.LISTEMPLACEMENTS));
 		String[] tabEmplacements = new String[listEmplacements.size()];
@@ -150,7 +219,10 @@ public class GuiController {
 
 
 
-
+	/**
+	 * 
+	 * @return
+	 */
 	public String[] readEtages() {
 		List<List<String>> listEtages = readGeneric(new Message(MessageType.LISTETAGES));
 		String[] tabEtages = new String[listEtages.size()];
@@ -162,6 +234,10 @@ public class GuiController {
 		return tabEtages;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String[] readEtageImage() {
 		List<List<String>> listImage = readGeneric(new Message(MessageType.LISTETAGES)); 
 		String[] tabImage = new String[listImage.size()];
@@ -197,18 +273,35 @@ public class GuiController {
 	//
 
 
+	/**
+	 * 
+	 * @return
+	 */
 	public List<List<String>> readObjects() {
 		return readGeneric(new Message(MessageType.LISTOBJECTS));
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 */
 	public List<List<String>> listCapteurs(){
 		return readGeneric(new Message(MessageType.LISTCAPTEURS));
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 */
 	public List<List<String>> listNotifications(){
 		return readGeneric(new Message(MessageType.MONITORING));
 	}
-	
+
+	/**
+	 * 
+	 * @param id
+	 * @param status
+	 */
 	public void changeAlert(Integer id, Boolean status){
 		MsgChangeAlert msg = new MsgChangeAlert(id, status);
 		String output = Tool.messageToJSON(msg);
@@ -217,7 +310,11 @@ public class GuiController {
 		}
 		catch (Throwable e) {}
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public String[] readReferentiels() {
 		List<List<String>> listReferentiels = readGeneric(new Message(MessageType.LISTREFERENTIELS));
 		String[] tabReferentiels = new String[listReferentiels.size()];
@@ -228,8 +325,12 @@ public class GuiController {
 		}
 		return tabReferentiels;
 	}
-
-	// To be called when we expect the message to return a List<List<String>>
+	
+	/**
+	 * To be called when we expect the message to return a List<List<String>>
+	 * @param message
+	 * @return
+	 */
 	public List<List<String>> readGeneric(Message message) {
 		String output = Tool.messageToJSON(message);
 		String answer; 
@@ -248,6 +349,12 @@ public class GuiController {
 
 
 	// TODO config file
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 * @throws ConnectException
+	 */
 	private String contactServer(String request) throws ConnectException {
 
 		final int port = 2001;

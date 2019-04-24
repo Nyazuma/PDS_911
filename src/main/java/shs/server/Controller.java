@@ -26,6 +26,7 @@ import shs.common.MsgReportOpening;
 import shs.common.MsgReportRFID;
 import shs.common.MsgReportSmoke;
 import shs.common.MsgReportTemperature;
+import shs.common.MsgUpdateEmplacement;
 import shs.common.MsgUpdateObject;
 import shs.common.Tool;
 
@@ -135,6 +136,11 @@ public class Controller {
 			resultList = listCapteurs();
 			MsgListResult answer15 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer15);
+		case UPDATEEMPLACEMENT : 
+			resultBoolean = updateEmplacementObject(((MsgUpdateEmplacement)input).getID_Capteur(), ((MsgUpdateEmplacement)input).getID_Emplacement()); 
+			MsgBooleanResult answer16 = new MsgBooleanResult(resultBoolean); 
+			return Tool.messageToJSON(answer16); 
+			
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -527,6 +533,19 @@ public class Controller {
 				"WHERE Date_Notification >= DATE_SUB(now(), INTERVAL 3 DAY) " + 
 				"ORDER BY Date_Notification DESC ";
 		return getList(request);
+	}
+	
+	private boolean updateEmplacementObject(String ID_Capteur, String ID_Emplacement) {
+		String request = "UPDATE Capteurs SET ID_Emplacement = '" + ID_Emplacement +"' WHERE ID_Capteur = '" + ID_Capteur +"'";
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+			return true; 
+		}catch (SQLException e) {
+			Tool.logger.error("changeAlert FAILED - SQL EXCEPTION");
+			return false;
+		}
+		
 	}
 
 
