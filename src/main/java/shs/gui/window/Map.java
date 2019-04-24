@@ -8,9 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +22,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import shs.common.Tool;
 import shs.gui.GuiController;
 
 public class Map extends JPanel implements ActionListener{
 
 
-	//TODO MAJ Capteur quand affecter à un bouton
+	//TODO Faire fonctionner le update. 
 	//TODO surcharger le constructeur pour récupérer la liste des alertes. -map(List<Capteurs>)
-	//TODO gérer l'affectation des objets sur un emplacement 
 	//TODO afficher un récapitulatif pour chaque objet
 	//TODO gérer la libération d'un capteur 
 	//TODO mettre une légende 
@@ -46,7 +42,6 @@ public class Map extends JPanel implements ActionListener{
 
 
 	private JButton btnRetour; 
-	private JTable table;
 	private JComboBox<String> comboStage;
 	private JLabel lblMessage; 
 
@@ -82,6 +77,10 @@ public class Map extends JPanel implements ActionListener{
 	private List<String> listEmplacementOccupied; 
 
 
+
+	//-------------------------------------------------------
+	// CONTROLER
+	//-------------------------------------------------------
 	public Map(GuiController controller) {
 		this.controller = controller; 
 
@@ -109,7 +108,7 @@ public class Map extends JPanel implements ActionListener{
 		this.add(scrollPane, BorderLayout.CENTER);
 
 		comboStage = new JComboBox<String>();
-		comboStage.setModel(new DefaultComboBoxModel(new String[] {"Etage 1", "Etage 2"}));
+		comboStage.setModel(new DefaultComboBoxModel<String>(new String[] {"Etage 1", "Etage 2"}));
 		comboStage.setBounds(108, 661, 204, 44);
 		comboStage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		comboStage.addActionListener(this);
@@ -128,10 +127,12 @@ public class Map extends JPanel implements ActionListener{
 			for(int i = 0; i<listEmplacementOccupied.size();  i++) {
 				if(listEmplacement.get(i).get(0).equals(listEmplacementOccupied.get(i))) {
 					JButton newButton = new JButton(); 
-					newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
+					newButton.setBounds(
+							Integer.parseInt(listEmplacement.get(ligne).get(3)),
 							Integer.parseInt(listEmplacement.get(ligne).get(4)), 
 							Integer.parseInt(listEmplacement.get(ligne).get(5)), 
-							Integer.parseInt(listEmplacement.get(ligne).get(6)));
+							Integer.parseInt(listEmplacement.get(ligne).get(6))
+							);
 					newButton.setBackground(Color.GREEN);
 					if(listEmplacement.get(ligne).get(2).toString().equals("1")) {
 						listJButtonsEtage1.add(newButton); stop = false; 
@@ -277,6 +278,9 @@ public class Map extends JPanel implements ActionListener{
 		return listEmplacementOccupied; 
 	}
 
+	/**
+	 * This method is used to display the JTable of objects
+	 */
 	public void gestionListObject() {
 		String[] header = {"ID_capteur", "Type du capteur", "Etat capteur", "Mac"}; 
 		Integer x = listObjectNullEmplacement.size(); 
@@ -338,7 +342,7 @@ public class Map extends JPanel implements ActionListener{
 	 * Method use to get the values of the selected row.
 	 * @return
 	 */
-	protected List<String> getRowUpdate(){
+	private List<String> getRowUpdate(){
 		int ligne = objectTable.getSelectedRow(); 
 		List<String> listUpdate = new ArrayList<String>(); 
 		for(int i = 0; i<data[ligne].length; i++) {
@@ -350,23 +354,50 @@ public class Map extends JPanel implements ActionListener{
 		return listUpdate;
 	}
 
+	/**
+	 * This methode return the ID_Emplacement of the JButton selected as a String
+	 * @param button
+	 * @return
+	 */
+	public String getIdEmplacement(JButton button) {
+		for(int i= 0; i< listEmplacement.size(); i++) {
+			if(Integer.parseInt(listEmplacement.get(i).get(3)) == button.getX() && Integer.parseInt(listEmplacement.get(i).get(4)) == button.getY()){
+				return listEmplacement.get(i).get(0);
+			}
+		}
+		return null; 
+
+	}
+
+	//-------------------------------------------------------
+	// ACTION PERFORMED ON THE ELEMENTS OF THE FRAME
+	//-------------------------------------------------------
+
 
 	public void actionPerformed(ActionEvent event) {
 
-		for(int i = 0; i< listJButtonsEtage1.size(); i++) {
-			if(event.getSource().equals(listJButtonsEtage1.get(i))){
-				if(objectTable.getSelectedRow() != -1) {
-					listJButtonsEtage1.get(i).setBackground(Color.GREEN);
-					lblMessage.setText("");
-					lblMessage.repaint();
-				}
-				else {
-					lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
-					lblMessage.repaint();
+		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+			for(int i = 0; i< listJButtonsEtage1.size(); i++) {
+				if(event.getSource().equals(listJButtonsEtage1.get(i))){
+					if(objectTable.getSelectedRow() != -1) {
+						listJButtonsEtage1.get(i).setBackground(Color.GREEN);
+						if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage1.get(i)))) {
+							gestionListObject();
+							objectTable.repaint(); 
+						}
+						
+						lblMessage.setText("");
+						lblMessage.repaint();
+						
+						
+					}
+					else {
+						lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
+						lblMessage.repaint();
+					}
 				}
 			}
 		}
-
 
 		if(event.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);

@@ -72,6 +72,10 @@ public class Tool {
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.CHANGEALERT.toString())) {
 				return mapper.readValue(json, MsgChangeAlert.class); 
 			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.UPDATEEMPLACEMENT.toString())) {
+				return mapper.readValue(json, MsgUpdateEmplacement.class); 
+			}
+			
 			// Don't forget messages without a specific class!
 			return mapper.readValue(json, Message.class);
 		} 

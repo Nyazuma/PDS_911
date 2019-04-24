@@ -5,21 +5,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MsgUpdateEmplacement extends Message{
 
-	protected String iD_Capteur;
-	protected String iD_Emplacement;
+	protected String sensorID;
+	protected String locationID;
 	
 	@JsonCreator
-	public MsgUpdateEmplacement(@JsonProperty("iD_Capteur") String iD_Capteur, @JsonProperty("iD_Emplacement") String iD_Emplacement) {
+	public MsgUpdateEmplacement(@JsonProperty("sensorID") String sensorID, @JsonProperty("locationID") String locationID) {
 		super(MessageType.UPDATEEMPLACEMENT);
-		this.iD_Capteur=iD_Capteur;
-		this.iD_Emplacement=iD_Emplacement;
-	}
-	
-	public String getID_Capteur() {
-		return iD_Capteur;
+		this.sensorID=sensorID;
+		this.locationID=locationID;
 	}
 
-	public String getID_Emplacement() {
-		return iD_Emplacement;
+	public String getSensorID() {
+		return sensorID;
 	}
+
+	public String getLocationID() {
+		return locationID;
+	}
+	
+
 }
