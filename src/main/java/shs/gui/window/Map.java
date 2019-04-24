@@ -46,7 +46,19 @@ public class Map extends JPanel implements ActionListener{
 
 	private JButton btnRetour; 
 	private JTable table;
-	JComboBox<String> comboStage; 
+	private JComboBox<String> comboStage;
+	private JLabel lblMessage; 
+	
+	/**
+	 * Legend
+	 */
+	private JButton freePlace; 
+	private JButton occupiedPlace; 
+	private JButton alertPlace; 
+	private JLabel lblFreePlace; 
+	private JLabel lblOccupiedPlace; 
+	private JLabel lblAlertPlace;
+	private JLabel lblLegend; 
 
 	private GuiController controller; 
 	private String[] tabImage; 
@@ -106,7 +118,10 @@ public class Map extends JPanel implements ActionListener{
 
 		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
 			JButton newButton = new JButton(); 
-			newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)), Integer.parseInt(listEmplacement.get(ligne).get(4)), Integer.parseInt(listEmplacement.get(ligne).get(5)), Integer.parseInt(listEmplacement.get(ligne).get(6)));
+			newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
+					Integer.parseInt(listEmplacement.get(ligne).get(4)), 
+					Integer.parseInt(listEmplacement.get(ligne).get(5)), 
+					Integer.parseInt(listEmplacement.get(ligne).get(6)));
 			if(listEmplacement.get(ligne).get(2).toString().equals("1"))
 				listJButtonsEtage1.add(newButton); 
 			else 
@@ -134,6 +149,52 @@ public class Map extends JPanel implements ActionListener{
 		picLabel = new JLabel(imageIcon); 
 		picLabel.setBounds(491, 99, 1345, 824);
 		this.add(picLabel);
+		
+		lblMessage = new JLabel();
+		lblMessage.setBounds(12, 711, 467, 33);
+		lblMessage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		lblMessage.setForeground(Color.RED);
+		this.add(lblMessage);
+		
+		freePlace = new JButton();
+		freePlace.setBounds(215, 868, 97, 33);
+		freePlace.setBackground(Color.GRAY); 
+		freePlace.setEnabled(false);
+		this.add(freePlace);
+		
+		occupiedPlace = new JButton();
+		occupiedPlace.setBounds(215, 914, 97, 33);
+		occupiedPlace.setBackground(Color.GREEN); 
+		occupiedPlace.setEnabled(false);
+		this.add(occupiedPlace);
+		
+		alertPlace = new JButton();
+		alertPlace.setBounds(215, 961, 97, 33);
+		alertPlace.setBackground(Color.RED); 
+		alertPlace.setEnabled(false);
+		this.add(alertPlace);
+		
+		
+		
+		lblFreePlace = new JLabel("Emplacement libre : ");
+		lblFreePlace.setBounds(12, 879, 191, 25);
+		lblFreePlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblFreePlace);
+		
+		lblOccupiedPlace = new JLabel("Emplacement occup\u00E9 : ");
+		lblOccupiedPlace.setBounds(12, 918, 191, 25);
+		lblOccupiedPlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblOccupiedPlace);
+		
+		lblAlertPlace = new JLabel("Emplacement en alerte : ");
+		lblAlertPlace.setBounds(12, 965, 191, 25);
+		lblAlertPlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblAlertPlace);
+		
+		lblLegend = new JLabel("L\u00E9gende");
+		lblLegend.setBounds(121, 816, 119, 25);
+		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblLegend);
 
 	}
 
@@ -144,8 +205,11 @@ public class Map extends JPanel implements ActionListener{
 	 */
 	public void displayButton(List<JButton> listButton) {
 		for(int ligne = 0; ligne< listButton.size(); ligne++) {
+			listButton.get(ligne).addActionListener(this);
 			this.add(listButton.get(ligne));
+			
 		}
+		
 		this.revalidate();
 	}
 
@@ -217,9 +281,39 @@ public class Map extends JPanel implements ActionListener{
 
 	}
 
+	/**
+	 * Method use to get the values of the selected row.
+	 * @return
+	 */
+	protected List<String> getRowUpdate(){
+		int ligne = objectTable.getSelectedRow(); 
+		List<String> listUpdate = new ArrayList<String>(); 
+		for(int i = 0; i<data[ligne].length; i++) {
+			if(data[ligne][i]!=null)
+				listUpdate.add(data[ligne][i].toString()); 
+			else
+				listUpdate.add(null);
+		}
+		return listUpdate;
+	}
+
 
 	public void actionPerformed(ActionEvent event) {
-
+		
+		for(int i = 0; i< listJButtonsEtage1.size(); i++) {
+			if(event.getSource().equals(listJButtonsEtage1.get(i))){
+				if(objectTable.getSelectedRow() != -1) {
+					listJButtonsEtage1.get(i).setBackground(Color.GREEN);
+					lblMessage.setText("");
+					lblMessage.repaint();
+				}
+				else {
+					lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
+					lblMessage.repaint();
+				}
+			}
+		}
+		
 
 		if(event.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
@@ -246,7 +340,6 @@ public class Map extends JPanel implements ActionListener{
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
 				removeButton(listJButtonsEtage1);
-
 				try {
 					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[1]));  
 				} catch (IOException e) {
