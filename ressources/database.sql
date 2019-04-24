@@ -137,6 +137,7 @@ CREATE TABLE Notifications(
         Niveau_Notification    Int NOT NULL ,
         Date_Notification      TIMESTAMP NOT NULL ,
         Message_Notification   Varchar (60) ,
+        Etat_Notification      Boolean NOT NULL,
         ID_Capteur             Int NOT NULL
 	,CONSTRAINT Notifications_PK PRIMARY KEY (ID_Notification)
 
