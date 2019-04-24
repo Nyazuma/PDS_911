@@ -547,7 +547,7 @@ INSERT INTO Emplacements (Nom_Emplacement, ID_Etage, X, Y, Width, Height)
  ('Couloir 1', '2', 1777, 239, 42, 37),
  ('Couloir 1', '2', 1777, 283, 42, 37),
  ('Couloir 1', '2', 1777, 333, 42, 37),
- ('Couloir 1', '2', 1777, 377, 42, 37),
+ ('Couloir 1', '2', 1777, 377, 42, 37);
  
  
 
