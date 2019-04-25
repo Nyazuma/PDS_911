@@ -17,6 +17,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,7 +35,7 @@ public class Map extends JPanel implements ActionListener{
 	//TODO mettre une légende 
 
 	/**
-	 * Image variables
+	 * Management Image
 	 */
 	private BufferedImage image; 
 	private JLabel picLabel;
@@ -46,7 +47,7 @@ public class Map extends JPanel implements ActionListener{
 	private JLabel lblMessage; 
 
 	/**
-	 * Legend
+	 * Management Legend
 	 */
 	private JButton freePlace; 
 	private JButton occupiedPlace; 
@@ -60,7 +61,7 @@ public class Map extends JPanel implements ActionListener{
 	private String[] tabImage; 
 
 	/**
-	 * Gestion Table
+	 * Management Table
 	 */
 	private JTable objectTable; 
 	private List<List<String>> listObjectNullEmplacement = new ArrayList<List<String>>(); 
@@ -69,18 +70,30 @@ public class Map extends JPanel implements ActionListener{
 	private JScrollPane scrollPane;
 
 	/**
-	 * Gestion Emplacements
+	 * Management location
 	 */
 	private List<List<String>> listEmplacement;
 	private List<JButton> listJButtonsEtage1; 
 	private List<JButton> listJButtonsEtage2; 
 	private List<String> listEmplacementOccupied; 
 
-
+	/**
+	 * Management Information frame
+	 */
+	JLabel lblTitle; 
+	JLabel infoTypeCapteur;
+	JLabel infoStateCapteur;
+	JLabel infoStairsCapteur;
+	JLabel infoRoomCapteur;
+	JLabel infoAddressMac;
 
 	//-------------------------------------------------------
-	// CONTROLER
+	// CONTROLLER
 	//-------------------------------------------------------
+	/**
+	 * Main Controller
+	 * @param controller
+	 */
 	public Map(GuiController controller) {
 		this.controller = controller; 
 
@@ -125,7 +138,7 @@ public class Map extends JPanel implements ActionListener{
 		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
 			stop = true; 
 			for(int i = 0; i<listEmplacementOccupied.size();  i++) {
-				if(listEmplacement.get(i).get(0).equals(listEmplacementOccupied.get(i))) {
+				if(listEmplacement.get(ligne).get(0).equals(listEmplacementOccupied.get(i))) {
 					JButton newButton = new JButton(); 
 					newButton.setBounds(
 							Integer.parseInt(listEmplacement.get(ligne).get(3)),
@@ -168,7 +181,7 @@ public class Map extends JPanel implements ActionListener{
 		}
 
 
-		//Get table Etage and read Image on line 
+		//Get table Etage and read Image on line.
 		tabImage = controller.readEtageImage(); 
 		try {
 			image = ImageIO.read(getClass().getResource("/images/" + tabImage[0]));  
@@ -183,12 +196,15 @@ public class Map extends JPanel implements ActionListener{
 		picLabel.setBounds(491, 99, 1345, 824);
 		this.add(picLabel);
 
+		// JLabel used to display messages (see messages in ActionPerformed).
 		lblMessage = new JLabel();
 		lblMessage.setBounds(12, 711, 467, 33);
 		lblMessage.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMessage.setForeground(Color.RED);
 		this.add(lblMessage);
 
+
+		// Legend part of the interface.
 		freePlace = new JButton();
 		freePlace.setBounds(242, 819, 99, 33);
 		freePlace.setBackground(Color.GRAY); 
@@ -255,6 +271,38 @@ public class Map extends JPanel implements ActionListener{
 		this.revalidate();
 	}
 
+	/**
+	 * This methode return true if the location is free and false otherwise
+	 * @param button
+	 * @return
+	 */
+	public boolean isEmplacementFree(JButton button) {
+		List<String> listEmplacementIDOccupied = new ArrayList<String>();
+		listEmplacementIDOccupied = listEmplacementOccupied(listEmplacement); 
+
+		for (int i = 0; i< listEmplacementIDOccupied.size(); i++) {
+			if(getIdEmplacement(button).equals(listEmplacementIDOccupied.get(i))) {
+				return false;
+			}
+		}
+		return true; 
+
+	}
+
+	/**
+	 * This methode return the ID_Emplacement of the JButton selected as a String
+	 * @param button
+	 * @return
+	 */
+	public String getIdEmplacement(JButton button) {
+		for(int i= 0; i< listEmplacement.size(); i++) {
+			if(Integer.parseInt(listEmplacement.get(i).get(3)) == button.getX() && Integer.parseInt(listEmplacement.get(i).get(4)) == button.getY()){
+				return listEmplacement.get(i).get(0);
+			}
+		}
+		return null; 
+
+	}
 
 	/**
 	 * This methode return the list of the Emplacement occupied identify by the ID_Emplacement
@@ -355,19 +403,102 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 	/**
-	 * This methode return the ID_Emplacement of the JButton selected as a String
+	 * Methode used to create and initialize the information window of an occupied location
 	 * @param button
-	 * @return
 	 */
-	public String getIdEmplacement(JButton button) {
-		for(int i= 0; i< listEmplacement.size(); i++) {
-			if(Integer.parseInt(listEmplacement.get(i).get(3)) == button.getX() && Integer.parseInt(listEmplacement.get(i).get(4)) == button.getY()){
-				return listEmplacement.get(i).get(0);
+	private void informationCapteur(JButton button) {
+
+		List<List<String>> listInformationLocation = new ArrayList<List<String>>();
+		List<List<String>> listInformationCapteur = new ArrayList<List<String>>();
+
+		for(int i =0; i<listEmplacement.size(); i++) {
+			if(listEmplacement.get(i).get(0).equals(getIdEmplacement(button)))
+				listInformationLocation.add(listEmplacement.get(i));
+		}
+
+		for (int i=0; i<listAllCapteurs.size(); i++) {
+			if(listAllCapteurs.get(i).get(3) != null) {
+				if(listAllCapteurs.get(i).get(3).equals(getIdEmplacement(button)))
+					listInformationCapteur.add(listAllCapteurs.get(i));
 			}
 		}
-		return null; 
+
+
+		JFrame informationWindow = new JFrame(); 
+		informationWindow.setTitle("Informations du capteur");
+		informationWindow.setBounds(100, 100, 549, 638);
+		informationWindow.setLocationRelativeTo(null);
+		informationWindow.setBackground(new Color(0, 204, 255));
+		informationWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);             
+		informationWindow.setVisible(true);
+
+		lblTitle = new JLabel("Informations concernant le capteur ");
+		lblTitle.setBounds(113, 19, 310, 29);
+		lblMessage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(lblTitle);
+
+		JLabel infoLblTypeDeCapteur = new JLabel("Type de capteur : ");
+		infoLblTypeDeCapteur.setBounds(12, 75, 145, 29);
+		infoLblTypeDeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoLblTypeDeCapteur);
+
+		infoTypeCapteur = new JLabel(listInformationCapteur.get(0).get(1));
+		infoTypeCapteur.setBounds(234, 75, 254, 29);
+		infoTypeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoTypeCapteur);
+
+		JLabel infoLblStateCapteur = new JLabel("Etat du capteur : ");
+		infoLblStateCapteur.setBounds(12, 128, 145, 29);
+		infoLblStateCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoLblStateCapteur);
+
+		infoStateCapteur = new JLabel((listInformationCapteur.get(0).get(2).equals("1")) ? "Activé" : "Désactivé");
+		infoStateCapteur.setBounds(234, 128, 254, 29);
+		infoStateCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoStateCapteur);
+
+		JLabel infoLblStairsCapteur = new JLabel("Etage Capteur :");
+		infoLblStairsCapteur.setBounds(12, 187, 145, 29);
+		infoLblStairsCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoLblStairsCapteur);
+
+		infoStairsCapteur = new JLabel(listInformationLocation.get(0).get(2));
+		infoStairsCapteur.setBounds(234, 187, 254, 29);
+		infoStairsCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoStairsCapteur);
+
+		JLabel infoLblRoomCapteur = new JLabel("Pi\u00E8ce capteur : ");
+		infoLblRoomCapteur.setBounds(12, 243, 145, 29);
+		infoLblRoomCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoLblRoomCapteur);
+
+		infoRoomCapteur = new JLabel(listInformationLocation.get(0).get(1));
+		infoRoomCapteur.setBounds(234, 249, 254, 29);
+		infoRoomCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoRoomCapteur);
+		
+		JLabel lblAddresseMac = new JLabel("Addresse MAC : ");
+		lblAddresseMac.setBounds(12, 309, 145, 29);
+		lblAddresseMac.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(lblAddresseMac);
+		
+		infoAddressMac = new JLabel(listInformationCapteur.get(0).get(4));
+		infoAddressMac.setBounds(234, 309, 254, 29);
+		infoAddressMac.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		informationWindow.add(infoAddressMac);
+		
+		//guardrail
+		JLabel label_3 = new JLabel();
+		label_3.setBounds(12, 363, 145, 29);
+		informationWindow.add(label_3);
+		
+		JLabel label_4 = new JLabel();
+		label_4.setBounds(234, 351, 254, 29);
+		informationWindow.add(label_4);
 
 	}
+
+
 
 	//-------------------------------------------------------
 	// ACTION PERFORMED ON THE ELEMENTS OF THE FRAME
@@ -377,19 +508,64 @@ public class Map extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 
 		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+
 			for(int i = 0; i< listJButtonsEtage1.size(); i++) {
 				if(event.getSource().equals(listJButtonsEtage1.get(i))){
+					if((!isEmplacementFree(listJButtonsEtage1.get(i))) && (objectTable.getSelectedRow() == -1)) {
+						informationCapteur(listJButtonsEtage1.get(i));
+						break; 
+					}
 					if(objectTable.getSelectedRow() != -1) {
-						listJButtonsEtage1.get(i).setBackground(Color.GREEN);
-						if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage1.get(i)))) {
-							gestionListObject();
-							objectTable.repaint(); 
+						if(isEmplacementFree(listJButtonsEtage1.get(i))){
+							listJButtonsEtage1.get(i).setBackground(Color.GREEN);
+							if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage1.get(i)))) {
+								gestionListObject();
+								objectTable.repaint(); 
+							}
+							else {
+								System.out.println("ERROR DURING UPDATING OBJECT");
+							}
+							lblMessage.setText("");
+							lblMessage.repaint();
 						}
-						
-						lblMessage.setText("");
+						else {
+							lblMessage.setText("Veuillez sélectionner un emplacement libre");
+							lblMessage.repaint();
+						}
+					}
+					else {
+						lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
 						lblMessage.repaint();
-						
-						
+					}
+				}
+			}
+		}
+		if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
+			for(int i = 0; i< listJButtonsEtage2.size(); i++) {
+				if(event.getSource().equals(listJButtonsEtage2.get(i))){
+					if((!isEmplacementFree(listJButtonsEtage2.get(i))) && (objectTable.getSelectedRow() == -1)) {
+						informationCapteur(listJButtonsEtage2.get(i));
+						break; 
+					}
+					if(objectTable.getSelectedRow() != -1) {
+						if(isEmplacementFree(listJButtonsEtage2.get(i))){
+							listJButtonsEtage2.get(i).setBackground(Color.GREEN);
+							if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage2.get(i)))) {
+								gestionListObject();
+								objectTable.repaint(); 
+							}
+							else {
+								System.out.println("ERROR DURING UPDATING OBJECT");
+							}
+
+							lblMessage.setText("");
+							lblMessage.repaint();
+
+						}
+						else {
+							lblMessage.setText("Veuillez sélectionner un emplacement disponible.");
+							lblMessage.repaint();
+						}
 					}
 					else {
 						lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
