@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListCellRenderer;
 
 import shs.gui.GuiController;
 
@@ -30,7 +31,6 @@ public class Map extends JPanel implements ActionListener{
 
 	//TODO Faire fonctionner le update. 
 	//TODO surcharger le constructeur pour récupérer la liste des alertes. -map(List<Capteurs>)
-	//TODO afficher un récapitulatif pour chaque objet
 	//TODO gérer la libération d'un capteur 
 	//TODO mettre une légende 
 
@@ -402,6 +402,77 @@ public class Map extends JPanel implements ActionListener{
 		return listUpdate;
 	}
 
+
+	private boolean isLocationPertinent(JButton button) {
+
+		String beforeEmplacementID = new String(); 
+		String afterEmplacementID = new String(); 
+
+		String beforeTypeCapteur = new String(); 
+		String afterTypeCapteur = new String(); 
+
+		String typeCapteur = getRowUpdate().get(1);
+		String locationID = getIdEmplacement(button); 
+
+
+
+		for(int i = 0; i<listEmplacement.size(); i++) {
+			if(listEmplacement.get(i).get(0).equals(locationID)) {
+				if(listEmplacement.get(i-1)!= null) {
+					System.out.println("1");
+					beforeEmplacementID = listEmplacement.get(i-1).get(0);
+				}
+				if(listEmplacement.get(i+1)!= null) {
+					System.out.println("2");
+					beforeEmplacementID = listEmplacement.get(i+1).get(0);
+				}
+			}
+		}
+
+		List<String> listOcupiedLocation = new ArrayList<String>();
+		listOcupiedLocation = listEmplacementOccupied(listEmplacement);
+
+		for(int i=0; i< listOcupiedLocation.size(); i++) {
+			if(beforeEmplacementID != null) {
+				System.out.println("3");
+				if(listOcupiedLocation.get(0).equals(beforeEmplacementID)) {
+					System.out.println("4");
+					for(int j=0; j<listAllCapteurs.size(); j++) {
+						if(listAllCapteurs.get(j).get(3).equals(beforeEmplacementID)) {
+							System.out.println("5");
+							beforeTypeCapteur = listAllCapteurs.get(j).get(1);
+						}
+					}
+				}
+			}
+			if(afterEmplacementID != null) {
+				System.out.println("7");
+				if(listOcupiedLocation.get(0).equals(afterEmplacementID)) {
+					System.out.println("8");
+					for(int j=0; j<listAllCapteurs.size(); j++) {
+						if(listAllCapteurs.get(j).get(3).equals(afterEmplacementID)) {
+							System.out.println("9");
+							beforeTypeCapteur = listAllCapteurs.get(j).get(1);
+						}
+					}
+				}
+			}
+
+		}
+
+		if((afterTypeCapteur == null && beforeTypeCapteur.equals(typeCapteur)) || (beforeTypeCapteur == null && afterTypeCapteur.equals(typeCapteur)) || (typeCapteur.equals(beforeTypeCapteur) && typeCapteur.equals(afterTypeCapteur))) {
+			System.out.println("afterTypeCapteur : " + afterTypeCapteur);
+			System.out.println("afterTypeCapteur : " + beforeTypeCapteur);
+			System.out.println("afterTypeCapteur : " + typeCapteur);
+			return false;
+		}else {
+			System.out.println("-afterTypeCapteur : " + afterTypeCapteur);
+			System.out.println("-afterTypeCapteur : " + beforeTypeCapteur);
+			System.out.println("-afterTypeCapteur : " + typeCapteur);
+			return true; 
+		}
+	}
+
 	/**
 	 * Methode used to create and initialize the information window of an occupied location
 	 * @param button
@@ -428,70 +499,70 @@ public class Map extends JPanel implements ActionListener{
 		informationWindow.setTitle("Informations du capteur");
 		informationWindow.setBounds(100, 100, 549, 638);
 		informationWindow.setLocationRelativeTo(null);
-		informationWindow.setBackground(new Color(0, 204, 255));
+		informationWindow.getContentPane().setBackground(new Color(0, 204, 255));
 		informationWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);             
 		informationWindow.setVisible(true);
 
 		lblTitle = new JLabel("Informations concernant le capteur ");
 		lblTitle.setBounds(113, 19, 310, 29);
 		lblMessage.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(lblTitle);
+		informationWindow.getContentPane().add(lblTitle);
 
 		JLabel infoLblTypeDeCapteur = new JLabel("Type de capteur : ");
 		infoLblTypeDeCapteur.setBounds(12, 75, 145, 29);
 		infoLblTypeDeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoLblTypeDeCapteur);
+		informationWindow.getContentPane().add(infoLblTypeDeCapteur);
 
 		infoTypeCapteur = new JLabel(listInformationCapteur.get(0).get(1));
 		infoTypeCapteur.setBounds(234, 75, 254, 29);
 		infoTypeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoTypeCapteur);
+		informationWindow.getContentPane().add(infoTypeCapteur);
 
 		JLabel infoLblStateCapteur = new JLabel("Etat du capteur : ");
 		infoLblStateCapteur.setBounds(12, 128, 145, 29);
 		infoLblStateCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoLblStateCapteur);
+		informationWindow.getContentPane().add(infoLblStateCapteur);
 
 		infoStateCapteur = new JLabel((listInformationCapteur.get(0).get(2).equals("1")) ? "Activé" : "Désactivé");
 		infoStateCapteur.setBounds(234, 128, 254, 29);
 		infoStateCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoStateCapteur);
+		informationWindow.getContentPane().add(infoStateCapteur);
 
 		JLabel infoLblStairsCapteur = new JLabel("Etage Capteur :");
 		infoLblStairsCapteur.setBounds(12, 187, 145, 29);
 		infoLblStairsCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoLblStairsCapteur);
+		informationWindow.getContentPane().add(infoLblStairsCapteur);
 
 		infoStairsCapteur = new JLabel(listInformationLocation.get(0).get(2));
 		infoStairsCapteur.setBounds(234, 187, 254, 29);
 		infoStairsCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoStairsCapteur);
+		informationWindow.getContentPane().add(infoStairsCapteur);
 
 		JLabel infoLblRoomCapteur = new JLabel("Pi\u00E8ce capteur : ");
 		infoLblRoomCapteur.setBounds(12, 243, 145, 29);
 		infoLblRoomCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoLblRoomCapteur);
+		informationWindow.getContentPane().add(infoLblRoomCapteur);
 
 		infoRoomCapteur = new JLabel(listInformationLocation.get(0).get(1));
 		infoRoomCapteur.setBounds(234, 249, 254, 29);
 		infoRoomCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoRoomCapteur);
-		
+		informationWindow.getContentPane().add(infoRoomCapteur);
+
 		JLabel lblAddresseMac = new JLabel("Addresse MAC : ");
 		lblAddresseMac.setBounds(12, 309, 145, 29);
 		lblAddresseMac.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(lblAddresseMac);
-		
+		informationWindow.getContentPane().add(lblAddresseMac);
+
 		infoAddressMac = new JLabel(listInformationCapteur.get(0).get(4));
 		infoAddressMac.setBounds(234, 309, 254, 29);
 		infoAddressMac.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		informationWindow.add(infoAddressMac);
-		
+		informationWindow.getContentPane().add(infoAddressMac);
+
 		//guardrail
 		JLabel label_3 = new JLabel();
 		label_3.setBounds(12, 363, 145, 29);
 		informationWindow.add(label_3);
-		
+
 		JLabel label_4 = new JLabel();
 		label_4.setBounds(234, 351, 254, 29);
 		informationWindow.add(label_4);
@@ -517,16 +588,21 @@ public class Map extends JPanel implements ActionListener{
 					}
 					if(objectTable.getSelectedRow() != -1) {
 						if(isEmplacementFree(listJButtonsEtage1.get(i))){
-							listJButtonsEtage1.get(i).setBackground(Color.GREEN);
-							if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage1.get(i)))) {
-								gestionListObject();
-								objectTable.repaint(); 
+							if(isLocationPertinent(listJButtonsEtage1.get(i))) {
+								listJButtonsEtage1.get(i).setBackground(Color.GREEN);
+								if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage1.get(i)))) {
+									gestionListObject();
+									objectTable.repaint(); 
+								}
+								else {
+									System.out.println("ERROR DURING UPDATING OBJECT");
+								}
+								lblMessage.setText("");
+								lblMessage.repaint();
+							}else {
+								lblMessage.setText("Champs non pertinent !");
+								lblMessage.repaint();
 							}
-							else {
-								System.out.println("ERROR DURING UPDATING OBJECT");
-							}
-							lblMessage.setText("");
-							lblMessage.repaint();
 						}
 						else {
 							lblMessage.setText("Veuillez sélectionner un emplacement libre");
