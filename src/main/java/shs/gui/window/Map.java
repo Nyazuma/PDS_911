@@ -141,43 +141,7 @@ public class Map extends JPanel implements ActionListener{
 		listJButtonsEtage1 = new ArrayList<JButton>();
 		listJButtonsEtage2 = new ArrayList<JButton>(); 
 		listEmplacementOccupied = listEmplacementOccupied(listEmplacement);
-		boolean stop = true; 
-
-		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
-			stop = true; 
-			for(int i = 0; i<listEmplacementOccupied.size();  i++) {
-				if(listEmplacement.get(ligne).get(0).equals(listEmplacementOccupied.get(i))) {
-					JButton newButton = new JButton(); 
-					newButton.setBounds(
-							Integer.parseInt(listEmplacement.get(ligne).get(3)),
-							Integer.parseInt(listEmplacement.get(ligne).get(4)), 
-							Integer.parseInt(listEmplacement.get(ligne).get(5)), 
-							Integer.parseInt(listEmplacement.get(ligne).get(6))
-							);
-					newButton.setBackground(Color.GREEN);
-					if(listEmplacement.get(ligne).get(2).toString().equals("1")) {
-						listJButtonsEtage1.add(newButton); stop = false; 
-					}
-					else {
-						listJButtonsEtage2.add(newButton); stop = false; 
-					}
-				}
-
-			}
-			if(stop = true) {
-				JButton newButton = new JButton(); 
-				newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
-						Integer.parseInt(listEmplacement.get(ligne).get(4)), 
-						Integer.parseInt(listEmplacement.get(ligne).get(5)), 
-						Integer.parseInt(listEmplacement.get(ligne).get(6)));
-				newButton.setBackground(Color.GRAY);
-				if(listEmplacement.get(ligne).get(2).toString().equals("1"))
-					listJButtonsEtage1.add(newButton); 
-				else 
-					listJButtonsEtage2.add(newButton); 
-			}
-		}
-
+		dispatchEtageEmplacement();
 
 		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
 			removeButton(listJButtonsEtage2);
@@ -260,13 +224,54 @@ public class Map extends JPanel implements ActionListener{
 		this.add(checkBoxDelete);
 
 	}
+	
+	private void dispatchEtageEmplacement() {
+		boolean stop = true; 
+
+		for(int ligne = 0; ligne< listEmplacement.size(); ligne++) {
+			stop = true; 
+			for(int i = 0; i<listEmplacementOccupied.size();  i++) {
+				if(listEmplacement.get(ligne).get(0).equals(listEmplacementOccupied.get(i))) {
+					JButton newButton = new JButton(); 
+					newButton.setBounds(
+							Integer.parseInt(listEmplacement.get(ligne).get(3)),
+							Integer.parseInt(listEmplacement.get(ligne).get(4)), 
+							Integer.parseInt(listEmplacement.get(ligne).get(5)), 
+							Integer.parseInt(listEmplacement.get(ligne).get(6))
+							);
+					newButton.setBackground(Color.GREEN);
+					if(listEmplacement.get(ligne).get(2).toString().equals("1")) {
+						listJButtonsEtage1.add(newButton); 
+						stop = false; 
+					}
+					else {
+						listJButtonsEtage2.add(newButton); 
+						stop = false; 
+					}
+				}
+
+			}
+			if(stop = true) {
+				JButton newButton = new JButton(); 
+				newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
+						Integer.parseInt(listEmplacement.get(ligne).get(4)), 
+						Integer.parseInt(listEmplacement.get(ligne).get(5)), 
+						Integer.parseInt(listEmplacement.get(ligne).get(6)));
+				newButton.setBackground(Color.GRAY);
+				if(listEmplacement.get(ligne).get(2).toString().equals("1"))
+					listJButtonsEtage1.add(newButton); 
+				else 
+					listJButtonsEtage2.add(newButton); 
+			}
+		}
+	}
 
 
 	/**
 	 * Display the button on the screen
 	 * @param listButton
 	 */
-	public void displayButton(List<JButton> listButton) {
+	private void displayButton(List<JButton> listButton) {
 		for(int ligne = 0; ligne< listButton.size(); ligne++) {
 			listButton.get(ligne).addActionListener(this);
 			this.add(listButton.get(ligne));
@@ -462,13 +467,17 @@ public class Map extends JPanel implements ActionListener{
 
 		for(int i = 0; i<listEmplacement.size(); i++) {
 			if(listEmplacement.get(i).get(0).equals(locationID)) {
-				if(listEmplacement.get(i-1)!= null) {
-					System.out.println("1");
+				if(i != 0) {
 					beforeEmplacementID = listEmplacement.get(i-1).get(0);
 				}
-				if(listEmplacement.get(i+1)!= null) {
-					System.out.println("2");
+				else {
+					System.out.println("FIRST EMPLACEMENT");
+				}
+				if(i != listEmplacement.size()-1) {
 					afterEmplacementID = listEmplacement.get(i+1).get(0);
+				}
+				else {
+					System.out.println("LAST EMPLACEMENT");
 				}
 			}
 		}
@@ -623,10 +632,15 @@ public class Map extends JPanel implements ActionListener{
 			for(int i = 0; i< listJButtonsEtage1.size(); i++) {
 				if(checkBoxDelete.isSelected() && !isEmplacementFree(listJButtonsEtage1.get(i)))
 				{
+					lblMessage.setText("");
+					lblMessage.repaint();
 					listJButtonsEtage1.get(i).setBackground(Color.GRAY);
 					if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage1.get(i)))) {
 						gestionListObject();
 						objectTable.repaint(); 
+						listAllCapteurs = controller.listCapteurs(); 
+						listEmplacement = controller.EmplacementFull();
+						
 						break; 
 					}
 					else 
@@ -670,14 +684,18 @@ public class Map extends JPanel implements ActionListener{
 				}
 			}
 		}
+		
 		if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
 			for(int i = 0; i< listJButtonsEtage2.size(); i++) {
 				if(checkBoxDelete.isSelected() && !isEmplacementFree(listJButtonsEtage2.get(i)))
 				{
+					lblMessage.setText("");
+					lblMessage.repaint();
 					listJButtonsEtage2.get(i).setBackground(Color.GRAY);
 					if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage2.get(i)))) {
 						gestionListObject();
 						objectTable.repaint(); 
+						break; 
 					}
 					else 
 					{
@@ -741,7 +759,6 @@ public class Map extends JPanel implements ActionListener{
 				imageIcon.setImage(image);
 				picLabel.setIcon(imageIcon);
 				displayButton(listJButtonsEtage1);
-
 
 			}
 
