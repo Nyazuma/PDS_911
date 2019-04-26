@@ -322,6 +322,9 @@ public class Map extends JPanel implements ActionListener{
 	 * @return
 	 */
 	private String getIdObject(JButton button) {
+		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
+		listAllCapteurs = controller.listCapteurs();
+		
 		String locationID = getIdEmplacement(button); 
 		for (int i = 0; i<listAllCapteurs.size(); i++) {
 			if(listAllCapteurs.get(1).get(3).equals(locationID)) {
@@ -338,6 +341,9 @@ public class Map extends JPanel implements ActionListener{
 	 */
 	public List<String> listEmplacementOccupied(List<List<String>> listEmplacement) {
 
+		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
+		listAllCapteurs = controller.listCapteurs();
+		
 		List<String> listEmplacementOccupied = new ArrayList<String>(); 
 		for (int i = 0; i<listAllCapteurs.size(); i++) {
 			if(listAllCapteurs.get(i).get(3)!= null) {
@@ -446,6 +452,9 @@ public class Map extends JPanel implements ActionListener{
 
 		String typeCapteur = getRowUpdate().get(1);
 		String locationID = getIdEmplacement(button); 
+		
+		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
+		listAllCapteurs = controller.listCapteurs();
 
 
 
@@ -504,6 +513,9 @@ public class Map extends JPanel implements ActionListener{
 	 * @param button
 	 */
 	private void informationCapteur(JButton button) {
+		
+		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
+		listAllCapteurs = controller.listCapteurs();
 
 		List<List<String>> listInformationLocation = new ArrayList<List<String>>();
 		List<List<String>> listInformationCapteur = new ArrayList<List<String>>();
@@ -613,16 +625,18 @@ public class Map extends JPanel implements ActionListener{
 					if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage1.get(i)))) {
 						gestionListObject();
 						objectTable.repaint(); 
+						break; 
 					}
-					break; 
+					else 
+					{
+						System.out.println("ERROR DURING DELETING OBJECT");
+					}
 				}
 				if(event.getSource().equals(listJButtonsEtage1.get(i))){
 					if((!isEmplacementFree(listJButtonsEtage1.get(i))) && (objectTable.getSelectedRow() == -1)) {
 						informationCapteur(listJButtonsEtage1.get(i));
 						break; 
 					}
-					System.out.println("Je suis la : " +checkBoxDelete.isSelected());
-
 					if(objectTable.getSelectedRow() != -1) {
 						if(isEmplacementFree(listJButtonsEtage1.get(i))){
 							if(isLocationPertinent(listJButtonsEtage1.get(i))) {
@@ -630,6 +644,7 @@ public class Map extends JPanel implements ActionListener{
 								if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage1.get(i)))) {
 									gestionListObject();
 									objectTable.repaint(); 
+									break; 
 								}
 								else {
 									System.out.println("ERROR DURING UPDATING OBJECT");
@@ -662,7 +677,10 @@ public class Map extends JPanel implements ActionListener{
 						gestionListObject();
 						objectTable.repaint(); 
 					}
-					break; 
+					else 
+					{
+						System.out.println("ERROR DURING DELETING OBJECT");
+					}
 				}
 				if(event.getSource().equals(listJButtonsEtage2.get(i))){
 					if((!isEmplacementFree(listJButtonsEtage2.get(i))) && (objectTable.getSelectedRow() == -1)) {
