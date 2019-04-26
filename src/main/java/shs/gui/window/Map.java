@@ -290,7 +290,7 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 	/**
-	 * This methode return the ID_Emplacement of the JButton selected as a String
+	 * This method return the ID_Emplacement of the JButton selected as a String
 	 * @param button
 	 * @return
 	 */
@@ -305,7 +305,7 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 	/**
-	 * This methode return the list of the Emplacement occupied identify by the ID_Emplacement
+	 * This method return the list of the location occupied identify by the ID_Emplacement
 	 * @param listEmplacement
 	 * @return
 	 */
@@ -403,13 +403,19 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 
+	/**
+	 * Method used to determine if the position of the sensor is pertinent or not. 
+	 * Two sensor of the same type can't be neighbour. 
+	 * @param button
+	 * @return
+	 */
 	private boolean isLocationPertinent(JButton button) {
 
-		String beforeEmplacementID = new String(); 
-		String afterEmplacementID = new String(); 
+		String beforeEmplacementID = null; 
+		String afterEmplacementID = null; 
 
-		String beforeTypeCapteur = new String(); 
-		String afterTypeCapteur = new String(); 
+		String beforeTypeCapteur = null; 
+		String afterTypeCapteur = null; 
 
 		String typeCapteur = getRowUpdate().get(1);
 		String locationID = getIdEmplacement(button); 
@@ -424,7 +430,7 @@ public class Map extends JPanel implements ActionListener{
 				}
 				if(listEmplacement.get(i+1)!= null) {
 					System.out.println("2");
-					beforeEmplacementID = listEmplacement.get(i+1).get(0);
+					afterEmplacementID = listEmplacement.get(i+1).get(0);
 				}
 			}
 		}
@@ -434,47 +440,40 @@ public class Map extends JPanel implements ActionListener{
 
 		for(int i=0; i< listOcupiedLocation.size(); i++) {
 			if(beforeEmplacementID != null) {
-				System.out.println("3");
-				if(listOcupiedLocation.get(0).equals(beforeEmplacementID)) {
-					System.out.println("4");
+				if(listOcupiedLocation.get(i).equals(beforeEmplacementID)) {
 					for(int j=0; j<listAllCapteurs.size(); j++) {
-						if(listAllCapteurs.get(j).get(3).equals(beforeEmplacementID)) {
-							System.out.println("5");
-							beforeTypeCapteur = listAllCapteurs.get(j).get(1);
+						if(listAllCapteurs.get(j).get(3) !=null) {
+							if(listAllCapteurs.get(j).get(3).equals(beforeEmplacementID)) {
+								beforeTypeCapteur = listAllCapteurs.get(j).get(1);
+								break; 
+							}
 						}
 					}
 				}
 			}
 			if(afterEmplacementID != null) {
-				System.out.println("7");
-				if(listOcupiedLocation.get(0).equals(afterEmplacementID)) {
-					System.out.println("8");
+				if(listOcupiedLocation.get(i).equals(afterEmplacementID)) {
 					for(int j=0; j<listAllCapteurs.size(); j++) {
-						if(listAllCapteurs.get(j).get(3).equals(afterEmplacementID)) {
-							System.out.println("9");
-							beforeTypeCapteur = listAllCapteurs.get(j).get(1);
+						if(listAllCapteurs.get(j).get(3) !=null) {
+							if(listAllCapteurs.get(j).get(3).equals(afterEmplacementID)) {
+								afterTypeCapteur = listAllCapteurs.get(j).get(1);
+								break; 
+							}
 						}
 					}
 				}
 			}
-
 		}
 
-		if((afterTypeCapteur == null && beforeTypeCapteur.equals(typeCapteur)) || (beforeTypeCapteur == null && afterTypeCapteur.equals(typeCapteur)) || (typeCapteur.equals(beforeTypeCapteur) && typeCapteur.equals(afterTypeCapteur))) {
-			System.out.println("afterTypeCapteur : " + afterTypeCapteur);
-			System.out.println("afterTypeCapteur : " + beforeTypeCapteur);
-			System.out.println("afterTypeCapteur : " + typeCapteur);
+		if((afterTypeCapteur == null && beforeTypeCapteur != null && beforeTypeCapteur.equals(typeCapteur)) || (beforeTypeCapteur == null && afterTypeCapteur != null && afterTypeCapteur.equals(typeCapteur)) || (beforeTypeCapteur != null && afterTypeCapteur != null && typeCapteur.equals(beforeTypeCapteur) && typeCapteur.equals(afterTypeCapteur)))
 			return false;
-		}else {
-			System.out.println("-afterTypeCapteur : " + afterTypeCapteur);
-			System.out.println("-afterTypeCapteur : " + beforeTypeCapteur);
-			System.out.println("-afterTypeCapteur : " + typeCapteur);
+		else 
 			return true; 
-		}
+
 	}
 
 	/**
-	 * Methode used to create and initialize the information window of an occupied location
+	 * Method used to create and initialize the information window of an occupied location
 	 * @param button
 	 */
 	private void informationCapteur(JButton button) {
@@ -625,18 +624,22 @@ public class Map extends JPanel implements ActionListener{
 					}
 					if(objectTable.getSelectedRow() != -1) {
 						if(isEmplacementFree(listJButtonsEtage2.get(i))){
-							listJButtonsEtage2.get(i).setBackground(Color.GREEN);
-							if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage2.get(i)))) {
-								gestionListObject();
-								objectTable.repaint(); 
-							}
-							else {
-								System.out.println("ERROR DURING UPDATING OBJECT");
-							}
+							if(isLocationPertinent(listJButtonsEtage1.get(i))) {
+								listJButtonsEtage2.get(i).setBackground(Color.GREEN);
+								if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage2.get(i)))) {
+									gestionListObject();
+									objectTable.repaint(); 
+								}
+								else {
+									System.out.println("ERROR DURING UPDATING OBJECT");
+								}
 
-							lblMessage.setText("");
-							lblMessage.repaint();
-
+								lblMessage.setText("");
+								lblMessage.repaint();
+							}else {
+								lblMessage.setText("Champs non pertinent !");
+								lblMessage.repaint();
+							}
 						}
 						else {
 							lblMessage.setText("Veuillez sélectionner un emplacement disponible.");
