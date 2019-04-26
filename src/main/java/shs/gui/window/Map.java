@@ -31,9 +31,11 @@ public class Map extends JPanel implements ActionListener{
 
 
 	//TODO Faire fonctionner le update. 
+	//TODO Faire fonctionner le delete.
+	//TODO Vérifier que la liste des capteurs est bien remise à jour
+	//TODO Vérifier que le bouton, une fois supprimer n'ouvre plus de fenètre d'information
+	//TODO Vérifier que l'emplacement est bien libéré. 
 	//TODO surcharger le constructeur pour récupérer la liste des alertes. -map(List<Capteurs>)
-	//TODO gérer la libération d'un capteur 
-	//TODO mettre une légende 
 
 	/**
 	 * Management Image
@@ -284,7 +286,7 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 	/**
-	 * This methode return true if the location is free and false otherwise
+	 * This method return true if the location is free and false otherwise
 	 * @param button
 	 * @return
 	 */
