@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -45,6 +46,11 @@ public class Map extends JPanel implements ActionListener{
 	private JButton btnRetour; 
 	private JComboBox<String> comboStage;
 	private JLabel lblMessage; 
+
+	/**
+	 * Management delete
+	 */
+	private JCheckBox checkBoxDelete;
 
 	/**
 	 * Management Legend
@@ -245,11 +251,17 @@ public class Map extends JPanel implements ActionListener{
 		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		this.add(lblLegend);
 
+		checkBoxDelete= new JCheckBox("Veuillez cocher cette case pour enlever l'emplacement d'un capteur ");
+		checkBoxDelete.setBounds(508, 23, 668, 25);
+		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		checkBoxDelete.setBackground(new Color(95, 158, 160));
+		this.add(checkBoxDelete);
+
 	}
 
 
 	/**
-	 * 
+	 * Display the button on the screen
 	 * @param listButton
 	 */
 	public void displayButton(List<JButton> listButton) {
@@ -261,7 +273,7 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 	/**
-	 * 
+	 * Remove the button of the screen
 	 * @param listButton
 	 */
 	public void removeButton(List<JButton> listButton) {
@@ -294,7 +306,7 @@ public class Map extends JPanel implements ActionListener{
 	 * @param button
 	 * @return
 	 */
-	public String getIdEmplacement(JButton button) {
+	private String getIdEmplacement(JButton button) {
 		for(int i= 0; i< listEmplacement.size(); i++) {
 			if(Integer.parseInt(listEmplacement.get(i).get(3)) == button.getX() && Integer.parseInt(listEmplacement.get(i).get(4)) == button.getY()){
 				return listEmplacement.get(i).get(0);
@@ -302,6 +314,21 @@ public class Map extends JPanel implements ActionListener{
 		}
 		return null; 
 
+	}
+
+	/**
+	 * This method return the ID of the Object from a specific location
+	 * @param button
+	 * @return
+	 */
+	private String getIdObject(JButton button) {
+		String locationID = getIdEmplacement(button); 
+		for (int i = 0; i<listAllCapteurs.size(); i++) {
+			if(listAllCapteurs.get(1).get(3).equals(locationID)) {
+				return listAllCapteurs.get(1).get(0);
+			}
+		}
+		return null; 
 	}
 
 	/**
@@ -580,11 +607,22 @@ public class Map extends JPanel implements ActionListener{
 		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
 
 			for(int i = 0; i< listJButtonsEtage1.size(); i++) {
+				if(checkBoxDelete.isSelected() && !isEmplacementFree(listJButtonsEtage1.get(i)))
+				{
+					listJButtonsEtage1.get(i).setBackground(Color.GRAY);
+					if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage1.get(i)))) {
+						gestionListObject();
+						objectTable.repaint(); 
+					}
+					break; 
+				}
 				if(event.getSource().equals(listJButtonsEtage1.get(i))){
 					if((!isEmplacementFree(listJButtonsEtage1.get(i))) && (objectTable.getSelectedRow() == -1)) {
 						informationCapteur(listJButtonsEtage1.get(i));
 						break; 
 					}
+					System.out.println("Je suis la : " +checkBoxDelete.isSelected());
+
 					if(objectTable.getSelectedRow() != -1) {
 						if(isEmplacementFree(listJButtonsEtage1.get(i))){
 							if(isLocationPertinent(listJButtonsEtage1.get(i))) {
@@ -617,14 +655,24 @@ public class Map extends JPanel implements ActionListener{
 		}
 		if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
 			for(int i = 0; i< listJButtonsEtage2.size(); i++) {
+				if(checkBoxDelete.isSelected() && !isEmplacementFree(listJButtonsEtage2.get(i)))
+				{
+					listJButtonsEtage2.get(i).setBackground(Color.GRAY);
+					if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage2.get(i)))) {
+						gestionListObject();
+						objectTable.repaint(); 
+					}
+					break; 
+				}
 				if(event.getSource().equals(listJButtonsEtage2.get(i))){
 					if((!isEmplacementFree(listJButtonsEtage2.get(i))) && (objectTable.getSelectedRow() == -1)) {
 						informationCapteur(listJButtonsEtage2.get(i));
 						break; 
 					}
+
 					if(objectTable.getSelectedRow() != -1) {
 						if(isEmplacementFree(listJButtonsEtage2.get(i))){
-							if(isLocationPertinent(listJButtonsEtage1.get(i))) {
+							if(isLocationPertinent(listJButtonsEtage2.get(i))) {
 								listJButtonsEtage2.get(i).setBackground(Color.GREEN);
 								if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage2.get(i)))) {
 									gestionListObject();

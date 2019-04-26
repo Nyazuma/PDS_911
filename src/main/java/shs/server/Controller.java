@@ -16,6 +16,7 @@ import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgChangeAlert;
 import shs.common.MsgConnection;
+import shs.common.MsgDeleteEmplacement;
 import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
@@ -140,6 +141,10 @@ public class Controller {
 			resultBoolean = updateEmplacementObject(((MsgUpdateEmplacement)input).getSensorID(), ((MsgUpdateEmplacement)input).getLocationID()); 
 			MsgBooleanResult answer16 = new MsgBooleanResult(resultBoolean); 
 			return Tool.messageToJSON(answer16); 
+		case DELETEEMPLACEMENT : 
+			resultBoolean = deleteEmplacementObject(((MsgDeleteEmplacement)input).getSensorID()); 
+			MsgBooleanResult answer17 = new MsgBooleanResult(resultBoolean); 
+			return Tool.messageToJSON(answer17);
 			
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
@@ -543,10 +548,23 @@ public class Controller {
 			statement.executeUpdate(request);
 			return true; 
 		}catch (SQLException e) {
-			Tool.logger.error("changeAlert FAILED - SQL EXCEPTION");
+			Tool.logger.error("updateEmplacementObject FAILED - SQL EXCEPTION");
 			return false;
 		}
 		
+	}
+	
+	private boolean deleteEmplacementObject(String ID_Capteur) {
+		String request = "UPDATE Capteurs SET ID_Emplacement = 'null' WHERE ID_Capteur = '" + ID_Capteur +"';";
+		try {
+			System.out.println(request);
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+			return true; 
+		}catch (SQLException e) {
+			Tool.logger.error("deleteEmplacementObject FAILED - SQL EXCEPTION");
+			return false;
+		}
 	}
 
 

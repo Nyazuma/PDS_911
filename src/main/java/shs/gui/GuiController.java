@@ -16,6 +16,7 @@ import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgChangeAlert;
 import shs.common.MsgConnection;
+import shs.common.MsgDeleteEmplacement;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
 import shs.common.MsgUpdateEmplacement;
@@ -72,7 +73,7 @@ public class GuiController {
 	}
 	
 	/**
-	 * 
+	 * Used to add a location to a sensor
 	 * @param ID_Capteur
 	 * @param ID_Emplacement
 	 * @return
@@ -80,6 +81,27 @@ public class GuiController {
 	public boolean updateEmplacementObject(String ID_Capteur, String ID_Emplacement) {
 		MsgUpdateEmplacement updateEmplacement = new MsgUpdateEmplacement(ID_Capteur, ID_Emplacement);
 		String output = Tool.messageToJSON(updateEmplacement); 
+		String answer; 
+		try {
+			answer = contactServer(output);
+			if(answer!= null) {
+				MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer);
+				return result.getStatus();
+			}
+			return false;	
+		}catch (ConnectException e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Used to delete the location of an object
+	 * @param ID_Capteur
+	 * @return
+	 */
+	public boolean deleteEmplacementObject(String ID_Capteur) {
+		MsgDeleteEmplacement deleteEmplacement = new MsgDeleteEmplacement(ID_Capteur);
+		String output = Tool.messageToJSON(deleteEmplacement); 
 		String answer; 
 		try {
 			answer = contactServer(output);
