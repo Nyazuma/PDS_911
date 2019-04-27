@@ -80,20 +80,25 @@ public class Map extends JPanel implements ActionListener{
 	/**
 	 * Management location
 	 */
-	private List<List<String>> listEmplacement;
-	private List<JButton> listJButtonsEtage1; 
-	private List<JButton> listJButtonsEtage2; 
-	private List<String> listEmplacementOccupied; 
+	private List<List<String>> listEmplacement = new ArrayList<List<String>>();
+	private List<JButton> listJButtonsEtage1 = new ArrayList<JButton>(); 
+	private List<JButton> listJButtonsEtage2 = new ArrayList<JButton>(); 
+	private List<String> listEmplacementOccupied = new ArrayList<String>(); 
 
 	/**
 	 * Management Information frame
 	 */
-	JLabel lblTitle; 
-	JLabel infoTypeCapteur;
-	JLabel infoStateCapteur;
-	JLabel infoStairsCapteur;
-	JLabel infoRoomCapteur;
-	JLabel infoAddressMac;
+	private JLabel lblTitle; 
+	private JLabel infoTypeCapteur;
+	private JLabel infoStateCapteur;
+	private JLabel infoStairsCapteur;
+	private JLabel infoRoomCapteur;
+	private JLabel infoAddressMac;
+	
+	/**
+	 * Management Alerte
+	 */
+	private String ID_EmplacementAlerte; 
 
 	//-------------------------------------------------------
 	// CONTROLLER
@@ -120,13 +125,9 @@ public class Map extends JPanel implements ActionListener{
 		//To get only the objects with an empty emplacement.
 
 		listAllCapteurs = controller.listCapteurs();
-		for(int i= 0; i<listAllCapteurs.size(); i++) {
-			if((listAllCapteurs.get(i).get(3) == null)) {
-				listObjectNullEmplacement.add(listAllCapteurs.get(i));
-			}
-		}
+		initListObjectNullEmplacement();
+
 		gestionListObject();
-		this.add(scrollPane, BorderLayout.CENTER);
 
 		comboStage = new JComboBox<String>();
 		comboStage.setModel(new DefaultComboBoxModel<String>(new String[] {"Etage 1", "Etage 2"}));
@@ -224,7 +225,144 @@ public class Map extends JPanel implements ActionListener{
 		this.add(checkBoxDelete);
 
 	}
-	
+
+	//-------------------------------------------------------
+	// CONTROLLER
+	//-------------------------------------------------------
+	/**
+	 * Main Controller
+	 * @param controller
+	 */
+	public Map(GuiController controller, String ID_EmplacementAlert ) {
+		this.ID_EmplacementAlerte = ID_EmplacementAlert;
+		this.controller = controller; 
+
+		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
+		this.controller.getGui().setSize(screensize);
+		this.controller.getGui().setLocationRelativeTo(null);
+		setBackground(new Color(95, 158, 160));
+		this.setLayout(null);
+
+		btnRetour = new JButton("Retour");
+		btnRetour.setBounds(12, 15, 90, 44);
+		btnRetour.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		btnRetour.addActionListener(this);
+		this.add(btnRetour);
+
+		//To get only the objects with an empty emplacement.
+
+		listAllCapteurs = controller.listCapteurs();
+		initListObjectNullEmplacement();
+
+		gestionListObject();
+
+		comboStage = new JComboBox<String>();
+		comboStage.setModel(new DefaultComboBoxModel<String>(new String[] {"Etage 1", "Etage 2"}));
+		comboStage.setBounds(108, 661, 204, 44);
+		comboStage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		comboStage.addActionListener(this);
+		this.add(comboStage);
+
+
+		// Create JButton from the listEmplacement
+		listEmplacement = controller.EmplacementFull(); 
+		listJButtonsEtage1 = new ArrayList<JButton>();
+		listJButtonsEtage2 = new ArrayList<JButton>(); 
+		listEmplacementOccupied = listEmplacementOccupied(listEmplacement);
+		dispatchEtageEmplacement();
+
+		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+			removeButton(listJButtonsEtage2);
+			displayButton(listJButtonsEtage1);
+		}
+		else {
+			removeButton(listJButtonsEtage1);
+			displayButton(listJButtonsEtage2);
+		}
+
+
+		//Get table Etage and read Image on line.
+		tabImage = controller.readEtageImage(); 
+		try {
+			image = ImageIO.read(getClass().getResource("/images/" + tabImage[0]));  
+		}catch(Exception e) {
+			System.out.println("ERROR - IMAGE NOT FOUND");
+			e.printStackTrace();
+		}
+
+
+		imageIcon = new ImageIcon(image); 
+		picLabel = new JLabel(imageIcon); 
+		picLabel.setBounds(491, 99, 1345, 824);
+		this.add(picLabel);
+
+		// JLabel used to display messages (see messages in ActionPerformed).
+		lblMessage = new JLabel();
+		lblMessage.setBounds(12, 711, 467, 33);
+		lblMessage.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		lblMessage.setForeground(Color.RED);
+		this.add(lblMessage);
+
+
+		// Legend part of the interface.
+		freePlace = new JButton();
+		freePlace.setBounds(242, 819, 99, 33);
+		freePlace.setBackground(Color.GRAY); 
+		freePlace.setEnabled(false);
+		this.add(freePlace);
+
+		occupiedPlace = new JButton();
+		occupiedPlace.setBounds(242, 865, 99, 33);
+		occupiedPlace.setBackground(Color.GREEN); 
+		occupiedPlace.setEnabled(false);
+		this.add(occupiedPlace);
+
+		alertPlace = new JButton();
+		alertPlace.setBounds(242, 912, 99, 33);
+		alertPlace.setBackground(Color.RED); 
+		alertPlace.setEnabled(false);
+		this.add(alertPlace);
+
+
+
+		lblFreePlace = new JLabel("Emplacement libre : ");
+		lblFreePlace.setBounds(39, 830, 302, 25);
+		lblFreePlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblFreePlace);
+
+		lblOccupiedPlace = new JLabel("Emplacement occup\u00E9 : ");
+		lblOccupiedPlace.setBounds(39, 869, 302, 25);
+		lblOccupiedPlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblOccupiedPlace);
+
+		lblAlertPlace = new JLabel("Emplacement en alerte : ");
+		lblAlertPlace.setBounds(39, 916, 302, 25);
+		lblAlertPlace.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblAlertPlace);
+
+		lblLegend = new JLabel("L\u00E9gende");
+		lblLegend.setBounds(148, 767, 193, 25);
+		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		this.add(lblLegend);
+
+		checkBoxDelete= new JCheckBox("Veuillez cocher cette case pour enlever l'emplacement d'un capteur ");
+		checkBoxDelete.setBounds(508, 23, 668, 25);
+		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		checkBoxDelete.setBackground(new Color(95, 158, 160));
+		this.add(checkBoxDelete);
+
+	}
+
+	private void initListObjectNullEmplacement() {
+		listObjectNullEmplacement = new ArrayList<List<String>>();
+		for(int i= 0; i<listAllCapteurs.size(); i++) {
+			if((listAllCapteurs.get(i).get(3) == null)) {
+				listObjectNullEmplacement.add(listAllCapteurs.get(i));
+			}
+		}
+	}
+
+
 	private void dispatchEtageEmplacement() {
 		boolean stop = true; 
 
@@ -239,7 +377,12 @@ public class Map extends JPanel implements ActionListener{
 							Integer.parseInt(listEmplacement.get(ligne).get(5)), 
 							Integer.parseInt(listEmplacement.get(ligne).get(6))
 							);
-					newButton.setBackground(Color.GREEN);
+					if(listEmplacement.get(ligne).get(0).equals(ID_EmplacementAlerte)) {
+						newButton.setBackground(Color.RED);
+					}
+					else{
+						newButton.setBackground(Color.GREEN);
+					}
 					if(listEmplacement.get(ligne).get(2).toString().equals("1")) {
 						listJButtonsEtage1.add(newButton); 
 						stop = false; 
@@ -251,7 +394,7 @@ public class Map extends JPanel implements ActionListener{
 				}
 
 			}
-			if(stop = true) {
+			if(stop == true) {
 				JButton newButton = new JButton(); 
 				newButton.setBounds(Integer.parseInt(listEmplacement.get(ligne).get(3)),
 						Integer.parseInt(listEmplacement.get(ligne).get(4)), 
@@ -296,11 +439,8 @@ public class Map extends JPanel implements ActionListener{
 	 * @return
 	 */
 	public boolean isEmplacementFree(JButton button) {
-		List<String> listEmplacementIDOccupied = new ArrayList<String>();
-		listEmplacementIDOccupied = listEmplacementOccupied(listEmplacement); 
-
-		for (int i = 0; i< listEmplacementIDOccupied.size(); i++) {
-			if(getIdEmplacement(button).equals(listEmplacementIDOccupied.get(i))) {
+		for (int i = 0; i< listEmplacementOccupied.size(); i++) {
+			if(getIdEmplacement(button).equals(listEmplacementOccupied.get(i))) {
 				return false;
 			}
 		}
@@ -315,7 +455,7 @@ public class Map extends JPanel implements ActionListener{
 	 */
 	private String getIdEmplacement(JButton button) {
 		for(int i= 0; i< listEmplacement.size(); i++) {
-			if(Integer.parseInt(listEmplacement.get(i).get(3)) == button.getX() && Integer.parseInt(listEmplacement.get(i).get(4)) == button.getY()){
+			if((Integer.parseInt(listEmplacement.get(i).get(3)) == button.getX()) && (Integer.parseInt(listEmplacement.get(i).get(4)) == button.getY())){
 				return listEmplacement.get(i).get(0);
 			}
 		}
@@ -329,13 +469,13 @@ public class Map extends JPanel implements ActionListener{
 	 * @return
 	 */
 	private String getIdObject(JButton button) {
-		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
-		listAllCapteurs = controller.listCapteurs();
-		
 		String locationID = getIdEmplacement(button); 
 		for (int i = 0; i<listAllCapteurs.size(); i++) {
-			if(listAllCapteurs.get(1).get(3).equals(locationID)) {
-				return listAllCapteurs.get(1).get(0);
+			if(listAllCapteurs.get(i).get(3) != null) {
+				if(listAllCapteurs.get(i).get(3).equals(locationID)) {
+					return listAllCapteurs.get(i).get(0);
+				}
+
 			}
 		}
 		return null; 
@@ -347,16 +487,14 @@ public class Map extends JPanel implements ActionListener{
 	 * @return
 	 */
 	public List<String> listEmplacementOccupied(List<List<String>> listEmplacement) {
-
-		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
-		listAllCapteurs = controller.listCapteurs();
-		
-		List<String> listEmplacementOccupied = new ArrayList<String>(); 
+		listEmplacementOccupied = new ArrayList<String>();
 		for (int i = 0; i<listAllCapteurs.size(); i++) {
 			if(listAllCapteurs.get(i).get(3)!= null) {
 				for(int j=0; j<listEmplacement.size(); j++) {
-					if(listEmplacement.get(j).get(0).equals(listAllCapteurs.get(i).get(3))){
+					if(listEmplacement.get(j).get(0).equals(listAllCapteurs.get(i).get(3))
+							&& !listEmplacementOccupied.contains(listEmplacement.get(j).get(0))){
 						listEmplacementOccupied.add(listEmplacement.get(j).get(0)); 
+						break;
 					}
 
 				}
@@ -420,10 +558,12 @@ public class Map extends JPanel implements ActionListener{
 			objectTable = new JTable();
 		}
 
+		if(scrollPane!=null)
+			remove(scrollPane);
 
 		scrollPane = new JScrollPane(objectTable);
 		scrollPane.setBounds(12, 99, 438, 527);
-
+		add(scrollPane, BorderLayout.CENTER);	
 	}
 
 	/**
@@ -459,9 +599,6 @@ public class Map extends JPanel implements ActionListener{
 
 		String typeCapteur = getRowUpdate().get(1);
 		String locationID = getIdEmplacement(button); 
-		
-		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
-		listAllCapteurs = controller.listCapteurs();
 
 
 
@@ -482,12 +619,9 @@ public class Map extends JPanel implements ActionListener{
 			}
 		}
 
-		List<String> listOcupiedLocation = new ArrayList<String>();
-		listOcupiedLocation = listEmplacementOccupied(listEmplacement);
-
-		for(int i=0; i< listOcupiedLocation.size(); i++) {
+		for(int i=0; i< listEmplacementOccupied.size(); i++) {
 			if(beforeEmplacementID != null) {
-				if(listOcupiedLocation.get(i).equals(beforeEmplacementID)) {
+				if(listEmplacementOccupied.get(i).equals(beforeEmplacementID)) {
 					for(int j=0; j<listAllCapteurs.size(); j++) {
 						if(listAllCapteurs.get(j).get(3) !=null) {
 							if(listAllCapteurs.get(j).get(3).equals(beforeEmplacementID)) {
@@ -499,7 +633,7 @@ public class Map extends JPanel implements ActionListener{
 				}
 			}
 			if(afterEmplacementID != null) {
-				if(listOcupiedLocation.get(i).equals(afterEmplacementID)) {
+				if(listEmplacementOccupied.get(i).equals(afterEmplacementID)) {
 					for(int j=0; j<listAllCapteurs.size(); j++) {
 						if(listAllCapteurs.get(j).get(3) !=null) {
 							if(listAllCapteurs.get(j).get(3).equals(afterEmplacementID)) {
@@ -524,10 +658,6 @@ public class Map extends JPanel implements ActionListener{
 	 * @param button
 	 */
 	private void informationCapteur(JButton button) {
-		
-		List<List<String>> listAllCapteurs = new ArrayList<List<String>>();
-		listAllCapteurs = controller.listCapteurs();
-
 		List<List<String>> listInformationLocation = new ArrayList<List<String>>();
 		List<List<String>> listInformationCapteur = new ArrayList<List<String>>();
 
@@ -619,6 +749,83 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 
+	private void actionButton(ActionEvent event, List<JButton> listJButtonsEtage) {
+
+		if(checkBoxDelete.isSelected() && objectTable.getSelectedRow() != -1) {
+			lblMessage.setText("Opération impossible.");
+			lblMessage.repaint();
+			return; 
+		}
+		else 
+		{
+			lblMessage.setText("");
+			lblMessage.repaint();
+		}
+		for(int i = 0; i< listJButtonsEtage.size(); i++) {
+
+			if(checkBoxDelete.isSelected() && !isEmplacementFree(listJButtonsEtage.get(i))
+					&& event.getSource().equals(listJButtonsEtage.get(i)))
+			{
+				lblMessage.setText("");
+				lblMessage.repaint();
+				if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage.get(i)))) {
+					listJButtonsEtage.get(i).setBackground(Color.GRAY);
+					listAllCapteurs = controller.listCapteurs(); 
+					listEmplacement = controller.EmplacementFull();
+					listEmplacementOccupied = listEmplacementOccupied(listEmplacement);
+					initListObjectNullEmplacement();
+					gestionListObject();
+					break; 
+				}
+				else 
+				{
+					System.out.println("ERROR DURING DELETING OBJECT");
+				}
+			}
+			else if(checkBoxDelete.isSelected() && isEmplacementFree(listJButtonsEtage.get(i))) {
+				lblMessage.setText("Il n'y a pas de capteur à cet emplacement.");
+				lblMessage.repaint();
+			}
+			if(event.getSource().equals(listJButtonsEtage.get(i))){
+				if((!isEmplacementFree(listJButtonsEtage.get(i))) && (objectTable.getSelectedRow() == -1)) {
+					informationCapteur(listJButtonsEtage.get(i));
+					break; 
+				}
+				if(objectTable.getSelectedRow() != -1) {
+					if(isEmplacementFree(listJButtonsEtage.get(i))){
+						if(isLocationPertinent(listJButtonsEtage.get(i))) {
+							if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage.get(i)))) {
+								listJButtonsEtage.get(i).setBackground(Color.GREEN);
+								listAllCapteurs = controller.listCapteurs(); 
+								listEmplacement = controller.EmplacementFull();
+								listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
+								initListObjectNullEmplacement();
+								gestionListObject();
+								break; 
+							}
+							else {
+								System.out.println("ERROR DURING UPDATING OBJECT");
+							}
+							lblMessage.setText("");
+							lblMessage.repaint();
+						}else {
+							lblMessage.setText("Champs non pertinent !");
+							lblMessage.repaint();
+						}
+					}
+					else {
+						lblMessage.setText("Veuillez sélectionner un emplacement libre");
+						lblMessage.repaint();
+					}
+				}
+				else {
+					lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
+					lblMessage.repaint();
+				}
+			}
+
+		}
+	}
 
 	//-------------------------------------------------------
 	// ACTION PERFORMED ON THE ELEMENTS OF THE FRAME
@@ -627,118 +834,16 @@ public class Map extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent event) {
 
-		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+		listAllCapteurs = controller.listCapteurs(); 
+		listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
+		listEmplacement = controller.EmplacementFull(); 
+		initListObjectNullEmplacement();
+		dispatchEtageEmplacement();
 
-			for(int i = 0; i< listJButtonsEtage1.size(); i++) {
-				if(checkBoxDelete.isSelected() && !isEmplacementFree(listJButtonsEtage1.get(i)))
-				{
-					lblMessage.setText("");
-					lblMessage.repaint();
-					listJButtonsEtage1.get(i).setBackground(Color.GRAY);
-					if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage1.get(i)))) {
-						gestionListObject();
-						objectTable.repaint(); 
-						listAllCapteurs = controller.listCapteurs(); 
-						listEmplacement = controller.EmplacementFull();
-						
-						break; 
-					}
-					else 
-					{
-						System.out.println("ERROR DURING DELETING OBJECT");
-					}
-				}
-				if(event.getSource().equals(listJButtonsEtage1.get(i))){
-					if((!isEmplacementFree(listJButtonsEtage1.get(i))) && (objectTable.getSelectedRow() == -1)) {
-						informationCapteur(listJButtonsEtage1.get(i));
-						break; 
-					}
-					if(objectTable.getSelectedRow() != -1) {
-						if(isEmplacementFree(listJButtonsEtage1.get(i))){
-							if(isLocationPertinent(listJButtonsEtage1.get(i))) {
-								listJButtonsEtage1.get(i).setBackground(Color.GREEN);
-								if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage1.get(i)))) {
-									gestionListObject();
-									objectTable.repaint(); 
-									break; 
-								}
-								else {
-									System.out.println("ERROR DURING UPDATING OBJECT");
-								}
-								lblMessage.setText("");
-								lblMessage.repaint();
-							}else {
-								lblMessage.setText("Champs non pertinent !");
-								lblMessage.repaint();
-							}
-						}
-						else {
-							lblMessage.setText("Veuillez sélectionner un emplacement libre");
-							lblMessage.repaint();
-						}
-					}
-					else {
-						lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
-						lblMessage.repaint();
-					}
-				}
-			}
-		}
-		
-		if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
-			for(int i = 0; i< listJButtonsEtage2.size(); i++) {
-				if(checkBoxDelete.isSelected() && !isEmplacementFree(listJButtonsEtage2.get(i)))
-				{
-					lblMessage.setText("");
-					lblMessage.repaint();
-					listJButtonsEtage2.get(i).setBackground(Color.GRAY);
-					if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage2.get(i)))) {
-						gestionListObject();
-						objectTable.repaint(); 
-						break; 
-					}
-					else 
-					{
-						System.out.println("ERROR DURING DELETING OBJECT");
-					}
-				}
-				if(event.getSource().equals(listJButtonsEtage2.get(i))){
-					if((!isEmplacementFree(listJButtonsEtage2.get(i))) && (objectTable.getSelectedRow() == -1)) {
-						informationCapteur(listJButtonsEtage2.get(i));
-						break; 
-					}
-
-					if(objectTable.getSelectedRow() != -1) {
-						if(isEmplacementFree(listJButtonsEtage2.get(i))){
-							if(isLocationPertinent(listJButtonsEtage2.get(i))) {
-								listJButtonsEtage2.get(i).setBackground(Color.GREEN);
-								if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage2.get(i)))) {
-									gestionListObject();
-									objectTable.repaint(); 
-								}
-								else {
-									System.out.println("ERROR DURING UPDATING OBJECT");
-								}
-
-								lblMessage.setText("");
-								lblMessage.repaint();
-							}else {
-								lblMessage.setText("Champs non pertinent !");
-								lblMessage.repaint();
-							}
-						}
-						else {
-							lblMessage.setText("Veuillez sélectionner un emplacement disponible.");
-							lblMessage.repaint();
-						}
-					}
-					else {
-						lblMessage.setText("Veuillez sélectionner une ligne dans le tableau.");
-						lblMessage.repaint();
-					}
-				}
-			}
-		}
+		if(comboStage.getSelectedItem().toString().equals("Etage 1"))
+			actionButton(event, listJButtonsEtage1);
+		else if(comboStage.getSelectedItem().toString().equals("Etage 2"))
+			actionButton(event, listJButtonsEtage2);
 
 		if(event.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
