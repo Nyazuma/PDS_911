@@ -1,19 +1,24 @@
 package shs.simulator;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryObject{
+public abstract class CategoryObject implements Runnable{
 
 	protected String referencedName;
 	protected List<String> listObjects;
 
 	public CategoryObject(String referencedName, List<String> listObjects) {
-
 		this.referencedName=referencedName;
 		this.listObjects=listObjects;
 	}
+	
+	public CategoryObject() {
+		referencedName="Unknow";
+		listObjects= new ArrayList<String>();
+	}	
 
-	public Integer waiting() throws InterruptedException {
+	private Integer waiting() throws InterruptedException {
 		if(listObjects.isEmpty())
 			Thread.currentThread().interrupt();
 		// Delay
@@ -25,4 +30,19 @@ public class CategoryObject{
 		// Transmission of the call
 		return Integer.valueOf(activeSensor);
 	}
+
+	public abstract void launchAlert(Integer id);
+	
+	public void run() {
+		try {
+			while(true) {
+				int id = waiting();
+				launchAlert(id);
+			}
+		} catch (InterruptedException e) {
+			System.out.println("There is no '" + referencedName + "' available");
+		}
+
+	}
+
 }

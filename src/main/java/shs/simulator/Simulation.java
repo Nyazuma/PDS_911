@@ -87,9 +87,10 @@ public class Simulation {
 		int i = 1;
 		for(List<String> sensorType : listReferentiels) {
 			if(i==1)
-				System.out.println(i++ + " : " + sensorType.get(0) + " (default choice)");
+				System.out.println(i + " : " + sensorType.get(0) + " (" + sortedCaptors.get(i-1).size() +  " sensors) (default choice)");
 			else
-				System.out.println(i++ + " : " + sensorType.get(0));
+				System.out.println(i + " : " + sensorType.get(0) + " (" + sortedCaptors.get(i-1).size() +  " sensors)");
+			i++;
 		}
 		String rawAnswer;
 		int answer=0;
@@ -104,20 +105,62 @@ public class Simulation {
 			}catch(NumberFormatException e) {
 				answer=0;
 			}
-			if(!(0<answer && answer<=sortedCaptors.size()))
+			if(!(0<answer && answer<=sortedCaptors.size() && sortedCaptors.get(answer-1).size()>0))
 				System.out.print("Invalid! Try again : ");
-		}while(!(0<answer && answer<=sortedCaptors.size()));
+		}while(!(0<answer && answer<=sortedCaptors.size() && sortedCaptors.get(answer-1).size()>0));
 		System.out.println("#####################################################\n");
-		launchAlert(sortedCaptors.get(answer-1));
+		launchAlert(listReferentiels.get(answer-1).get(0), sortedCaptors.get(answer-1));
 	}
 
-	private void launchAlert(List<String> list) {
-		//TODO As usual, config file
-		final Integer maxNumberSensorsDisplayed = 10;
+	private void launchAlert(String sensorType, List<String> listSensors) {
+		//TODO config file
+		final Integer maxNumberSensorsDisplayed = 15;
 		System.out.println("############# Launch specific alerts (2) ############");
 		System.out.println("With which sensor do you want to launch an alert?");
-		System.out.println("(only the first " + maxNumberSensorsDisplayed + " sensor are displayed");
-		//TODO boucle
+		System.out.println("(only the first " + maxNumberSensorsDisplayed + " sensors are displayed)");
+		int i = 1;
+		for(String sensor : listSensors) {
+			if(i>maxNumberSensorsDisplayed)
+				break;
+			if(i==1)
+				System.out.println(i++ + " : " + sensorType + " n°" + sensor +  " (default choice)");
+			else
+				System.out.println(i++ + " : " + sensorType + " n°" + sensor);
+		}
+		String rawAnswer;
+		int answer=0;
+		System.out.print("Your choice : ");
+		do {
+			try {
+				rawAnswer = sc.nextLine();
+				if(rawAnswer.equals(""))
+					answer=1;
+				else
+					answer=Integer.parseInt(rawAnswer);
+			}catch(NumberFormatException e) {
+				answer=0;
+			}
+			if(!(0<answer && answer<=maxNumberSensorsDisplayed && answer<=listSensors.size()))
+				System.out.print("Invalid! Try again : ");
+		}while(!(0<answer && answer<=maxNumberSensorsDisplayed && answer<=listSensors.size()));
+		CategoryObject category = null;
+		if(sensorType.equals("Bracelet RFID"))
+			category = new CategoryRFID();
+		if(sensorType.equals("Capteur appel"))
+			category = new CategoryCall();
+		if(sensorType.equals("Capteur de fumée"))
+			category = new CategorySmoke();
+		if(sensorType.equals("Capteur de présence"))
+			category = new CategoryMotion();
+		if(sensorType.equals("Capteur de température"))
+			new CategoryTemperature();
+		if(sensorType.equals("Capteur hygrométrique"))
+			category = new CategoryHygro();
+		if(sensorType.equals("Capteur ouverture"))
+			category = new CategoryOpening();
+		Integer id = Integer.parseInt(listSensors.get(answer-1));
+		category.launchAlert(id);
+		System.out.println("An alert was launched!");
 		System.out.println("#####################################################\n");
 	}
 
