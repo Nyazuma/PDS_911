@@ -15,7 +15,7 @@ use shs;
 #------------------------------------------------------------
 
 CREATE TABLE Adresses(
-        ID_Addresse        Int  Auto_increment  NOT NULL ,
+        ID_Addresse        Int(11) Auto_increment  NOT NULL ,
         Numero_Addresse    Int NOT NULL ,
         Rue_Adresse        Varchar (35) NOT NULL ,
         Ville_Adresse      Varchar (35) NOT NULL ,
@@ -30,7 +30,7 @@ CREATE TABLE Adresses(
 #------------------------------------------------------------
 
 CREATE TABLE Residences(
-        ID_Residence  Int  Auto_increment  NOT NULL ,
+        ID_Residence  Int(11) Auto_increment  NOT NULL ,
         Nom_Residence Varchar (50) NOT NULL ,
         ID_Addresse   Int NOT NULL
 	,CONSTRAINT Residences_PK PRIMARY KEY (ID_Residence)
@@ -44,7 +44,7 @@ CREATE TABLE Residences(
 #------------------------------------------------------------
 
 CREATE TABLE Residents(
-        ID_Resident          Int  Auto_increment  NOT NULL ,
+        ID_Resident          Int(11) Auto_increment  NOT NULL ,
         NumChambre_Resident  Int NOT NULL ,
         Nom_Resident         Varchar (30) NOT NULL ,
         Prenom_Resident      Varchar (30) NOT NULL ,
@@ -62,7 +62,7 @@ CREATE TABLE Residents(
 # Table: Personnels
 #------------------------------------------------------------
 CREATE TABLE Personnels(
-        ID_Personnel          Int  Auto_increment  NOT NULL ,
+        ID_Personnel          Int(11) Auto_increment  NOT NULL ,
         Identifiant_Personnel Varchar (20) NOT NULL ,
         MotDePasse_Personnel  Varchar (40) NOT NULL ,
         Nom_Personnel         Varchar (30) NOT NULL ,
@@ -80,7 +80,7 @@ CREATE TABLE Personnels(
 # Table: Etages
 #------------------------------------------------------------
 CREATE TABLE Etages(
-        ID_Etage    Int  Auto_increment  NOT NULL ,
+        ID_Etage    Int(11) Auto_increment  NOT NULL ,
         Image_Etage VARCHAR(30) NOT NULL, 
         Niveau_Etage Int NOT NULL ,
         ID_Residence      Int NOT NULL
@@ -92,7 +92,7 @@ CREATE TABLE Etages(
 # Table: Emplacements
 #------------------------------------------------------------
 CREATE TABLE Emplacements(
-        ID_Emplacement   Int  Auto_increment  NOT NULL ,
+        ID_Emplacement   Int(11) Auto_increment  NOT NULL ,
         Nom_Emplacement  Varchar (30) NOT NULL ,
         ID_Etage      Int NOT NULL,
         X Int NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE Referentiel_Capteurs(
 # Table: Capteurs
 #------------------------------------------------------------
 CREATE TABLE Capteurs(
-        ID_Capteur     Int  Auto_increment  NOT NULL ,
+        ID_Capteur     Int(11) Auto_increment  NOT NULL ,
         Type_Capteur   Varchar(30) NOT NULL COMMENT "Enumeration des différents type de capteur à définir"  ,
         Etat_Capteur   Bool NOT NULL ,
         ID_Emplacement Int (11),
@@ -133,7 +133,7 @@ CREATE TABLE Capteurs(
 #------------------------------------------------------------
 
 CREATE TABLE Notifications(
-        ID_Notification        Int  Auto_increment  NOT NULL ,
+        ID_Notification        Int(11) Auto_increment  NOT NULL ,
         Niveau_Notification    Int NOT NULL ,
         Date_Notification      TIMESTAMP NOT NULL ,
         Message_Notification   Varchar (60) ,
@@ -247,21 +247,20 @@ CREATE TABLE dependre_de(
 
 ALTER TABLE Notifications CHANGE Date_Notification Date_Notification TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
--- -----------------------------------------------------
--- Table `shs`.`historisation`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shs`.`historisation` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Type_Capteur` VARCHAR(45) NULL DEFAULT NULL,
-  `Hist_Date` DATE NULL DEFAULT NULL,
-  `Hist_Time` TIME NULL DEFAULT NULL,
-  `Hist_User` VARCHAR(45) NULL DEFAULT NULL,
-  `Hist_comm` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 61
-DEFAULT CHARACTER SET = latin1
-COLLATE = latin1_general_ci;
+#------------------------------------------------------------
+# Table: Historisations
+#------------------------------------------------------------
+CREATE TABLE Historisations(
+	ID_Historisation INT(11) NOT NULL AUTO_INCREMENT,
+    ID_Capteur INT(11) NOT NULL,
+	Type_Capteur VARCHAR(45) NULL DEFAULT NULL,
+	Hist_Date DATE NULL DEFAULT NULL,
+	Hist_Time TIME NULL DEFAULT NULL,
+	Hist_User VARCHAR(45) NULL DEFAULT NULL,
+	Hist_comm VARCHAR(45) NULL DEFAULT NULL
+	,CONSTRAINT Historisation_PK PRIMARY KEY (ID_Historisation)
+    ,CONSTRAINT Histo_Capteurs_FK FOREIGN KEY (ID_Capteur) REFERENCES Capteurs(ID_Capteur)
+)ENGINE=InnoDB;
 
 USE `shs`;
 
@@ -273,7 +272,7 @@ TRIGGER `shs`.`Capteurs_AFTER_INSERT`
 AFTER INSERT ON `shs`.`Capteurs`
 FOR EACH ROW
 BEGIN
-	INSERT INTO historisation (id,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
+	INSERT INTO Historisations (ID_Capteur,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
     (new.ID_Capteur, new.Type_Capteur, current_date(), current_time(), user(), "insert");
 END$$
 
@@ -284,7 +283,7 @@ TRIGGER `shs`.`Capteurs_BEFORE_DELETE`
 BEFORE DELETE ON `shs`.`Capteurs`
 FOR EACH ROW
 BEGIN
-	INSERT INTO historisation (id,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
+	INSERT INTO Historisations (ID_Capteur,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
     (old.ID_Capteur, old.Type_Capteur, current_date(), current_time(), user(), "delete");
 END$$
 
@@ -295,7 +294,7 @@ TRIGGER `shs`.`Capteurs_BEFORE_UPDATE`
 BEFORE UPDATE ON `shs`.`Capteurs`
 FOR EACH ROW
 BEGIN
-	INSERT INTO historisation (id,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
+	INSERT INTO Historisations (ID_Capteur,Type_Capteur,Hist_Date,Hist_Time,Hist_User,Hist_comm) VALUES
     (old.ID_Capteur, old.Type_Capteur, current_date(), current_time(), user(), "update");
 END$$
 
@@ -551,20 +550,3 @@ INSERT INTO Emplacements (Nom_Emplacement, ID_Etage, X, Y, Width, Height)
  ('Couloir 1', '2', 1777, 333, 42, 37),
  ('Couloir 1', '2', 1777, 377, 42, 37);
  
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
