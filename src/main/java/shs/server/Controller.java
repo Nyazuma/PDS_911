@@ -349,10 +349,10 @@ public class Controller {
 	}
 
 	private List<List<String>> listObjects(){
-		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement, Mac_Capteur " + 
-				"FROM Capteurs LEFT JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
-				"LEFT JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
-				"LEFT JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence"; 
+		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement, Mac_Capteur, Capteurs.ID_Emplacement " +
+				" FROM Capteurs LEFT JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
+				"				LEFT JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
+				"				LEFT JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence; "; 
 		return getList(request);
 
 	}

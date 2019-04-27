@@ -12,7 +12,7 @@ import shs.common.Tool;
 public class Simulation {
 
 	protected Scanner sc;
-	
+
 	protected List<List<String>> listReferentiels;
 	protected List<List<String>> sortedCaptors;
 
@@ -24,7 +24,7 @@ public class Simulation {
 
 	private void init() {
 		sc = new Scanner(System.in);
-		
+
 		System.out.println("################### Initialisation ##################");
 		//We get the referentiel of objects
 		Message requestReferentielList = new Message(MessageType.LISTREFERENTIELS);
@@ -44,13 +44,15 @@ public class Simulation {
 		for(int i=0; i<listReferentiels.size();i++)
 			sortedCaptors.add(new ArrayList<String>());
 		int cursor;
-		for(List<String> captor : listObjects) {
+		for(List<String> sensor : listObjects) {
 			cursor = 0;
 			for(List<String> reference : listReferentiels) {
-				if(captor.get(1).trim().equalsIgnoreCase(reference.get(0))) {
-					//We add its id
-					sortedCaptors.get(cursor).add(captor.get(0));
-					continue;
+				if(sensor.get(1).trim().equalsIgnoreCase(reference.get(0))) {
+					if(sensor.get(1).equals("Bracelet RFID") || (!sensor.get(1).equals("Bracelet RFID") 
+							&& sensor.get(7) != null)){
+						sortedCaptors.get(cursor).add(sensor.get(0));
+						continue;
+					}
 				}
 				cursor++;
 			}
