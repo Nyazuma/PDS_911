@@ -555,7 +555,7 @@ public class Controller {
 	}
 	
 	private boolean deleteEmplacementObject(String ID_Capteur) {
-		String request = "UPDATE Capteurs SET ID_Emplacement = 'null' WHERE ID_Capteur = '" + ID_Capteur +"';";
+		String request = "UPDATE Capteurs SET ID_Emplacement = null WHERE ID_Capteur = '" + ID_Capteur +"'";
 		try {
 			System.out.println(request);
 			Statement statement = connection.createStatement();
