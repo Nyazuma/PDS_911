@@ -358,7 +358,7 @@ public class Controller {
 	}
 
 	private List<List<String>> listCapteurs(){
-		String request ="Select * from Capteurs"; 
+		String request ="Select * from Capteurs where Type_Capteur != 'Bracelet RFID';"; 
 		return getList(request); 
 	}
 
