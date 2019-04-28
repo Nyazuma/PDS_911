@@ -280,6 +280,7 @@ public class Controller {
 		//		String requestEmplacement = "SELECT ID_Emplacement FROM Emplacements INNER JOIN Residences ON Residences.ID_Residence=Emplacements.ID_Residence "
 		//				+ "					WHERE Nom_Residence='" + attribute.get(3) + "' AND Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'";
 		String request = "";
+
 		try {
 			Statement statement = connection.createStatement(); 
 			//			ResultSet resultEmplacement = statement.executeQuery(requestEmplacement); 
@@ -290,27 +291,13 @@ public class Controller {
 			ResultSet resultResidence = statement.executeQuery(requestResidence); 
 			resultResidence.next();
 			int id = resultResidence.getInt(1);
-			// We create the "Emplacement" with the Residence ID
-			//				String createEmplacement = "INSERT INTO Emplacements(Piece_Emplacement, Zone_Emplacement, ID_Residence) VALUES('" +attribute.get(5) + "', '" + attribute.get(4)+ "', '" + id + "')" ;
-			//				statement.executeUpdate(createEmplacement); 
-			// We get the ID from the "Emplacement" we just created
-			//				String requestEmplacementNew = "SELECT ID_Emplacement FROM Emplacements WHERE Zone_Emplacement='" + attribute.get(4) + "' AND Piece_Emplacement='" + attribute.get(5) + "'"
-			//						+ " AND ID_Residence='" + id + "'";
-			//				ResultSet resultEmplacementNew = statement.executeQuery(requestEmplacementNew); 
-			//				resultEmplacementNew.next();
-			//	int idNew = resultEmplacementNew.getInt(1);
-			//				int idNew = 6 ;
-			request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + "', Mac_Capteur = '"+ attribute.get(0) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-			//			}
 
-			//				int idNew = 6 ;
-			//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + idNew + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-			//			}
-			//			else {
-			//				request = "UPDATE Capteurs SET Type_Capteur = '"+ attribute.get(1) +"', Etat_Capteur = '"+ attribute.get(2) + "', ID_Emplacement = '" + resultEmplacement.getInt(1) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
-			//			}
+			request = "UPDATE Capteurs SET Etat_Capteur = '" + attribute.get(2) + "' WHERE ID_Capteur ='"+ attribute.get(0)+"'";
+
+
 
 			statement.executeUpdate(request); 
+ 
 			return true; 
 		}catch(SQLException e) {
 			Tool.logger.info("updateObject FAILED - SQL EXCEPTION : " + request);
@@ -361,6 +348,12 @@ public class Controller {
 		String request ="Select * from Capteurs"; 
 		return getList(request); 
 	}
+// TODO recup list non configurés	
+//	private List<List<String>> listConfigs(){
+//		String request ="Select * from Capteurs where ID_Emplacement = null "; 
+//		return getList(request); 
+//	}
+
 
 	private List<List<String>> listResidences() {
 		String request = "SELECT * FROM Residences INNER JOIN Adresses ON Residences.ID_Addresse=Adresses.ID_Addresse;"; 

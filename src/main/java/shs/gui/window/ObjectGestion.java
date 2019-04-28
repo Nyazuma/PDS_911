@@ -103,11 +103,11 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		addButton.addActionListener(this);
 		this.add(addButton);
 
-//		configButton = new JButton("Configurer");
-//		configButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		configButton.setBounds(970, 538, 162, 41);
-//		configButton.addActionListener(this);
-//		this.add(configButton);
+		configButton = new JButton("Configurer");
+		configButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		configButton.setBounds(970, 538, 162, 41);
+		configButton.addActionListener(this);
+		this.add(configButton);
 		
 		errorSelection = new JLabel("Veuillez sélectionner une ligne ");
 		errorSelection.setForeground(new Color(126, 0, 0));
@@ -120,7 +120,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		deleteButton.addActionListener(this);
 		this.add(deleteButton);
 
-		updateButton = new JButton("Configurer");
+		updateButton = new JButton("Modifier");
 		updateButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		updateButton.setBounds(317, 671, 162, 41);
 		updateButton.addActionListener(this);
@@ -249,6 +249,17 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		if(event.getSource().equals(updateButton)) {
 			if(objectTable.getSelectedRow()!= -1) {
 				controller.getGui().changeWindow(WindowList.OBJECTMODIFICATION);
+			}
+			else {
+				this.add(errorSelection);
+				controller.getGui().revalidate();
+				controller.getGui().repaint(); 
+			}
+		}
+		
+		if(event.getSource().equals(configButton)) {
+			if(objectTable.getSelectedRow()!= -1) {
+				controller.getGui().changeWindow(WindowList.OBJECTCONFIGURATION);
 			}
 			else {
 				this.add(errorSelection);
