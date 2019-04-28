@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -259,7 +258,7 @@ public class Monitoring extends JPanel implements ActionListener{
 				stopThread=true;
 				refreshAlertsThread.interrupt();
 				//TODO link with map
-				controller.getGui().changeWindow(WindowList.MAP);
+				controller.getGui().loadWindowMap((String) displayedData[alertsTable.getSelectedRow()][8]);
 			}
 			else {
 				detailsAlertText.setText("Vous n'avez pas sélectionné d'alerte à localiser!");
@@ -290,7 +289,7 @@ public class Monitoring extends JPanel implements ActionListener{
 				stopThread=true;
 				refreshAlertsThread.interrupt();
 				//TODO link with Modify sensors
-				controller.getGui().changeWindow(WindowList.OBJECTMODIFICATION);
+				//controller.getGui().
 			}
 			else {
 				detailsAlertText.setText("Vous n'avez pas sélectionné d'alerte pour modifier son capteur!");
@@ -356,6 +355,8 @@ public class Monitoring extends JPanel implements ActionListener{
 		long milliseconds = currentDate.getTime() - eventDate.getTime();
 		
 		//if the result is weird, the server time should probably be fixed :  date +%T -s "11:14:00"
+		if(milliseconds<0)
+			return "(wrong server time)";
 		int seconds = (int) milliseconds / 1000;
 		int hours = seconds / 3600;
 		int minutes = (seconds % 3600) / 60;

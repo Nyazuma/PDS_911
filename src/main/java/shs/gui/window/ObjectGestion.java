@@ -135,7 +135,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 
 	public void gestionListObject() {
-		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Residence", "Etage", "Emplacement","Mac"}; 
+		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Residence", "Etage", "Emplacement","Mac", "ID_Emplacement"}; 
 		Integer x = listObject.size(); 
 		Integer y;
 		if(x>0) { 
@@ -167,6 +167,10 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			//Hide ID column
 			objectTable.getColumnModel().getColumn(0).setMinWidth(0);
 			objectTable.getColumnModel().getColumn(0).setMaxWidth(0);
+			objectTable.getColumnModel().getColumn(7).setMinWidth(0);
+			objectTable.getColumnModel().getColumn(7).setMaxWidth(0);
+			
+			
 		}
 		else {
 			// if the result is empty, the table will be empty

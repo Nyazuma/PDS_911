@@ -73,5 +73,12 @@ public class Gui extends JFrame{
 			Tool.logger.error("#ERROR : Gui > ChangeWindow : Unknow window");
 		}
 	}
+	
+	// To be used when we wants to load the Map window with parameters
+	public void loadWindowMap(String displayedData) {
+		this.setContentPane(new Map(controller, displayedData));
+		repaint();
+		setVisible(true);
+	}
 
 }
