@@ -21,21 +21,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 
 import shs.gui.GuiController;
 
 public class Map extends JPanel implements ActionListener{
-
-
-	//TODO Faire fonctionner le update. 
-	//TODO Faire fonctionner le delete.
-	//TODO Vérifier que la liste des capteurs est bien remise à jour
-	//TODO Vérifier que le bouton, une fois supprimer n'ouvre plus de fenètre d'information
-	//TODO Vérifier que l'emplacement est bien libéré. 
-	//TODO surcharger le constructeur pour récupérer la liste des alertes. -map(List<Capteurs>)
 
 	/**
 	 * Management Image
@@ -94,11 +87,17 @@ public class Map extends JPanel implements ActionListener{
 	private JLabel infoStairsCapteur;
 	private JLabel infoRoomCapteur;
 	private JLabel infoAddressMac;
-	
+
 	/**
 	 * Management Alerte
 	 */
 	private String ID_EmplacementAlerte; 
+
+	/**
+	 * Smart location
+	 */
+	private JButton smartLocation;
+	private JProgressBar progressBar;
 
 	//-------------------------------------------------------
 	// CONTROLLER
@@ -219,18 +218,36 @@ public class Map extends JPanel implements ActionListener{
 		this.add(lblLegend);
 
 		checkBoxDelete= new JCheckBox("Veuillez cocher cette case pour enlever l'emplacement d'un capteur ");
-		checkBoxDelete.setBounds(508, 23, 668, 25);
+		checkBoxDelete.setBounds(508, 23, 584, 25);
 		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		checkBoxDelete.setBackground(new Color(95, 158, 160));
 		this.add(checkBoxDelete);
 
+		smartLocation = new JButton("Smart");
+		smartLocation.setBounds(1123, 19, 154, 33);
+		smartLocation.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		smartLocation.addActionListener(this);
+		this.add(smartLocation);
+
+		if(listEmplacementOccupied.isEmpty()) 
+			smartLocation.setEnabled(true);
+		else 
+			smartLocation.setEnabled(false);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(1440, 23, 193, 25);
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(100);
+		progressBar.setVisible(false);
+		this.add(progressBar);
+
 	}
 
 	//-------------------------------------------------------
-	// CONTROLLER
+	// OVERLOADED CONTROLLER
 	//-------------------------------------------------------
 	/**
-	 * Main Controller
+	 * Overloaded Controller
 	 * @param controller
 	 */
 	public Map(GuiController controller, String ID_EmplacementAlert ) {
@@ -249,7 +266,7 @@ public class Map extends JPanel implements ActionListener{
 		btnRetour.addActionListener(this);
 		this.add(btnRetour);
 
-		//To get only the objects with an empty emplacement.
+		//To get only the objects with an empty location.
 
 		listAllCapteurs = controller.listCapteurs();
 		initListObjectNullEmplacement();
@@ -281,7 +298,7 @@ public class Map extends JPanel implements ActionListener{
 		}
 
 
-		//Get table Etage and read Image on line.
+		//Get table floor and read Image on line.
 		tabImage = controller.readEtageImage(); 
 		try {
 			image = ImageIO.read(getClass().getResource("/images/" + tabImage[0]));  
@@ -346,13 +363,34 @@ public class Map extends JPanel implements ActionListener{
 		this.add(lblLegend);
 
 		checkBoxDelete= new JCheckBox("Veuillez cocher cette case pour enlever l'emplacement d'un capteur ");
-		checkBoxDelete.setBounds(508, 23, 668, 25);
+		checkBoxDelete.setBounds(508, 23, 584, 25);
 		lblLegend.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		checkBoxDelete.setBackground(new Color(95, 158, 160));
 		this.add(checkBoxDelete);
 
+		smartLocation = new JButton("Smart");
+		smartLocation.setBounds(1123, 19, 154, 33);
+		smartLocation.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		smartLocation.addActionListener(this);
+		this.add(smartLocation);
+
+		if(listEmplacementOccupied.isEmpty()) 
+			smartLocation.setEnabled(true);
+		else 
+			smartLocation.setEnabled(false);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(1440, 23, 193, 25);
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(100);
+		progressBar.setVisible(false);
+		this.add(progressBar);
+
 	}
 
+	/**
+	 * Initialize the list of null location sensor used to build the JTable.  
+	 */
 	private void initListObjectNullEmplacement() {
 		listObjectNullEmplacement = new ArrayList<List<String>>();
 		for(int i= 0; i<listAllCapteurs.size(); i++) {
@@ -363,6 +401,9 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 
+	/**
+	 * This method is used to divide the listEmplacement into list of JButton by floor. 
+	 */
 	private void dispatchEtageEmplacement() {
 		boolean stop = true; 
 
@@ -654,6 +695,75 @@ public class Map extends JPanel implements ActionListener{
 	}
 
 	/**
+	 * OVERLOADED for smartLocation method
+	 * Method used to determine if the position of the sensor is pertinent or not. 
+	 * Two sensor of the same type can't be neighbour. 
+	 * @param button
+	 * @return
+	 */
+	private boolean isLocationPertinent(JButton button, String typeCapteur) {
+
+		String beforeEmplacementID = null; 
+		String afterEmplacementID = null; 
+
+		String beforeTypeCapteur = null; 
+		String afterTypeCapteur = null; 
+		String locationID = getIdEmplacement(button); 
+
+
+
+		for(int i = 0; i<listEmplacement.size(); i++) {
+			if(listEmplacement.get(i).get(0).equals(locationID)) {
+				if(i != 0) {
+					beforeEmplacementID = listEmplacement.get(i-1).get(0);
+				}
+				else {
+					System.out.println("FIRST EMPLACEMENT");
+				}
+				if(i != listEmplacement.size()-1) {
+					afterEmplacementID = listEmplacement.get(i+1).get(0);
+				}
+				else {
+					System.out.println("LAST EMPLACEMENT");
+				}
+			}
+		}
+
+		for(int i=0; i< listEmplacementOccupied.size(); i++) {
+			if(beforeEmplacementID != null) {
+				if(listEmplacementOccupied.get(i).equals(beforeEmplacementID)) {
+					for(int j=0; j<listAllCapteurs.size(); j++) {
+						if(listAllCapteurs.get(j).get(3) !=null) {
+							if(listAllCapteurs.get(j).get(3).equals(beforeEmplacementID)) {
+								beforeTypeCapteur = listAllCapteurs.get(j).get(1);
+								break; 
+							}
+						}
+					}
+				}
+			}
+			if(afterEmplacementID != null) {
+				if(listEmplacementOccupied.get(i).equals(afterEmplacementID)) {
+					for(int j=0; j<listAllCapteurs.size(); j++) {
+						if(listAllCapteurs.get(j).get(3) !=null) {
+							if(listAllCapteurs.get(j).get(3).equals(afterEmplacementID)) {
+								afterTypeCapteur = listAllCapteurs.get(j).get(1);
+								break; 
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if((afterTypeCapteur == null && beforeTypeCapteur != null && beforeTypeCapteur.equals(typeCapteur)) || (beforeTypeCapteur == null && afterTypeCapteur != null && afterTypeCapteur.equals(typeCapteur)) || (beforeTypeCapteur != null && afterTypeCapteur != null && typeCapteur.equals(beforeTypeCapteur) && typeCapteur.equals(afterTypeCapteur)))
+			return false;
+		else 
+			return true; 
+
+	}
+
+	/**
 	 * Method used to create and initialize the information window of an occupied location
 	 * @param button
 	 */
@@ -748,7 +858,11 @@ public class Map extends JPanel implements ActionListener{
 
 	}
 
-
+	/**
+	 * This method represent the actions on the buttons.
+	 * @param event
+	 * @param listJButtonsEtage
+	 */
 	private void actionButton(ActionEvent event, List<JButton> listJButtonsEtage) {
 
 		if(checkBoxDelete.isSelected() && objectTable.getSelectedRow() != -1) {
@@ -827,6 +941,76 @@ public class Map extends JPanel implements ActionListener{
 		}
 	}
 
+
+	/**
+	 * This method return true if all the JButton of the floor are occupied and false otherwise
+	 * @param floor
+	 * @return
+	 */
+	private boolean isEtageFullOccupied(List<JButton> floor) {
+
+		for(int i=0; i<floor.size();  i ++) {
+			if(isEmplacementFree(floor.get(i))) {
+				return false; 
+			}
+			else
+				continue; 
+		}
+		return true; 
+	}
+
+	/**
+	 * This method is use for the smartPlacement action. It place the JButton automatically on the map and update the sensor's location.
+	 * @param floor
+	 */
+	private void smartPlacement(List<JButton> floor) {
+
+		int compteur = 0; 
+		progressBar.setVisible(true);
+		progressBar.setMaximum(119);
+		while (!listObjectNullEmplacement.isEmpty()) {
+			compteur = 0; 
+			for(int j=0; j<floor.size(); j++) {
+				if(!isEtageFullOccupied(floor)) { 
+					if(isEmplacementFree(floor.get(j))){
+						if(isLocationPertinent(floor.get(j), listObjectNullEmplacement.get(0).get(1)) && compteur != floor.size()) {
+							if(controller.updateEmplacementObject(listObjectNullEmplacement.get(0).get(0), getIdEmplacement(floor.get(j)))) {
+								floor.get(j).setBackground(Color.GREEN);
+								listAllCapteurs = controller.listCapteurs(); 
+								listEmplacement = controller.EmplacementFull(); 
+								listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
+								initListObjectNullEmplacement();
+								progressBar.setValue(progressBar.getValue() + 1);
+								progressBar.update(getGraphics());
+							}else 
+								System.out.println("ERROR DURING UPDATING OBJECT");
+						}
+						else 
+							compteur ++; 
+					}
+				}
+				else 
+				{
+				
+				
+					int value = progressBar.getMaximum() - progressBar.getValue();
+					System.out.println(value);
+					progressBar.setValue(value);
+					progressBar.update(getGraphics()); 
+					return;
+
+				}
+			}
+		} 
+		
+		int value = progressBar.getMaximum() - progressBar.getValue();
+		System.out.println(value);
+		progressBar.setValue(value);
+		progressBar.update(getGraphics()); 
+		return; 
+
+	}
+
 	//-------------------------------------------------------
 	// ACTION PERFORMED ON THE ELEMENTS OF THE FRAME
 	//-------------------------------------------------------
@@ -835,15 +1019,45 @@ public class Map extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 
 		listAllCapteurs = controller.listCapteurs(); 
+		listEmplacement = controller.EmplacementFull();
 		listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
-		listEmplacement = controller.EmplacementFull(); 
 		initListObjectNullEmplacement();
 		dispatchEtageEmplacement();
 
-		if(comboStage.getSelectedItem().toString().equals("Etage 1"))
-			actionButton(event, listJButtonsEtage1);
-		else if(comboStage.getSelectedItem().toString().equals("Etage 2"))
-			actionButton(event, listJButtonsEtage2);
+
+		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+			if(event.getSource().equals(smartLocation)){
+				smartPlacement(listJButtonsEtage1);
+				listAllCapteurs = controller.listCapteurs(); 
+				listEmplacement = controller.EmplacementFull(); 
+				listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
+				initListObjectNullEmplacement();
+				dispatchEtageEmplacement();
+				gestionListObject();
+				progressBar.setVisible(false);
+				smartLocation.setEnabled(false);
+				this.repaint();
+			}
+			else
+				actionButton(event, listJButtonsEtage1);
+		}
+		else if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
+			if(event.getSource().equals(smartLocation)){
+				smartPlacement(listJButtonsEtage2);
+				listAllCapteurs = controller.listCapteurs(); 
+				listEmplacement = controller.EmplacementFull(); 
+				listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
+				initListObjectNullEmplacement();
+				dispatchEtageEmplacement();
+				gestionListObject();
+				scrollPane.repaint();
+				progressBar.setVisible(false);
+				smartLocation.setEnabled(false);
+			}
+			else
+				actionButton(event, listJButtonsEtage2);
+
+		}
 
 		if(event.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
@@ -884,6 +1098,12 @@ public class Map extends JPanel implements ActionListener{
 			this.repaint();
 
 		}
+
+		//Used to update the display of the smart button
+		if(listEmplacementOccupied.isEmpty())
+			smartLocation.setEnabled(true);
+		else 
+			smartLocation.setEnabled(false);
 
 	}
 
