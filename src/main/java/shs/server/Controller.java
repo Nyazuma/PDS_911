@@ -32,6 +32,7 @@ import shs.common.MsgUpdateObject;
 import shs.common.MsgNumberObjectAdded;
 import shs.common.MsgNumberObjectDeleted;
 import shs.common.MsgNumberObjectUpdated;
+import shs.common.MsgNumberObjectAlert;
 import shs.common.Tool;
 
 public class Controller {
@@ -152,14 +153,18 @@ public class Controller {
 			resultInteger = nbObjectAdded(((MsgNumberObjectAdded)input).getDateFrom(), ((MsgNumberObjectAdded)input).getDateTo());
 			MsgIntResult answer18 = new MsgIntResult(resultInteger); 
 			return Tool.messageToJSON(answer18);
-		case NUMBEROBJECTDELETED:
+		case NUMBEROBJECTDELETED :
 			resultInteger = nbObjectDeleted(((MsgNumberObjectDeleted)input).getDateFrom(), ((MsgNumberObjectDeleted)input).getDateTo());
 			MsgIntResult answer19 = new MsgIntResult(resultInteger); 
 			return Tool.messageToJSON(answer19);
-		case NUMBEROBJECTUPDATED:
-			resultInteger = nbObjectDeleted(((MsgNumberObjectUpdated)input).getDateFrom(), ((MsgNumberObjectUpdated)input).getDateTo());
+		case NUMBEROBJECTUPDATED :
+			resultInteger = nbObjectUpdated(((MsgNumberObjectUpdated)input).getDateFrom(), ((MsgNumberObjectUpdated)input).getDateTo());
 			MsgIntResult answer20 = new MsgIntResult(resultInteger); 
 			return Tool.messageToJSON(answer20);
+		case NUMBEROBJECTALERT :
+			resultInteger = nbObjectAlert(((MsgNumberObjectAlert)input).getDateFrom(), ((MsgNumberObjectAlert)input).getDateTo());
+			MsgIntResult answer21 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer21);
 			
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
@@ -229,7 +234,7 @@ public class Controller {
 		}
 	}
 	
-	private int nbObjectAdded(String dateFrom, String dateTo) {							//My edit
+	private int nbObjectAdded(String dateFrom, String dateTo) {							
 		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='insert' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
 		try {
 			Statement statement = connection.createStatement();
@@ -246,7 +251,7 @@ public class Controller {
 		}
 	}
 	
-	private int nbObjectDeleted(String dateFrom, String dateTo) {							//My edit
+	private int nbObjectDeleted(String dateFrom, String dateTo) {							
 		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='delete' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
 		try {
 			Statement statement = connection.createStatement();
@@ -263,8 +268,27 @@ public class Controller {
 		}
 	}
 	
-	private int nbObjectUpdated(String dateFrom, String dateTo) {							//My edit
+	private int nbObjectUpdated(String dateFrom, String dateTo) {							
 		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='update' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultat = statement.executeQuery(request);
+			resultat.next(); 
+			Tool.logger.info("nbObject SUCCEED");
+
+			return resultat.getInt(1); 
+
+		}catch (SQLException e) {
+			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+
+			return 0; 
+		}
+	}
+	
+	private int nbObjectAlert(String dateFrom, String dateTo) {							
+		String request = "SELECT COUNT(*) FROM shs.Notifications "
+				+ "WHERE Date_Notification >= STR_TO_DATE('" + dateFrom + "', '%Y-%m-%d') "
+				+ "AND Date_Notification <= STR_TO_DATE('" + dateTo + "', '%Y-%m-%d') + INTERVAL 1 DAY;";  
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);

@@ -234,7 +234,7 @@ public class Statistics extends JPanel implements ActionListener{
 			objectAdded.setText(Integer.toString(controller.nbObjectAdded(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 			objectDeleted.setText(Integer.toString(controller.nbObjectDeleted(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 			objectModified.setText(Integer.toString(controller.nbObjectUpdated(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
-			//objectAlert.setText(Integer.toString(controller));
+			objectAlert.setText(Integer.toString(controller.nbObjectAlert(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 		}
 		
 	}

@@ -18,6 +18,7 @@ import shs.common.MsgBooleanResult;
 import shs.common.MsgChangeAlert;
 import shs.common.MsgConnection;
 import shs.common.MsgNumberObjectAdded;
+import shs.common.MsgNumberObjectAlert;
 import shs.common.MsgNumberObjectDeleted;
 import shs.common.MsgNumberObjectUpdated;
 import shs.common.MsgDeleteEmplacement;
@@ -153,6 +154,11 @@ public class GuiController {
 	public int nbObjectUpdated(String dateFrom, String dateTo) {
 		MsgNumberObjectUpdated nbObjectUpdated = new MsgNumberObjectUpdated (dateFrom, dateTo);
 		return readInt(nbObjectUpdated);
+	}
+	
+	public int nbObjectAlert(String dateFrom, String dateTo) {
+		MsgNumberObjectAlert nbObjectAlert = new MsgNumberObjectAlert (dateFrom, dateTo);
+		return readInt(nbObjectAlert);
 	}
 
 	/**
