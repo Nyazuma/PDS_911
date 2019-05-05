@@ -126,18 +126,6 @@ public class Controller {
 		case REPORTHYGRO :
 			reportHygro(((MsgReportHygro) input).getId(), ((MsgReportHygro) input).getHygroValue());
 			return null;
-		case NUMBEROBJECTADDED :								//My edit
-			resultInteger = nbObjectAdded(((MsgNumberObjectAdded)input).getDateFrom(), ((MsgNumberObjectAdded)input).getDateTo());
-			MsgIntResult answer13 = new MsgIntResult(resultInteger); 
-			return Tool.messageToJSON(answer13);
-		case NUMBEROBJECTDELETED:
-			resultInteger = nbObjectDeleted(((MsgNumberObjectDeleted)input).getDateFrom(), ((MsgNumberObjectDeleted)input).getDateTo());
-			MsgIntResult answer14 = new MsgIntResult(resultInteger); 
-			return Tool.messageToJSON(answer14);
-		case NUMBEROBJECTUPDATED:
-			resultInteger = nbObjectDeleted(((MsgNumberObjectUpdated)input).getDateFrom(), ((MsgNumberObjectUpdated)input).getDateTo());
-			MsgIntResult answer15 = new MsgIntResult(resultInteger); 
-			return Tool.messageToJSON(answer15);
 		case REPORTOPENING :
 			reportOpening(((MsgReportOpening) input).getId());
 			return null;
@@ -160,6 +148,18 @@ public class Controller {
 			resultBoolean = deleteEmplacementObject(((MsgDeleteEmplacement)input).getSensorID()); 
 			MsgBooleanResult answer17 = new MsgBooleanResult(resultBoolean); 
 			return Tool.messageToJSON(answer17);
+		case NUMBEROBJECTADDED :								
+			resultInteger = nbObjectAdded(((MsgNumberObjectAdded)input).getDateFrom(), ((MsgNumberObjectAdded)input).getDateTo());
+			MsgIntResult answer18 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer18);
+		case NUMBEROBJECTDELETED:
+			resultInteger = nbObjectDeleted(((MsgNumberObjectDeleted)input).getDateFrom(), ((MsgNumberObjectDeleted)input).getDateTo());
+			MsgIntResult answer19 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer19);
+		case NUMBEROBJECTUPDATED:
+			resultInteger = nbObjectDeleted(((MsgNumberObjectUpdated)input).getDateFrom(), ((MsgNumberObjectUpdated)input).getDateTo());
+			MsgIntResult answer20 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer20);
 			
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);

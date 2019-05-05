@@ -8,20 +8,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import shs.gui.GuiController;
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 
 public class Statistics extends JPanel implements ActionListener{
@@ -44,6 +39,7 @@ public class Statistics extends JPanel implements ActionListener{
 	private JLabel objectAdded;
 	private JLabel objectDeleted;
 	private JLabel objectModified;
+	private JLabel objectAlert;
 
 	private GuiController controller;
 	
@@ -220,6 +216,11 @@ public class Statistics extends JPanel implements ActionListener{
 		objectModified.setBounds(646, 494, 55, 28);
 		this.add(objectModified);
 		
+		objectAlert = new JLabel("0");
+		objectAlert.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectAlert.setBounds(862, 494, 55, 28);
+		this.add(objectAlert);
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -233,6 +234,7 @@ public class Statistics extends JPanel implements ActionListener{
 			objectAdded.setText(Integer.toString(controller.nbObjectAdded(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 			objectDeleted.setText(Integer.toString(controller.nbObjectDeleted(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 			objectModified.setText(Integer.toString(controller.nbObjectUpdated(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
+			//objectAlert.setText(Integer.toString(controller));
 		}
 		
 	}

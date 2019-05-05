@@ -154,26 +154,6 @@ public class GuiController {
 		MsgNumberObjectUpdated nbObjectUpdated = new MsgNumberObjectUpdated (dateFrom, dateTo);
 		return readInt(nbObjectUpdated);
 	}
-	
-//	public int nbObjectAdded(String dateFrom, String dateTo) {																			//My edit
-//		System.out.println("Hola1");
-//		MsgDateResult nbObjectAdded = new MsgDateResult(dateFrom, dateTo);
-//		System.out.println("Hola2");
-//		String output = Tool.messageToJSON(nbObjectAdded);
-//		System.out.println("Hola3");
-//		String answer;
-//		try {
-//			answer = contactServer(output);
-//			if(answer!= null) {
-//				MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
-//				return result.getNumber();
-//			}
-//		}
-//		catch (ConnectException e) {
-//			return -1;
-//		}
-//		return -1;
-//	}
 
 	/**
 	 * 
