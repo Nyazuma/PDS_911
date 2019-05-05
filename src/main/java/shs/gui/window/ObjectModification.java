@@ -13,6 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
 
 import shs.gui.GuiController;
 
@@ -25,6 +27,10 @@ public class ObjectModification extends JPanel implements ActionListener{
 	private JLabel lblTypeCapteur; 
 	private JComboBox<String> etatCapteur; 
 	private JLabel lblEtatCapteur;
+	private JTextField minCapteur; 
+	private JLabel lblMinCapteur;
+	private JTextField maxCapteur; 
+	private JLabel lblMaxCapteur;
 	private JCheckBox confirmation; 
 	private JButton valider; 
 	private JButton returnButton; 
@@ -35,13 +41,15 @@ public class ObjectModification extends JPanel implements ActionListener{
 	private JLabel lblEtage; 
 	private JComboBox<String> residenceCapteur; 
 	private JLabel lblResidence; 
+	private JSlider sliderTemperature;
+	private JLabel lblTemperatureCapteur; 
 //	private JComboBox<String> macCapteur; 
 //	private JLabel lblMacCapteur; 	
 
 	//Initialization of the JComboBox with a model
 	private DefaultComboBoxModel<String> modelTypeCapteur;
 	private DefaultComboBoxModel<String> modelEtatCapteur; 
-//	private DefaultComboBoxModel<String> modelMacCapteur;
+	private DefaultComboBoxModel<String> modelMinCapteur;
 	private DefaultComboBoxModel<String> modelResidence; 
 	private DefaultComboBoxModel<String> modelEtage; 
 	private DefaultComboBoxModel<String> modelEmplacement; 
@@ -70,12 +78,12 @@ public class ObjectModification extends JPanel implements ActionListener{
 		typeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		typeCapteur.setModel(modelTypeCapteur);
 		typeCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(1).toString());
-		typeCapteur.setBounds(571, 243, 265, 42);
+		typeCapteur.setBounds(371, 243, 265, 42);
 		this.add(typeCapteur);
 
 		lblTypeCapteur = new JLabel("Type de capteur :");
 		lblTypeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblTypeCapteur.setBounds(381, 250, 152, 28);
+		lblTypeCapteur.setBounds(181, 250, 152, 28);
 		this.add(lblTypeCapteur);
 
 		modelEtatCapteur = new DefaultComboBoxModel<String>(new String[] {"Enable", "Disable"});
@@ -83,13 +91,13 @@ public class ObjectModification extends JPanel implements ActionListener{
 		etatCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etatCapteur.setModel(modelEtatCapteur);
 		etatCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(2).toString());
-		etatCapteur.setBounds(571, 322, 265, 42);
+		etatCapteur.setBounds(371, 322, 265, 42);
 		this.add(etatCapteur);
 
 
 		lblEtatCapteur = new JLabel("Etat du capteur : ");
 		lblEtatCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblEtatCapteur.setBounds(381, 329, 152, 28);
+		lblEtatCapteur.setBounds(181, 329, 152, 28);
 		this.add(lblEtatCapteur);
 
 		// We get the residences list
@@ -97,23 +105,63 @@ public class ObjectModification extends JPanel implements ActionListener{
 		residenceCapteur = new JComboBox<String>(); 
 		residenceCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		residenceCapteur.setModel(modelResidence);
+		if(ObjectGestion.getRowUpdate().get(3)!=null)
 		residenceCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		residenceCapteur.setBounds(571, 396, 265, 42);
+		residenceCapteur.setBounds(371, 396, 265, 42);
 		this.add(residenceCapteur);
 
+		
+//		lblMinCapteur = new JLabel("Min : ");
+//		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		lblMinCapteur.setBounds(681, 329, 152, 28);
+//		this.add(lblMinCapteur);	
+//		
+//		
+//	//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
+//	    minCapteur = new JTextField();
+//		minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+////		minCapteur.setModel(modelMinCapteur);
+////		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+//		minCapteur.setBounds(771, 400, 265, 42);
+//		this.add(minCapteur);
+//		
+//		lblMaxCapteur = new JLabel("Max : ");
+//		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		lblMaxCapteur.setBounds(681, 395, 152, 28);
+//		this.add(lblMaxCapteur);	
+//
+//		
+//	//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
+//		maxCapteur = new JTextField();
+//		maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+////		minCapteur.setModel(modelMinCapteur);
+////		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+//		maxCapteur.setBounds(771, 330, 265, 42);
+//		this.add(maxCapteur);
+//		
+		
+//		
+//		lblTemperatureCapteur = new JLabel("Temperature : ");
+//		lblTemperatureCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		lblTemperatureCapteur.setBounds(681, 490, 152, 28);
+//		this.add(lblTemperatureCapteur);
+//		
+//		// TODO Not working yet: 
+//		
+//		sliderTemperature = new JSlider(JSlider.HORIZONTAL, 100, 100, 100);  
+//		sliderTemperature.setMinorTickSpacing(2);  
+//		sliderTemperature.setMajorTickSpacing(10);  
+//		sliderTemperature.setPaintTicks(true);  
+//		sliderTemperature.setPaintLabels(true); 
+//		this.add(sliderTemperature);
+////		location_t.setPreferredSize(new Dimension(50, 22));
+//		
 		lblResidence = new JLabel("Résidence :"); 
 		lblResidence.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblResidence.setBounds(381, 403, 152, 28);
+		lblResidence.setBounds(181, 403, 152, 28);
 		this.add(lblResidence); 
 
-//		// We get the list of zones
-//		modelZone = new DefaultComboBoxModel<String>(controller.readZones());
-//		zoneCapteur = new JComboBox<String>(); 
-//		zoneCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		zoneCapteur.setModel(modelZone);
-//		zoneCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
-//		zoneCapteur.setBounds(571, 477, 265, 42);
-//		this.add(zoneCapteur); 
+
 //
 //		// We get the list of pieces
 //		modelPiece = new DefaultComboBoxModel<String>(controller.readPieces());
@@ -126,7 +174,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 
 		lblEtage = new JLabel("Etage :");
 		lblEtage.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblEtage.setBounds(381, 484, 152, 28);
+		lblEtage.setBounds(181, 484, 152, 28);
 		this.add(lblEtage); 
 
 
@@ -134,22 +182,24 @@ public class ObjectModification extends JPanel implements ActionListener{
 		etageCapteur = new JComboBox<String>(); 
 		etageCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		etageCapteur.setModel(modelEtage);
-		etageCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		etageCapteur.setBounds(571, 477, 265, 42);
+		if(ObjectGestion.getRowUpdate().get(4)!=null)
+			etageCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(4).toString());
+		etageCapteur.setBounds(371, 477, 265, 42);
 		this.add(etageCapteur);
 
-		lblEmplacement = new JLabel("Emplacement:");
-		lblEmplacement.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblEmplacement.setBounds(381, 563, 152, 28);
-		this.add(lblEmplacement); 
+//		lblEmplacement = new JLabel("Emplacement:");
+//		lblEmplacement.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		lblEmplacement.setBounds(181, 563, 152, 28);
+//		this.add(lblEmplacement); 
 		
-		modelEmplacement = new DefaultComboBoxModel<String>(controller.readEmplacements());
-		emplacementCapteur = new JComboBox<String>(); 
-		emplacementCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		emplacementCapteur.setModel(modelEmplacement);
-		emplacementCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		emplacementCapteur.setBounds(571, 563, 265, 42);
-		this.add(emplacementCapteur);
+//		modelEmplacement = new DefaultComboBoxModel<String>(controller.readEmplacements());
+//		emplacementCapteur = new JComboBox<String>(); 
+//		emplacementCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		emplacementCapteur.setModel(modelEmplacement);
+//		if(ObjectGestion.getRowUpdate().get(5)!=null)
+//			emplacementCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(5).toString());
+//		emplacementCapteur.setBounds(371, 563, 265, 42);
+//		this.add(emplacementCapteur);
 
 		// List of MAC adresses !! Compléter avec la création de l'adresse
 		
@@ -214,7 +264,7 @@ public class ObjectModification extends JPanel implements ActionListener{
 		else 
 			listValues.add("0"); 
 		listValues.add(residenceCapteur.getSelectedItem().toString());
-		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
+//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
 		listValues.add(etageCapteur.getSelectedItem().toString()); 
 //		listValues.add(macCapteur.getSelectedItem().toString()); 
 		return listValues; 

@@ -22,6 +22,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	private GuiController controller;
 
+	protected JButton returnButton; 
 	protected static JTable objectTable;
 	protected JScrollPane scrollPane;
 	protected JLabel addTitleLabel;
@@ -52,6 +53,12 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		setBackground(new Color(95, 158, 160));
 		setFont(new Font("Cambria Math", Font.BOLD, 17));
 		setLayout(null);
+		
+		returnButton = new JButton("Retour");
+		returnButton.setBounds(12, 15, 90, 44);
+		returnButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		returnButton.addActionListener(this);
+		this.add(returnButton);
 
 		objectNumberTitleLabel = new JLabel("Nombre d'objets connect\u00E9s : ");
 		objectNumberTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
@@ -128,7 +135,7 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 
 	public void gestionListObject() {
-		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Residence", "Etage", "Emplacement","Mac"}; 
+		String[] header = {"ID_capteur", "Type du capteur",  "Etat capteur", "Residence", "Etage", "Emplacement","Mac", "ID_Emplacement"}; 
 		Integer x = listObject.size(); 
 		Integer y;
 		if(x>0) { 
@@ -160,6 +167,10 @@ public class ObjectGestion extends JPanel implements ActionListener {
 			//Hide ID column
 			objectTable.getColumnModel().getColumn(0).setMinWidth(0);
 			objectTable.getColumnModel().getColumn(0).setMaxWidth(0);
+			objectTable.getColumnModel().getColumn(7).setMinWidth(0);
+			objectTable.getColumnModel().getColumn(7).setMaxWidth(0);
+			
+			
 		}
 		else {
 			// if the result is empty, the table will be empty
@@ -186,7 +197,10 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		int ligne = objectTable.getSelectedRow(); 
 		List<String> listUpdate = new ArrayList<String>(); 
 		for(int i = 0; i<data[ligne].length; i++) {
-			listUpdate.add(data[ligne][i].toString()); 
+			if(data[ligne][i]!=null)
+				listUpdate.add(data[ligne][i].toString()); 
+			else
+				listUpdate.add(null);
 		}
 		return listUpdate;
 	}
@@ -194,6 +208,12 @@ public class ObjectGestion extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent event) {
 
+		if(event.getSource().equals(returnButton)) {
+			this.controller.getGui().setBounds(100, 100, 1400, 900);
+			controller.getGui().changeWindow(WindowList.MENU);
+			return;
+		}
+		
 		if(event.getSource().equals(addButton)){
 			clearlabel();
 			listObject = controller.addObject(detectorList.getSelectedItem().toString());
@@ -229,6 +249,17 @@ public class ObjectGestion extends JPanel implements ActionListener {
 		if(event.getSource().equals(updateButton)) {
 			if(objectTable.getSelectedRow()!= -1) {
 				controller.getGui().changeWindow(WindowList.OBJECTMODIFICATION);
+			}
+			else {
+				this.add(errorSelection);
+				controller.getGui().revalidate();
+				controller.getGui().repaint(); 
+			}
+		}
+		
+		if(event.getSource().equals(configButton)) {
+			if(objectTable.getSelectedRow()!= -1) {
+				controller.getGui().changeWindow(WindowList.OBJECTCONFIGURATION);
 			}
 			else {
 				this.add(errorSelection);

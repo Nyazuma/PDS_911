@@ -78,6 +78,16 @@ public class Tool {
 			if (map.get("type").toString().equalsIgnoreCase(MessageType.NUMBEROBJECTUPDATED.toString())) {
 				return mapper.readValue(json, MsgNumberObjectUpdated.class);
 			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.CHANGEALERT.toString())) {
+				return mapper.readValue(json, MsgChangeAlert.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.UPDATEEMPLACEMENT.toString())) {
+				return mapper.readValue(json, MsgUpdateEmplacement.class); 
+			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.DELETEEMPLACEMENT.toString())) {
+				return mapper.readValue(json, MsgDeleteEmplacement.class); 
+			}
+			
 			// Don't forget messages without a specific class!
 			return mapper.readValue(json, Message.class);
 		} 

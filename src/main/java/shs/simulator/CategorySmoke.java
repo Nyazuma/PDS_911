@@ -11,23 +11,18 @@ public class CategorySmoke extends CategoryObject{
 		super(referencedName, listObjects);
 	}
 
-	public void randomFire() {
-		// Choice of the sensor
-		int id = (int)(Math.random()*listObjects.size());
-		specificID(Integer.parseInt(listObjects.get(id)));
+	public CategorySmoke() {
+		super();
 	}
-	
-	public void specificID(int id) {
-		// Choice of the sensor
-		if(!listObjects.contains(Integer.toString(id)))
-			throw new IllegalArgumentException();
-		// We create a smoke report (a value >=50)
+
+	@Override
+	public void launchAlert(Integer id) {
 		for(int i=0; i<3; i++) {
-			int level = (int) (50 + Math.random()*50);
-			MsgReportSmoke update = new MsgReportSmoke(id, level);
+			int smokeValue = (int) (50 + Math.random()*50);
+			MsgReportSmoke update = new MsgReportSmoke(id, smokeValue);
 			Connector.contactServer(Tool.messageToJSON(update));
 			try {
-				Thread.sleep((long) (5000 + Math.random()*5000));
+				Thread.sleep(500);
 			} catch (InterruptedException e) {}
 		}
 	}

@@ -16,6 +16,8 @@ public class ServerLaunch {
 		final ServerSocket serverSocket = new ServerSocket(DataConfig.getPORT());
 		final JDBCConnectionPool connectionPool = new JDBCConnectionPool();
 		
+		new Thread(new MemoryCache()).start();
+		
 		// Define the closing process of the server application (by closing the port and avoiding any blocked port issue at the next launch)
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {

@@ -7,6 +7,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import shs.common.Tool;
+
 public class Connector {
 	
 	public static String contactServer(String request){
@@ -44,7 +46,10 @@ public class Connector {
 			try {
 				socket.close();
 				rawAnswerServer.close();
-			} catch (IOException e) {}
+			} catch (Exception e) {
+				Tool.logger.error("The server is not available");
+				System.exit(-1);
+			}
 		}
 		return answerServer;
 	}

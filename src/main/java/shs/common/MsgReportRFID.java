@@ -13,7 +13,7 @@ public class MsgReportRFID extends Message {
 		this.id=id;
 	}
 
-	public Integer getID() {
+	public Integer getId() {
 		return id;
 	}
 

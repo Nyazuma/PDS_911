@@ -2,28 +2,28 @@ package shs.simulator;
 
 import java.util.List;
 
-import shs.common.MsgReportMotion;
+import shs.common.MsgReportOpening;
 import shs.common.Tool;
 
-public class CategoryMotion extends CategoryObject{
+public class CategoryOpening extends CategoryObject{
 
-	public CategoryMotion(String referencedName, List<String> listObjects) {
+	public CategoryOpening(String referencedName, List<String> listObjects) {
 		super(referencedName, listObjects);
 	}
-
-	public CategoryMotion() {
+	
+	public CategoryOpening() {
 		super();
 	}
 
+	@Override
 	public void launchAlert(Integer id) {
 		for(int i=0; i<3; i++) {
-			MsgReportMotion update = new MsgReportMotion(id);
+			MsgReportOpening update = new MsgReportOpening(id);
 			Connector.contactServer(Tool.messageToJSON(update));
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {}
 		}
 	}
-
 
 }
