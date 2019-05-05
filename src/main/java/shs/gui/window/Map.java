@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 
 import shs.gui.GuiController;
 
@@ -100,7 +99,7 @@ public class Map extends JPanel implements ActionListener{
 	private JProgressBar progressBar;
 
 	//-------------------------------------------------------
-	// CONTROLLER
+	// CONSTRUCTOR
 	//-------------------------------------------------------
 	/**
 	 * Main Controller
@@ -226,6 +225,7 @@ public class Map extends JPanel implements ActionListener{
 		smartLocation = new JButton("Smart");
 		smartLocation.setBounds(1123, 19, 154, 33);
 		smartLocation.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		smartLocation.setToolTipText("Apuyer sur ce bouton pour générer un placement automatique intelligent.");
 		smartLocation.addActionListener(this);
 		this.add(smartLocation);
 
@@ -420,9 +420,11 @@ public class Map extends JPanel implements ActionListener{
 							);
 					if(listEmplacement.get(ligne).get(0).equals(ID_EmplacementAlerte)) {
 						newButton.setBackground(Color.RED);
+						newButton.setToolTipText("Alerte !");
 					}
 					else{
 						newButton.setBackground(Color.GREEN);
+						newButton.setToolTipText("Emplacement occupé");
 					}
 					if(listEmplacement.get(ligne).get(2).toString().equals("1")) {
 						listJButtonsEtage1.add(newButton); 
@@ -432,6 +434,7 @@ public class Map extends JPanel implements ActionListener{
 						listJButtonsEtage2.add(newButton); 
 						stop = false; 
 					}
+					break;
 				}
 
 			}
@@ -442,6 +445,7 @@ public class Map extends JPanel implements ActionListener{
 						Integer.parseInt(listEmplacement.get(ligne).get(5)), 
 						Integer.parseInt(listEmplacement.get(ligne).get(6)));
 				newButton.setBackground(Color.GRAY);
+				newButton.setToolTipText("Emplacement libre.");
 				if(listEmplacement.get(ligne).get(2).toString().equals("1"))
 					listJButtonsEtage1.add(newButton); 
 				else 
@@ -460,7 +464,7 @@ public class Map extends JPanel implements ActionListener{
 			listButton.get(ligne).addActionListener(this);
 			this.add(listButton.get(ligne));
 		}
-		this.revalidate();
+		this.repaint(); 
 	}
 
 	/**
@@ -471,7 +475,7 @@ public class Map extends JPanel implements ActionListener{
 		for(int ligne = 0; ligne< listButton.size(); ligne++) {
 			this.remove(listButton.get(ligne));
 		}
-		this.revalidate();
+		this.repaint();
 	}
 
 	/**
@@ -884,6 +888,7 @@ public class Map extends JPanel implements ActionListener{
 				lblMessage.repaint();
 				if(controller.deleteEmplacementObject(getIdObject(listJButtonsEtage.get(i)))) {
 					listJButtonsEtage.get(i).setBackground(Color.GRAY);
+					listJButtonsEtage.get(i).setToolTipText("Emplacement libre.");
 					listAllCapteurs = controller.listCapteurs(); 
 					listEmplacement = controller.EmplacementFull();
 					listEmplacementOccupied = listEmplacementOccupied(listEmplacement);
@@ -910,6 +915,7 @@ public class Map extends JPanel implements ActionListener{
 						if(isLocationPertinent(listJButtonsEtage.get(i))) {
 							if(controller.updateEmplacementObject(getRowUpdate().get(0), getIdEmplacement(listJButtonsEtage.get(i)))) {
 								listJButtonsEtage.get(i).setBackground(Color.GREEN);
+								listJButtonsEtage.get(i).setToolTipText("Emplacement occupé.");
 								listAllCapteurs = controller.listCapteurs(); 
 								listEmplacement = controller.EmplacementFull();
 								listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
@@ -967,47 +973,41 @@ public class Map extends JPanel implements ActionListener{
 
 		int compteur = 0; 
 		progressBar.setVisible(true);
-		progressBar.setMaximum(119);
-		while (!listObjectNullEmplacement.isEmpty()) {
-			compteur = 0; 
-			for(int j=0; j<floor.size(); j++) {
-				if(!isEtageFullOccupied(floor)) { 
-					if(isEmplacementFree(floor.get(j))){
-						if(isLocationPertinent(floor.get(j), listObjectNullEmplacement.get(0).get(1)) && compteur != floor.size()) {
-							if(controller.updateEmplacementObject(listObjectNullEmplacement.get(0).get(0), getIdEmplacement(floor.get(j)))) {
-								floor.get(j).setBackground(Color.GREEN);
-								listAllCapteurs = controller.listCapteurs(); 
-								listEmplacement = controller.EmplacementFull(); 
-								listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
-								initListObjectNullEmplacement();
-								progressBar.setValue(progressBar.getValue() + 1);
-								progressBar.update(getGraphics());
-							}else 
-								System.out.println("ERROR DURING UPDATING OBJECT");
-						}
-						else 
-							compteur ++; 
+		progressBar.setMaximum(listObjectNullEmplacement.size());
+		compteur = 0; 
+		for(int j=0; j<floor.size(); j++) {
+			if(!isEtageFullOccupied(floor)) { 
+				if(isEmplacementFree(floor.get(j))){
+					if(isLocationPertinent(floor.get(j), listObjectNullEmplacement.get(0).get(1)) && compteur != floor.size()-1) {
+						if(controller.updateEmplacementObject(listObjectNullEmplacement.get(0).get(0), getIdEmplacement(floor.get(j)))) {
+							floor.get(j).setBackground(Color.GREEN);
+							floor.get(j).setToolTipText("Emplacement occupé.");
+							listAllCapteurs = controller.listCapteurs(); 
+							listEmplacement = controller.EmplacementFull(); 
+							listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
+							initListObjectNullEmplacement();
+							if(listObjectNullEmplacement.isEmpty())
+								break;
+							progressBar.setValue(progressBar.getValue() + 1);
+							progressBar.update(getGraphics());
+						}else 
+							System.out.println("ERROR DURING UPDATING OBJECT");
 					}
-				}
-				else 
-				{
-				
-				
-					int value = progressBar.getMaximum() - progressBar.getValue();
-					System.out.println(value);
-					progressBar.setValue(value);
-					progressBar.update(getGraphics()); 
-					return;
-
+					else 
+						compteur ++; 
 				}
 			}
+			else 
+			{
+				
+				progressBar.setValue(progressBar.getMaximum());
+				progressBar.update(getGraphics()); 
+				return;
+			}
 		} 
-		
-		int value = progressBar.getMaximum() - progressBar.getValue();
-		System.out.println(value);
-		progressBar.setValue(value);
+		progressBar.setValue(progressBar.getMaximum());
 		progressBar.update(getGraphics()); 
-		return; 
+		return;
 
 	}
 
@@ -1028,11 +1028,21 @@ public class Map extends JPanel implements ActionListener{
 		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
 			if(event.getSource().equals(smartLocation)){
 				smartPlacement(listJButtonsEtage1);
+				listJButtonsEtage1 = new ArrayList<JButton>();
+				listJButtonsEtage2 = new ArrayList<JButton>();
 				listAllCapteurs = controller.listCapteurs(); 
 				listEmplacement = controller.EmplacementFull(); 
 				listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
 				initListObjectNullEmplacement();
 				dispatchEtageEmplacement();
+				if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+					removeButton(listJButtonsEtage2);
+					displayButton(listJButtonsEtage1);
+				}
+				else {
+					removeButton(listJButtonsEtage1);
+					displayButton(listJButtonsEtage2);
+				}
 				gestionListObject();
 				progressBar.setVisible(false);
 				smartLocation.setEnabled(false);
@@ -1068,28 +1078,28 @@ public class Map extends JPanel implements ActionListener{
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
 				removeButton(listJButtonsEtage2);
-
+				displayButton(listJButtonsEtage1);
 				try {
 					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[0]));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
 				}
+
 				imageIcon.setImage(image);
 				picLabel.setIcon(imageIcon);
-				displayButton(listJButtonsEtage1);
+
 
 			}
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
-				removeButton(listJButtonsEtage1);
 				try {
 					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[1]));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
 				}
-				displayButton(listJButtonsEtage2);
+
 				imageIcon.setImage(image);
 				picLabel.setIcon(imageIcon);
 
