@@ -69,6 +69,15 @@ public class Tool {
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTTEMPERATURE.toString())) {
 				return mapper.readValue(json, MsgReportTemperature.class); 
 			}
+			if (map.get("type").toString().equalsIgnoreCase(MessageType.NUMBEROBJECTADDED.toString())) {
+				return mapper.readValue(json, MsgNumberObjectAdded.class);
+			}
+			if (map.get("type").toString().equalsIgnoreCase(MessageType.NUMBEROBJECTDELETED.toString())) {
+				return mapper.readValue(json, MsgNumberObjectDeleted.class);
+			}
+			if (map.get("type").toString().equalsIgnoreCase(MessageType.NUMBEROBJECTUPDATED.toString())) {
+				return mapper.readValue(json, MsgNumberObjectUpdated.class);
+			}
 			// Don't forget messages without a specific class!
 			return mapper.readValue(json, Message.class);
 		} 

@@ -19,6 +19,9 @@ import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
 import shs.common.MsgReportRFID;
 import shs.common.MsgUpdateObject;
+import shs.common.MsgNumberObjectAdded;
+import shs.common.MsgNumberObjectDeleted;
+import shs.common.MsgNumberObjectUpdated;
 import shs.common.Tool;
 
 public class Controller {
@@ -107,6 +110,18 @@ public class Controller {
 		case REPORTRFID :
 			reportRFID(((MsgReportRFID)input).getID());
 			return null;
+		case NUMBEROBJECTADDED :								//My edit
+			resultInteger = nbObjectAdded(((MsgNumberObjectAdded)input).getDateFrom(), ((MsgNumberObjectAdded)input).getDateTo());
+			MsgIntResult answer13 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer13);
+		case NUMBEROBJECTDELETED:
+			resultInteger = nbObjectDeleted(((MsgNumberObjectDeleted)input).getDateFrom(), ((MsgNumberObjectDeleted)input).getDateTo());
+			MsgIntResult answer14 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer14);
+		case NUMBEROBJECTUPDATED:
+			resultInteger = nbObjectDeleted(((MsgNumberObjectUpdated)input).getDateFrom(), ((MsgNumberObjectUpdated)input).getDateTo());
+			MsgIntResult answer15 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer15);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -173,13 +188,83 @@ public class Controller {
 
 			return 0; 
 		}
-	}//
+	}
+	
+	private int nbObjectAdded(String dateFrom, String dateTo) {							//My edit
+		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='insert' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultat = statement.executeQuery(request);
+			resultat.next(); 
+			Tool.logger.info("nbObject SUCCEED");
+
+			return resultat.getInt(1); 
+
+		}catch (SQLException e) {
+			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+
+			return 0; 
+		}
+	}
+	
+	private int nbObjectDeleted(String dateFrom, String dateTo) {							//My edit
+		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='delete' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultat = statement.executeQuery(request);
+			resultat.next(); 
+			Tool.logger.info("nbObject SUCCEED");
+
+			return resultat.getInt(1); 
+
+		}catch (SQLException e) {
+			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+
+			return 0; 
+		}
+	}
+	
+	private int nbObjectUpdated(String dateFrom, String dateTo) {							//My edit
+		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='update' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultat = statement.executeQuery(request);
+			resultat.next(); 
+			Tool.logger.info("nbObject SUCCEED");
+
+			return resultat.getInt(1); 
+
+		}catch (SQLException e) {
+			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+
+			return 0; 
+		}
+	}
+
+//		try {
+//			Statement statement = connection.createStatement();
+//			ResultSet resultat = statement.executeQuery(request);
+//			resultat.next(); 
+//			Tool.logger.info("nbObjectAdded SUCCEED");
+//
+//			//return nbObjectAdded();
+//			return resultat.getString(1); 
+//
+//		}catch (SQLException e) {
+//			Tool.logger.error("nbObjectAdded FAILED - SQL EXCEPTION");
+//
+//			return 0; 
+//		}
+//	}//
+	
+	//
 	/**
 	 * Add an object to the base.
 	 * 
 	 * @param typeCapteur
 	 * @return
 	 */
+	
 	private List<List<String>> addObject(String typeCapteur, String addresseMac) {
 		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', 1, 1,'" + addresseMac + "')"; 
 

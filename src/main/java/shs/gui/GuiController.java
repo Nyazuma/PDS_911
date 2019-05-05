@@ -7,6 +7,7 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Date;
 import java.util.List;
 
 import shs.common.Message;
@@ -15,6 +16,9 @@ import shs.common.MessageType;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgConnection;
+import shs.common.MsgNumberObjectAdded;
+import shs.common.MsgNumberObjectDeleted;
+import shs.common.MsgNumberObjectUpdated;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
 import shs.common.MsgUpdateObject;
@@ -75,6 +79,41 @@ public class GuiController {
 		}
 		return -1;
 	}
+	
+	public int nbObjectAdded(String dateFrom, String dateTo) {
+		MsgNumberObjectAdded nbObjectAdded = new MsgNumberObjectAdded (dateFrom, dateTo);
+		return readInt(nbObjectAdded);
+	}
+	
+	public int nbObjectDeleted(String dateFrom, String dateTo) {
+		MsgNumberObjectDeleted nbObjectDeleted = new MsgNumberObjectDeleted (dateFrom, dateTo);
+		return readInt(nbObjectDeleted);
+	}
+	
+	public int nbObjectUpdated(String dateFrom, String dateTo) {
+		MsgNumberObjectUpdated nbObjectUpdated = new MsgNumberObjectUpdated (dateFrom, dateTo);
+		return readInt(nbObjectUpdated);
+	}
+	
+//	public int nbObjectAdded(String dateFrom, String dateTo) {																			//My edit
+//		System.out.println("Hola1");
+//		MsgDateResult nbObjectAdded = new MsgDateResult(dateFrom, dateTo);
+//		System.out.println("Hola2");
+//		String output = Tool.messageToJSON(nbObjectAdded);
+//		System.out.println("Hola3");
+//		String answer;
+//		try {
+//			answer = contactServer(output);
+//			if(answer!= null) {
+//				MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
+//				return result.getNumber();
+//			}
+//		}
+//		catch (ConnectException e) {
+//			return -1;
+//		}
+//		return -1;
+//	}
 
 	public boolean update(List<String> rowUpdate) {
 		MsgUpdateObject update =  new MsgUpdateObject(rowUpdate);  
@@ -223,6 +262,23 @@ public class GuiController {
 			return null;
 		}
 		return null;
+	}
+	
+	// To be called when we expect the message to return a int
+	public int readInt(Message message) {
+		String output = Tool.messageToJSON(message);
+		String answer; 
+		try { 
+			answer = contactServer(output);
+			if(answer!= null) {
+				MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
+				return result.getNumber();
+			}
+		}
+		catch (ConnectException e) {
+			return 0;
+		}
+		return 0;
 	}
 
 

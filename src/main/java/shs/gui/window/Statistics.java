@@ -6,11 +6,16 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import shs.gui.GuiController;
@@ -26,6 +31,9 @@ public class Statistics extends JPanel implements ActionListener{
 	private JComboBox<String> zone;
 	private JComboBox<String> etage;
 	private JButton btnRetour; 
+	private JButton btnValider;
+	private JDateChooser dateFrom;
+	private JDateChooser dateTo;
 	private DefaultComboBoxModel<String> modelTypeCapteur;
 	private DefaultComboBoxModel<String> modelEtatCapteur; 
 	private DefaultComboBoxModel<String> modelResidence; 
@@ -33,11 +41,16 @@ public class Statistics extends JPanel implements ActionListener{
 	private DefaultComboBoxModel<String> modelEmplacement; 
 	private JComboBox<String> etatCapteur; 
 	private JLabel objectNumberLabel;
-	
+	private JLabel objectAdded;
+	private JLabel objectDeleted;
+	private JLabel objectModified;
+
 	private GuiController controller;
 	
 	public Statistics(GuiController controller) {
+		
 		this.controller = controller; 
+		
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		this.controller.getGui().setSize(screensize);
 		this.controller.getGui().setLocationRelativeTo(null);
@@ -140,17 +153,19 @@ public class Statistics extends JPanel implements ActionListener{
 		lblNombresTotalDe.setBounds(88, 438, 192, 26);
 		add(lblNombresTotalDe);
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(758, 371, 96, 22);
-		add(dateChooser);
-		
-		JDateChooser dateChooser_1 = new JDateChooser();
-		dateChooser_1.setBounds(576, 371, 96, 22);
-		add(dateChooser_1);
+		dateFrom = new JDateChooser();
+		dateFrom.setDateFormatString("yyyy-MM-dd");
+		dateFrom.setBounds(576, 371, 96, 22);
+		this.add(dateFrom);
 		
 		JLabel lblFrom = new JLabel("De");
 		lblFrom.setBounds(530, 371, 56, 16);
 		add(lblFrom);
+		
+		dateTo = new JDateChooser();
+		dateTo.setDateFormatString("yyyy-MM-dd");
+		dateTo.setBounds(758, 371, 96, 22);
+		this.add(dateTo);
 		
 		JLabel lblTo = new JLabel("A");
 		lblTo.setBounds(704, 371, 56, 16);
@@ -168,9 +183,11 @@ public class Statistics extends JPanel implements ActionListener{
 		lblCapteursModifies.setBounds(530, 499, 123, 16);
 		add(lblCapteursModifies);
 		
-		JButton btnValider = new JButton("Valider");
+		btnValider = new JButton("Valider");
 		btnValider.setBounds(918, 371, 97, 25);
-		add(btnValider);
+		btnValider.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		btnValider.addActionListener(this);
+		this.add(btnValider);
 		
 		JLabel lblAlertes = new JLabel("Alertes :");
 		lblAlertes.setBounds(807, 499, 56, 16);
@@ -188,12 +205,34 @@ public class Statistics extends JPanel implements ActionListener{
 		lblSocksRestants.setBounds(88, 547, 134, 16);
 		add(lblSocksRestants);
 		
+		objectAdded = new JLabel("0");
+		objectAdded.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectAdded.setBounds(646, 437, 55, 28);		
+		this.add(objectAdded);
+		
+		objectDeleted = new JLabel("0");
+		objectDeleted.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectDeleted.setBounds(941, 437, 55, 28); 
+		this.add(objectDeleted);
+		
+		objectModified = new JLabel("0");
+		objectModified.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectModified.setBounds(646, 494, 55, 28);
+		this.add(objectModified);
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(btnRetour)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
 			controller.getGui().changeWindow(WindowList.MENU);
+		}
+		
+		if (e.getSource().equals(btnValider)) {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			objectAdded.setText(Integer.toString(controller.nbObjectAdded(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
+			objectDeleted.setText(Integer.toString(controller.nbObjectDeleted(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
+			objectModified.setText(Integer.toString(controller.nbObjectUpdated(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 		}
 		
 	}
