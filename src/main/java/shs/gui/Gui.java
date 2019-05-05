@@ -7,6 +7,7 @@ import shs.gui.window.Authentication;
 import shs.gui.window.Map;
 import shs.gui.window.Menu;
 import shs.gui.window.Monitoring;
+import shs.gui.window.ObjectConfiguration;
 import shs.gui.window.ObjectGestion;
 import shs.gui.window.ObjectModification;
 import shs.gui.window.Statistics;
@@ -54,6 +55,11 @@ public class Gui extends JFrame{
 			repaint();
 			setVisible(true);
 			break;
+		case OBJECTCONFIGURATION :
+			this.setContentPane(new ObjectConfiguration(controller));
+			repaint();
+			setVisible(true);
+			break;		
 		case MONITORING :
 			this.setContentPane(new Monitoring(controller));
 			repaint();

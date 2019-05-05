@@ -135,15 +135,14 @@ CREATE TABLE Capteurs(
 CREATE TABLE Notifications(
         ID_Notification        Int(11) Auto_increment  NOT NULL ,
         Niveau_Notification    Int NOT NULL ,
-        Date_Notification      TIMESTAMP NOT NULL ,
+        Date_Notification      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
         Message_Notification   Varchar (60) ,
         Etat_Notification      Boolean NOT NULL,
         ID_Capteur             Int NOT NULL
 	,CONSTRAINT Notifications_PK PRIMARY KEY (ID_Notification)
 
-	,CONSTRAINT Notifications_Capteurs_FK FOREIGN KEY (ID_Capteur) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT Notifications_Capteurs_FK FOREIGN KEY (ID_Capteur) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
-
 
 #------------------------------------------------------------
 # Table: CapteursFumee
@@ -153,7 +152,7 @@ CREATE TABLE CapteursFumee(
         ID_CapteurFumee          Int NOT NULL COMMENT "Clé étrangère vers ID_Capteur de Capteur"  ,
         Seuil_CapteurFumee Int NOT NULL
 	,CONSTRAINT CapteurFumee_PK PRIMARY KEY (ID_CapteurFumee)
-	,CONSTRAINT CapteurFumee_Capteurs_FK FOREIGN KEY (ID_CapteurFumee) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT CapteurFumee_Capteurs_FK FOREIGN KEY (ID_CapteurFumee) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -166,7 +165,7 @@ CREATE TABLE CapteursTemperature(
         Min_CapteurTemperature 			Float NOT NULL ,
         Max_CapteurTemperature 			Float NOT NULL 
 	,CONSTRAINT CapteurTemperature_PK PRIMARY KEY (ID_CapteurTemperature)
-	,CONSTRAINT CapteurTemperature_Capteurs_FK FOREIGN KEY (ID_CapteurTemperature) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT CapteurTemperature_Capteurs_FK FOREIGN KEY (ID_CapteurTemperature) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -179,7 +178,7 @@ CREATE TABLE CapteursOuverture(
         Debut_CapteurOuverture Time NOT NULL,
 		Fin_CapteurOuverture   Time NOT NULL
 	,CONSTRAINT CapteurOuverture_PK PRIMARY KEY (ID_CapteurOuverture)
-	,CONSTRAINT CapteurOuverture_Capteurs_FK FOREIGN KEY (ID_CapteurOuverture) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT CapteurOuverture_Capteurs_FK FOREIGN KEY (ID_CapteurOuverture) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -191,7 +190,7 @@ CREATE TABLE CapteursHygro(
         ID_CapteurHygro    Int NOT NULL ,
         Seuil_CapteurHygro Int NOT NULL
 	,CONSTRAINT CapteurHygro_PK PRIMARY KEY (ID_CapteurHygro)
-	,CONSTRAINT CapteurHygro_Capteurs_FK FOREIGN KEY (ID_CapteurHygro) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT CapteurHygro_Capteurs_FK FOREIGN KEY (ID_CapteurHygro) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -204,7 +203,7 @@ CREATE TABLE CapteursPresence(
         Debut_CapteurPresence Time NOT NULL,
         Fin_CapteurPresence Time NOT NULL
 	,CONSTRAINT CapteurPresence_PK PRIMARY KEY (ID_CapteurPresence)
-	,CONSTRAINT CapteurPresence_Capteurs_FK FOREIGN KEY (ID_CapteurPresence) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT CapteurPresence_Capteurs_FK FOREIGN KEY (ID_CapteurPresence) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -216,7 +215,7 @@ CREATE TABLE CapteursAppel(
         ID_CapteurAppel           Int NOT NULL ,
         NiveauAlerte_CapteurAppel Int NOT NULL
 	,CONSTRAINT CapteurAppel_PK PRIMARY KEY (ID_CapteurAppel)
-	,CONSTRAINT CapteurAppel_Capteurs_FK FOREIGN KEY (ID_CapteurAppel) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT CapteurAppel_Capteurs_FK FOREIGN KEY (ID_CapteurAppel) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -228,7 +227,7 @@ CREATE TABLE CapteursRFID(
         ID_CapteurRFID              Int NOT NULL ,
         NiveauAlerte_CapteurRFID    Int NOT NULL
 	,CONSTRAINT CapteurRFID_PK PRIMARY KEY (ID_CapteurRFID)
-	,CONSTRAINT CapteurRFID_Capteurs_FK FOREIGN KEY (ID_CapteurRFID) REFERENCES Capteurs(ID_Capteur)
+	,CONSTRAINT CapteurRFID_Capteurs_FK FOREIGN KEY (ID_CapteurRFID) REFERENCES Capteurs(ID_Capteur) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 #------------------------------------------------------------
@@ -244,9 +243,6 @@ CREATE TABLE dependre_de(
 	,CONSTRAINT dependre_de_Residences0_FK FOREIGN KEY (ID_Residence) REFERENCES Residences(ID_Residence)
 )ENGINE=InnoDB;
 
-
-ALTER TABLE Notifications CHANGE Date_Notification Date_Notification TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-
 #------------------------------------------------------------
 # Table: Historisations
 #------------------------------------------------------------
@@ -259,7 +255,6 @@ CREATE TABLE Historisations(
 	Hist_User VARCHAR(45) NULL DEFAULT NULL,
 	Hist_comm VARCHAR(45) NULL DEFAULT NULL
 	,CONSTRAINT Historisation_PK PRIMARY KEY (ID_Historisation)
-    ,CONSTRAINT Histo_Capteurs_FK FOREIGN KEY (ID_Capteur) REFERENCES Capteurs(ID_Capteur)
 )ENGINE=InnoDB;
 
 USE `shs`;
