@@ -8,6 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -24,22 +29,24 @@ public class Statistics extends JPanel implements ActionListener{
 	private JComboBox<String> typeCapteur;
 	private JComboBox<String> residence;
 	private JComboBox<String> zone;
-	private JComboBox<String> etage;
+	private JComboBox<String> floor;
 	private JButton btnRetour; 
 	private JButton btnValider;
+	private JButton btnValider2;
 	private JDateChooser dateFrom;
 	private JDateChooser dateTo;
 	private DefaultComboBoxModel<String> modelTypeCapteur;
-	private DefaultComboBoxModel<String> modelEtatCapteur; 
+	private DefaultComboBoxModel<String> modelStateCaptor; 
 	private DefaultComboBoxModel<String> modelResidence; 
-	private DefaultComboBoxModel<String> modelEtage; 
+	private DefaultComboBoxModel<String> modelFloor; 
 	private DefaultComboBoxModel<String> modelEmplacement; 
-	private JComboBox<String> etatCapteur; 
+	private JComboBox<String> stateCaptor; 
 	private JLabel objectNumberLabel;
 	private JLabel objectAdded;
 	private JLabel objectDeleted;
 	private JLabel objectModified;
 	private JLabel objectAlert;
+	private JLabel fetchResult;
 
 	private GuiController controller;
 	
@@ -86,13 +93,13 @@ public class Statistics extends JPanel implements ActionListener{
 		lblEtatCapteur.setBounds(364, 101, 116, 16);
 		add(lblEtatCapteur);
 		
-		modelEtatCapteur = new DefaultComboBoxModel<String>(new String[] {"Enable", "Disable"});
-		etatCapteur = new JComboBox<String>();
-		etatCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		etatCapteur.setModel(modelEtatCapteur);
+		modelStateCaptor = new DefaultComboBoxModel<String>(new String[] {"0", "1"});
+		stateCaptor = new JComboBox<String>();
+		stateCaptor.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		stateCaptor.setModel(modelStateCaptor);
 		//etatCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(2).toString());
-		etatCapteur.setBounds(351, 130, 116, 32);
-		this.add(etatCapteur);
+		stateCaptor.setBounds(351, 130, 116, 32);
+		this.add(stateCaptor);
 		
 		
 		JLabel lblResidence = new JLabel("Residence");
@@ -130,12 +137,12 @@ public class Statistics extends JPanel implements ActionListener{
 		add(lblEtage);
 		
 		// We get the list of pieces
-		modelEtage = new DefaultComboBoxModel<String>(controller.readEtages());
-		etage = new JComboBox<String>(); 
-		etage.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		etage.setModel(modelEtage);
-		etage.setBounds(963, 130, 161, 32);
-		this.add(etage);
+		modelFloor = new DefaultComboBoxModel<String>(controller.readEtages());
+		floor = new JComboBox<String>(); 
+		floor.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		floor.setModel(modelFloor);
+		floor.setBounds(963, 130, 161, 32);
+		this.add(floor);
 		
 		JLabel lblNombreDeLogements = new JLabel("Nombre de logements");
 		lblNombreDeLogements.setBounds(88, 489, 134, 26);
@@ -221,6 +228,17 @@ public class Statistics extends JPanel implements ActionListener{
 		objectAlert.setBounds(862, 494, 55, 28);
 		this.add(objectAlert);
 		
+		btnValider2 = new JButton("Valider");
+		btnValider2.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		btnValider2.setBounds(535, 222, 97, 25);
+		btnValider2.addActionListener(this);
+		this.add(btnValider2);
+		
+		fetchResult = new JLabel("0");
+		fetchResult.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		fetchResult.setBounds(442, 268, 55, 28);
+		this.add(fetchResult);
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -235,6 +253,16 @@ public class Statistics extends JPanel implements ActionListener{
 			objectDeleted.setText(Integer.toString(controller.nbObjectDeleted(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 			objectModified.setText(Integer.toString(controller.nbObjectUpdated(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
 			objectAlert.setText(Integer.toString(controller.nbObjectAlert(dateFormat.format(dateFrom.getDate()), dateFormat.format(dateTo.getDate()))));
+		}
+		
+		if (e.getSource().equals(btnValider2)) {
+			System.out.println(typeCapteur.getSelectedItem().toString());
+			System.out.println(stateCaptor.getSelectedItem().toString());
+			System.out.println(zone.getSelectedItem().toString());
+			System.out.println(floor.getSelectedItem().toString());
+			System.out.println(residence.getSelectedItem().toString());
+			fetchResult.setText(Integer.toString(controller.nbObjectFetch(typeCapteur.getSelectedItem().toString(), stateCaptor.getSelectedItem().toString(), 
+					zone.getSelectedItem().toString(), floor.getSelectedItem().toString(), residence.getSelectedItem().toString())));
 		}
 		
 	}

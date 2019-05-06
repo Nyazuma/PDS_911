@@ -33,6 +33,7 @@ import shs.common.MsgNumberObjectAdded;
 import shs.common.MsgNumberObjectDeleted;
 import shs.common.MsgNumberObjectUpdated;
 import shs.common.MsgNumberObjectAlert;
+import shs.common.MsgNumberObjectFetch;
 import shs.common.Tool;
 
 public class Controller {
@@ -165,7 +166,12 @@ public class Controller {
 			resultInteger = nbObjectAlert(((MsgNumberObjectAlert)input).getDateFrom(), ((MsgNumberObjectAlert)input).getDateTo());
 			MsgIntResult answer21 = new MsgIntResult(resultInteger); 
 			return Tool.messageToJSON(answer21);
-			
+		case NUMBEROBJECTFETCH :
+			resultInteger = nbObjectFetch(((MsgNumberObjectFetch)input).getCaptorType(), ((MsgNumberObjectFetch)input).getCaptorState(),
+					((MsgNumberObjectFetch)input).getCaptorPlace(), ((MsgNumberObjectFetch)input).getCaptorFloor(), 
+					((MsgNumberObjectFetch)input).getCaptorResidence());
+			MsgIntResult answer22 = new MsgIntResult(resultInteger); 
+			return Tool.messageToJSON(answer22);		
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -235,7 +241,9 @@ public class Controller {
 	}
 	
 	private int nbObjectAdded(String dateFrom, String dateTo) {							
-		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='insert' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
+		String request = "SELECT COUNT(*) FROM shs.Historisations "
+				+ "WHERE Hist_comm='insert' "
+				+ "AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
@@ -252,7 +260,9 @@ public class Controller {
 	}
 	
 	private int nbObjectDeleted(String dateFrom, String dateTo) {							
-		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='delete' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
+		String request = "SELECT COUNT(*) FROM shs.Historisations "
+				+ "WHERE Hist_comm='delete' "
+				+ "AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
@@ -269,7 +279,9 @@ public class Controller {
 	}
 	
 	private int nbObjectUpdated(String dateFrom, String dateTo) {							
-		String request = "SELECT COUNT(*) FROM shs.Historisations WHERE Hist_comm='update' AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
+		String request = "SELECT COUNT(*) FROM shs.Historisations "
+				+ "WHERE Hist_comm='update' "
+				+ "AND Hist_Date BETWEEN '" + dateFrom + "' AND '" + dateTo + "';";  
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
@@ -289,6 +301,31 @@ public class Controller {
 		String request = "SELECT COUNT(*) FROM shs.Notifications "
 				+ "WHERE Date_Notification >= STR_TO_DATE('" + dateFrom + "', '%Y-%m-%d') "
 				+ "AND Date_Notification <= STR_TO_DATE('" + dateTo + "', '%Y-%m-%d') + INTERVAL 1 DAY;";  
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultat = statement.executeQuery(request);
+			resultat.next(); 
+			Tool.logger.info("nbObject SUCCEED");
+
+			return resultat.getInt(1); 
+
+		}catch (SQLException e) {
+			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+
+			return 0; 
+		}
+	}
+	
+	private int nbObjectFetch(String captorType , String captorState, String captorPlace, String captorFloor, String captorResidence) {
+		String request = "SELECT COUNT(*) FROM shs.Capteurs "
+				+ "c LEFT JOIN shs.Emplacements e on c.ID_Emplacement = e.ID_Emplacement " 
+				+ "LEFT JOIN shs.Etages et ON e.ID_Etage = et.ID_Etage "
+				+ "LEFT JOIN shs.Residences r ON et.ID_Residence = r.ID_Residence "
+				+ "WHERE Type_Capteur = '" + captorType + "' "
+				+ "AND Etat_Capteur = '" + captorState + "' "
+				+ "AND Nom_Emplacement = '" + captorPlace + "' "
+				+ "AND Niveau_Etage = '" + captorFloor + "' "
+				+ "AND Nom_Residence = '" + captorResidence + "';";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);

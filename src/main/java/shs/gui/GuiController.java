@@ -20,6 +20,7 @@ import shs.common.MsgConnection;
 import shs.common.MsgNumberObjectAdded;
 import shs.common.MsgNumberObjectAlert;
 import shs.common.MsgNumberObjectDeleted;
+import shs.common.MsgNumberObjectFetch;
 import shs.common.MsgNumberObjectUpdated;
 import shs.common.MsgDeleteEmplacement;
 import shs.common.MsgIntResult;
@@ -160,6 +161,11 @@ public class GuiController {
 		MsgNumberObjectAlert nbObjectAlert = new MsgNumberObjectAlert (dateFrom, dateTo);
 		return readInt(nbObjectAlert);
 	}
+	
+	public int nbObjectFetch(String captorType, String captorState, String captorPlace, String captorFloor, String captorResidence) {
+		MsgNumberObjectFetch nbObjectFetch = new MsgNumberObjectFetch (captorType, captorState, captorPlace, captorFloor, captorResidence);
+		return readInt(nbObjectFetch);
+	}
 
 	/**
 	 * 
@@ -255,16 +261,28 @@ public class GuiController {
 	 */
 	public String[] readEmplacements() {
 		List<List<String>> listEmplacements = readGeneric(new Message(MessageType.LISTEMPLACEMENTS));
-		String[] tabEmplacements = new String[listEmplacements.size()];
 		int i =0;
+		String str = "";
 		for(List<String> line : listEmplacements) {
+			if (!str.contains(line.get(1))) {
+				i++;
+				str = str+","+line.get(1);
+			}
+			
+		}
+		String[] tabEmplacements = new String[i];
+		i=0;
+		str = "";
+		for(List<String> line : listEmplacements) {
+			if (!str.contains(line.get(1))) {
 			tabEmplacements[i]=line.get(1);
 			i++;
+			str = str+","+line.get(1);
+			}
 		}
+		
 		return tabEmplacements;
 	}
-
-
 
 	/**
 	 * 
@@ -275,7 +293,7 @@ public class GuiController {
 		String[] tabEtages = new String[listEtages.size()];
 		int i =0;
 		for(List<String> line : listEtages) {
-			tabEtages[i]=line.get(1);
+			tabEtages[i]=line.get(2);
 			i++;
 		}
 		return tabEtages;

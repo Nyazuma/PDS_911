@@ -81,6 +81,9 @@ public class Tool {
 			if (map.get("type").toString().equalsIgnoreCase(MessageType.NUMBEROBJECTALERT.toString())) {
 				return mapper.readValue(json, MsgNumberObjectAlert.class);
 			}
+			if(map.get("type").toString().equalsIgnoreCase(MessageType.NUMBEROBJECTFETCH.toString())) {
+				return mapper.readValue(json, MsgNumberObjectFetch.class); 
+			}
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.CHANGEALERT.toString())) {
 				return mapper.readValue(json, MsgChangeAlert.class); 
 			}
