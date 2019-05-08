@@ -91,7 +91,6 @@ public class Map extends JPanel implements ActionListener{
 	 * Management Alerte
 	 */
 	private String ID_EmplacementAlerte; 
-
 	/**
 	 * Smart location
 	 */
@@ -792,9 +791,18 @@ public class Map extends JPanel implements ActionListener{
 		informationWindow.setTitle("Informations du capteur");
 		informationWindow.setBounds(100, 100, 549, 638);
 		informationWindow.setLocationRelativeTo(null);
-		informationWindow.getContentPane().setBackground(new Color(0, 204, 255));
+		if(!ID_EmplacementAlerte.isEmpty()) {
+			if(getIdEmplacement(button).equals(ID_EmplacementAlerte))
+				informationWindow.getContentPane().setBackground(new Color(255, 77, 77));
+			else
+				informationWindow.getContentPane().setBackground(new Color(0, 204, 255));
+		}
+		else
+			informationWindow.getContentPane().setBackground(new Color(0, 204, 255));
 		informationWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);             
 		informationWindow.setVisible(true);
+
+
 
 		lblTitle = new JLabel("Informations concernant le capteur ");
 		lblTitle.setBounds(113, 19, 310, 29);
@@ -999,7 +1007,7 @@ public class Map extends JPanel implements ActionListener{
 			}
 			else 
 			{
-				
+
 				progressBar.setValue(progressBar.getMaximum());
 				progressBar.update(getGraphics()); 
 				return;
