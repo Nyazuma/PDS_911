@@ -18,11 +18,9 @@ public abstract class CategoryObject implements Runnable{
 		listObjects= new ArrayList<String>();
 	}	
 
-	private Integer waiting() throws InterruptedException {
+	private Integer getRandomID() throws InterruptedException {
 		if(listObjects.isEmpty())
 			Thread.currentThread().interrupt();
-		// Delay
-		Thread.sleep((long) (6000 + Math.random()*10000));
 		// Choice of the sensor
 		int id = (int)(Math.random()*listObjects.size());
 		String activeSensor = listObjects.get(id);
@@ -36,8 +34,10 @@ public abstract class CategoryObject implements Runnable{
 	public void run() {
 		try {
 			while(true) {
-				int id = waiting();
+				int id = getRandomID();
 				launchAlert(id);
+				// Delay
+				Thread.sleep((long) (4000 + Math.random()*20000));
 			}
 		} catch (InterruptedException e) {
 			System.out.println("There is no '" + referencedName + "' available");

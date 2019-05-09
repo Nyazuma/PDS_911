@@ -47,12 +47,12 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private JLabel lblResidence; 
 	private JSlider sliderTemperature;
 	private JLabel lblTemperatureCapteur; 
-//	private JComboBox<String> macCapteur; 
-//	private JLabel lblMacCapteur; 	
-	
+	//	private JComboBox<String> macCapteur; 
+	//	private JLabel lblMacCapteur; 	
+
 	protected JLabel errorSelection; 	
-	
-	
+
+
 	// TODO supprimer les lignes inutiles 
 
 	//Initialization of the JComboBox with a model
@@ -63,17 +63,17 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private DefaultComboBoxModel<String> modelEtage; 
 	private DefaultComboBoxModel<String> modelEmplacement; 
 
-//	protected static List<List<String>> listObject; 
-//	protected static Object[][] data; 
-//	protected static JTable objectTable;
-//	protected JScrollPane scrollPane;
-//	protected JLabel errorSelection; 
-	
-	
+	//	protected static List<List<String>> listObject; 
+	//	protected static Object[][] data; 
+	//	protected static JTable objectTable;
+	//	protected JScrollPane scrollPane;
+	//	protected JLabel errorSelection; 
+
+
 	private static JTable objectTable; 
-	private List<List<String>> listObjectNullEmplacement = new ArrayList<List<String>>(); 
+	private List<List<String>> listSensorsDetails = new ArrayList<List<String>>(); 
 	List<List<String>> listAllCapteurs = new ArrayList<List<String>>(); 
-    private JScrollPane scrollPane;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -88,7 +88,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 
 		labTitre = new JLabel("Vous pouvez configurer l'objet que vous avez s\u00E9lectionn\u00E9");
 		labTitre.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		labTitre.setBounds(511, 103, 447, 28);
+		labTitre.setBounds(511, 103, 500, 28);
 		this.add(labTitre);
 
 		// We get the list of captor types
@@ -100,43 +100,44 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		typeCapteur.setBounds(771, 243, 265, 42);
 		this.add(typeCapteur);
 
-		
+
 		//TODO Faire apparaitre tableau à gauche 
-		
 		lblTypeCapteur = new JLabel("Type :");
 		lblTypeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblTypeCapteur.setBounds(681, 250, 152, 28);
 		this.add(lblTypeCapteur);
 
-		
+
 		lblMinCapteur = new JLabel("Min : ");
 		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMinCapteur.setBounds(681, 329, 152, 28);
 		this.add(lblMinCapteur);	
-		
-		
-	//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
-	    minCapteur = new JTextField();
+
+		listSensorsDetails = controller.listSensors();
+		configListObject();
+
+		//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
+		minCapteur = new JTextField();
 		minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		minCapteur.setModel(modelMinCapteur);
-//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+		//		minCapteur.setModel(modelMinCapteur);
+		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
 		minCapteur.setBounds(771, 400, 265, 42);
 		this.add(minCapteur);
-		
+
 		lblMaxCapteur = new JLabel("Max : ");
 		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMaxCapteur.setBounds(681, 395, 152, 28);
 		this.add(lblMaxCapteur);	
 
-		
-	//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
+
+		//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
 		maxCapteur = new JTextField();
 		maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		minCapteur.setModel(modelMinCapteur);
-//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+		//		minCapteur.setModel(modelMinCapteur);
+		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
 		maxCapteur.setBounds(771, 330, 265, 42);
 		this.add(maxCapteur);
-		
+
 
 		confirmation = new JCheckBox("Je confirme vouloir configurer cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
@@ -175,80 +176,52 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		this.add(returnButton);
 
 	}
-	
+
 
 	/**
 	 * This method is used to display the JTable of objects
 	 */
 	public void configListObject() {
-		String[] header = {"ID_capteur", "Type du capteur", "Etat capteur", "Mac","Min","Max","Valeur actuelle"}; 
-		Integer x = listObjectNullEmplacement.size(); 
-		Integer y;
+		String[] header = {"ID_Capteur", "Type_Capteur", "Etat_Capteur", "ID_Emplacement", "Mac_Capteur", "NiveauAlerte_CapteurAppel", "Seuil_CapteurFumee", 
+				"Seuil_CapteurHygro", "Debut_CapteurOuverture", "Fin_CapteurOuverture", "Debut_CapteurPresence", "Fin_CapteurPresence", 
+				"NiveauAlerte_CapteurRFID", "Min_CapteurTemperature", "Max_CapteurTemperature"};
+		Integer x = 0;
+		for(List<String> line : listSensorsDetails) {
+			if(line.get(3)==null && !line.get(1).equals("Bracelet RFID")) {
+				x++;
+			}
+		}
+		System.out.println(x);
 		if(x>0) { 
 			// If the result is not empty, we could fill our table
-			y = listObjectNullEmplacement.get(0).size()-1; //we don't want the "Emplacement" ID
+			Integer y = listSensorsDetails.get(0).size();
 			data = new Object[x][y]; 
 			Integer lineNumber = 0;
 			Integer columnNumber = 0;
-			for(List<String> line : listObjectNullEmplacement) {
+			for(List<String> line : listSensorsDetails) {
+				if(!(line.get(3)==null && !line.get(1).equals("Bracelet RFID"))) {
+					continue;
+				}
 				for(String column : line) {
-					if(columnNumber<=1) {
-						data[lineNumber][columnNumber]=column;
-						columnNumber++;
-						continue;
-					}
-					if(columnNumber==2) {
-						if(column.equals("0"))
-							data[lineNumber][columnNumber]="Disable";
-						else
-							data[lineNumber][columnNumber]="Enable";
-						columnNumber++;
-						continue;
-					}
-					if(columnNumber==3) {
-						// We don't want the "emplacement ID"
-						columnNumber++;
-						continue;
-					}
-					if(columnNumber==4) {
-						data[lineNumber][columnNumber-1]=column;
-						columnNumber++;
-						continue;
-					
-					}
-					if(columnNumber==5) {
-						data[lineNumber][columnNumber-1]="Max";
-						columnNumber++;
-						continue;
-					}
-					if(columnNumber==6) {
-						data[lineNumber][columnNumber-1]="Min";
-						columnNumber++;
-						continue;
-					}
-					if(columnNumber==7) {
-						data[lineNumber][columnNumber-1]="VA";
-						columnNumber++;
-					}
+					data[lineNumber][columnNumber]=column;
+					columnNumber++;
 				}
 				columnNumber=0;
 				lineNumber++;
 			}
-
 			objectTable = new JTable(data, header);
-			// We cancel the user selection of a table case.
-			objectTable.setDefaultEditor(Object.class, null);
-			//Hide ID column
-			objectTable.getColumnModel().getColumn(0).setMinWidth(0);
-			objectTable.getColumnModel().getColumn(0).setMaxWidth(0);
-			objectTable.getColumnModel().getColumn(6).setMinWidth(0);
-			objectTable.getColumnModel().getColumn(6).setMaxWidth(0);			
-			
+
 		}
 		else {
 			// if the result is empty, the table will be empty
 			objectTable = new JTable();
 		}
+
+		// We cancel the user selection of a table case.
+		objectTable.setDefaultEditor(Object.class, null);
+		//Hide ID column
+		//objectTable.getColumnModel().getColumn(0).setMinWidth(0);
+		//objectTable.getColumnModel().getColumn(0).setMaxWidth(0);			
 
 		if(scrollPane!=null)
 			remove(scrollPane);
@@ -258,9 +231,6 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		add(scrollPane, BorderLayout.CENTER);	
 	}
 
-	
-	
-	
 
 	/**
 	 * Method use to get the values of the selected row. It will be use especially in the ObjectModification class
@@ -286,9 +256,9 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		else 
 			listValues.add("0"); 
 		listValues.add(residenceCapteur.getSelectedItem().toString());
-//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
+		//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
 		listValues.add(etageCapteur.getSelectedItem().toString()); 
-//		listValues.add(macCapteur.getSelectedItem().toString()); 
+		//		listValues.add(macCapteur.getSelectedItem().toString()); 
 		return listValues; 
 
 	}
@@ -300,19 +270,19 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 			controller.getGui().changeWindow(WindowList.MENU);
 			return;
 		}
-		
-//		if(event.getSource().equals(valider)){
-//			clearlabel();
-//			listObject = controller.addObject(detectorList.getSelectedItem().toString());
-//			objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
-//			this.remove(scrollPane);
-//			gestionListObject();
-//			this.add(scrollPane, BorderLayout.CENTER);
-//			controller.getGui().revalidate();
-//			controller.getGui().repaint();
-//			return;
-//		}
-		
+
+		//		if(event.getSource().equals(valider)){
+		//			clearlabel();
+		//			listObject = controller.addObject(detectorList.getSelectedItem().toString());
+		//			objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
+		//			this.remove(scrollPane);
+		//			gestionListObject();
+		//			this.add(scrollPane, BorderLayout.CENTER);
+		//			controller.getGui().revalidate();
+		//			controller.getGui().repaint();
+		//			return;
+		//		}
+
 		if(event.getSource().equals(confirmation)) {
 			if(confirmation.isSelected()) 
 				valider.setEnabled(true);
@@ -330,7 +300,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 				message.setEnabled(true);
 			}
 			else {
-				message.setText("Une erreur est survenue. L'object n'a pas pu être configurer.");
+				message.setText("Une erreur est survenue. L'object n'a pas pu être configuré.");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);
 

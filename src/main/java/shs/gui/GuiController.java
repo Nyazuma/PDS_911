@@ -253,6 +253,10 @@ public class GuiController {
 	public List<List<String>> EmplacementFull(){
 		return readGeneric(new Message(MessageType.LISTEMPLACEMENTS)); 
 	}
+	
+	public List<List<String>> listSensors(){
+		return readGeneric(new Message(MessageType.LISTSENSORSDETAILS)); 
+	}
 
 
 	/**

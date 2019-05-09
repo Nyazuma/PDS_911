@@ -176,6 +176,10 @@ public class Controller {
 			resultList = listNonConfigured();
 			MsgListResult answer23 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer23);
+		case LISTSENSORSDETAILS :
+			resultList = sensorsDetails();
+			MsgListResult answer24 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer24);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -493,7 +497,23 @@ public class Controller {
 		}
 
 	}
+	
 
+	private List<List<String>> sensorsDetails() {
+		String sql = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur, NiveauAlerte_CapteurAppel, Seuil_CapteurFumee, Seuil_CapteurHygro, Debut_CapteurOuverture, " + 
+				"Fin_CapteurOuverture, Debut_CapteurPresence, Fin_CapteurPresence, NiveauAlerte_CapteurRFID, Min_CapteurTemperature, Max_CapteurTemperature " + 
+				"FROM Capteurs " + 
+				"LEFT JOIN CapteursAppel ON Capteurs.ID_Capteur = CapteursAppel.ID_CapteurAppel " + 
+				"LEFT JOIN CapteursFumee ON Capteurs.ID_Capteur = CapteursFumee.ID_CapteurFumee " + 
+				"LEFT JOIN CapteursHygro ON Capteurs.ID_Capteur = CapteursHygro.ID_CapteurHygro " + 
+				"LEFT JOIN CapteursOuverture ON Capteurs.ID_Capteur = CapteursOuverture.ID_CapteurOuverture " + 
+				"LEFT JOIN CapteursPresence ON Capteurs.ID_Capteur = CapteursPresence.ID_CapteurPresence " + 
+				"LEFT JOIN CapteursRFID ON Capteurs.ID_Capteur = CapteursRFID.ID_CapteurRFID " + 
+				"LEFT JOIN CapteursTemperature ON Capteurs.ID_Capteur = CapteursTemperature.ID_CapteurTemperature";
+		return getList(sql);
+	}
+
+	
 	/**
 	 * getList()
 	 * @return a list given by the select request
