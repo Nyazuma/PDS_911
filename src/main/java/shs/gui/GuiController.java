@@ -362,6 +362,10 @@ public class GuiController {
 		return readGeneric(new Message(MessageType.MONITORING));
 	}
 
+	
+	public List<List<String>> listNonConfigured(){
+		return readGeneric(new Message(MessageType.LISTNONCONFIGURED));
+	}
 	/**
 	 * 
 	 * @param id
