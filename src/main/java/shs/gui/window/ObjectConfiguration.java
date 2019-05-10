@@ -114,12 +114,12 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMinCapteur.setBounds(701, 329, 152, 28);
 		this.add(lblMinCapteur);	
-		
+
 
 		listSensorsDetails = controller.listSensors();
 		configListObject();
-//		makeFieldsAppear();
-		
+		//		makeFieldsAppear();
+
 
 		//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
 		minCapteur = new JTextField();
@@ -132,7 +132,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		lblMaxCapteur = new JLabel("Max : ");
 		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMaxCapteur.setBounds(701, 395, 152, 28);
-	//	this.add(lblMaxCapteur);	
+		//	this.add(lblMaxCapteur);	
 
 
 		//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
@@ -141,7 +141,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		//		minCapteur.setModel(modelMinCapteur);
 		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
 		maxCapteur.setBounds(791, 400, 265, 42);
-	//	this.add(maxCapteur);
+		//	this.add(maxCapteur);
 
 		confirmation = new JCheckBox("Je confirme vouloir configurer cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
@@ -162,18 +162,18 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		message.setBounds(389, 802, 559, 16);
 		message.setEnabled(false);
 		this.add(message);
-		
+
 		objectNumberTitleLabel = new JLabel("Non configurés restants : ");
 		objectNumberTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectNumberTitleLabel.setBounds(50, 140, 300, 30);
 		this.add(objectNumberTitleLabel);
-		
-//		objectNumberLabel = new JLabel("");
-//		objectNumberLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		objectNumberLabel.setBounds(300, 145, 300, 30);
-//		objectNumberLabel.setText(Integer.toString(controller.nbObjectNonConfigured())); 
-//		this.add(objectNumberLabel);
-		
+
+		//		objectNumberLabel = new JLabel("");
+		//		objectNumberLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		//		objectNumberLabel.setBounds(300, 145, 300, 30);
+		//		objectNumberLabel.setText(Integer.toString(controller.nbObjectNonConfigured())); 
+		//		this.add(objectNumberLabel);
+
 		returnButton = new JButton("Retour");
 		returnButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		returnButton.setBounds(56, 40, 98, 48);
@@ -187,38 +187,38 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	/**
 	 * This method make fields appear considering the type of captor selected
 	 */
-	
-//	public void makeFieldsAppear() {
-//		System.out.println("Testhella");
-//		for(List<String> line : listSensorsDetails) {
-//		if(line.get(1).equals("Capteur hygrométrique")){
-//			this.add(lblMaxCapteur);
-//			this.add(maxCapteur);
-//			
-//			
-//		}
-//		}
-//	}
+
+	//	public void makeFieldsAppear() {
+	//		System.out.println("Testhella");
+	//		for(List<String> line : listSensorsDetails) {
+	//		if(line.get(1).equals("Capteur hygrométrique")){
+	//			this.add(lblMaxCapteur);
+	//			this.add(maxCapteur);
+	//			
+	//			
+	//		}
+	//		}
+	//	}
 	/**
 	 * This method is used to display the JTable of objects
 	 */
-	
+
 	public void configListObject() {
 		String[] header = {"ID_Capteur", "Type_Capteur", "Etat_Capteur", "ID_Emplacement", "Mac_Capteur", "NiveauAlerte_CapteurAppel", "Seuil_CapteurFumee", 
 				"Seuil_CapteurHygro", "Debut_CapteurOuverture", "Fin_CapteurOuverture", "Debut_CapteurPresence", "Fin_CapteurPresence", 
 				"NiveauAlerte_CapteurRFID", "Min_CapteurTemperature", "Max_CapteurTemperature"};
 		Integer x = 0;
-//		String nbNC = "";
+		//		String nbNC = "";
 		for(List<String> line : listSensorsDetails) {
 			if(line.get(3)==null && !line.get(1).equals("Bracelet RFID")) {
-				
+
 				// TODO Jlabel pour faire afficher x comme etant le nb d'objets co
-//			     nbNC =	String.valueOf(x);
-//				lblnbNonConfig = new JLabel(nbNC);
-//				lblnbNonConfig.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//				lblnbNonConfig.setBounds(300, 145, 300, 30);
-//				this.add(lblnbNonConfig);
-//				
+				//			     nbNC =	String.valueOf(x);
+				//				lblnbNonConfig = new JLabel(nbNC);
+				//				lblnbNonConfig.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				//				lblnbNonConfig.setBounds(300, 145, 300, 30);
+				//				this.add(lblnbNonConfig);
+				//				
 				x++;
 			}
 		}
@@ -233,34 +233,31 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 				if(!(line.get(3)==null && !line.get(1).equals("Bracelet RFID"))) {
 					System.out.println("numero de colonne "+ columnNumber);
 					continue;
-					
+
 
 					// TODO Put "-" to the columns we don't need for each type  5 6 8 9 10 11 12 13 14
 				}
-					
-			
+
+
 				for(String column : line) {
-					data[lineNumber][columnNumber]=column;
-					columnNumber++;
-					
 					if (line.get(1).equals("Capteur hygrométrique")) {
 						if((columnNumber == 5 ) || (columnNumber == 6 )) {
-							System.out.println("test iccccccccccci");
 							System.out.println(lineNumber +"  "+ columnNumber);
-						 data[lineNumber][5]="-HELLA-";
-						 data[lineNumber][5]="-HELLA-";
-						 
+							data[lineNumber][columnNumber]="-";;
+							columnNumber++;
+							continue;
+						}
 					}
-						
-						}	
-					
-					
+					data[lineNumber][columnNumber]=column;
+					columnNumber++;
+
+
 				}
 				for(int i =0; i<=14; i++) {
-				System.out.println(" test "+  data[lineNumber][i]);
-				
+					System.out.println(" test "+  data[lineNumber][i]);
+
 				}
-				
+
 				columnNumber=0;
 				lineNumber++;
 			}
@@ -288,11 +285,11 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		objectTable.getColumnModel().getColumn(10).setMaxWidth(0);
 		objectTable.getColumnModel().getColumn(11).setMinWidth(0);
 		objectTable.getColumnModel().getColumn(11).setMaxWidth(0);
-		
 
 
-			
-		
+
+
+
 		if(scrollPane!=null)
 			remove(scrollPane);
 
