@@ -167,7 +167,7 @@ public class GuiController {
 		return readInt(nbObjectFetch);
 	}
 	
-	
+
 	
 	public int nbObjectNonConfigured() {
 		Message nbObjectNonConfigured = new Message(MessageType.NUMBEROBJECTNONCONFIGURED);

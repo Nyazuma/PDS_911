@@ -49,6 +49,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private JLabel lblTemperatureCapteur; 
 	private JLabel objectNumberTitleLabel;
 	protected JLabel objectNumberLabel; 
+	private JLabel  lblnbNonConfig;
 	//	private JComboBox<String> macCapteur; 
 	//	private JLabel lblMacCapteur; 	
 
@@ -113,22 +114,25 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMinCapteur.setBounds(701, 329, 152, 28);
 		this.add(lblMinCapteur);	
+		
 
 		listSensorsDetails = controller.listSensors();
 		configListObject();
+//		makeFieldsAppear();
+		
 
 		//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
 		minCapteur = new JTextField();
 		minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		//		minCapteur.setModel(modelMinCapteur);
 		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		minCapteur.setBounds(791, 400, 265, 42);
+		minCapteur.setBounds(791, 330, 265, 42);
 		this.add(minCapteur);
 
 		lblMaxCapteur = new JLabel("Max : ");
 		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblMaxCapteur.setBounds(701, 395, 152, 28);
-		this.add(lblMaxCapteur);	
+	//	this.add(lblMaxCapteur);	
 
 
 		//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
@@ -136,9 +140,8 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		//		minCapteur.setModel(modelMinCapteur);
 		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		maxCapteur.setBounds(791, 330, 265, 42);
-		this.add(maxCapteur);
-
+		maxCapteur.setBounds(791, 400, 265, 42);
+	//	this.add(maxCapteur);
 
 		confirmation = new JCheckBox("Je confirme vouloir configurer cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
@@ -165,6 +168,12 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		objectNumberTitleLabel.setBounds(50, 140, 300, 30);
 		this.add(objectNumberTitleLabel);
 		
+//		objectNumberLabel = new JLabel("");
+//		objectNumberLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		objectNumberLabel.setBounds(300, 145, 300, 30);
+//		objectNumberLabel.setText(Integer.toString(controller.nbObjectNonConfigured())); 
+//		this.add(objectNumberLabel);
+		
 		returnButton = new JButton("Retour");
 		returnButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		returnButton.setBounds(56, 40, 98, 48);
@@ -174,34 +183,84 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	}
 
 
+
+	/**
+	 * This method make fields appear considering the type of captor selected
+	 */
+	
+//	public void makeFieldsAppear() {
+//		System.out.println("Testhella");
+//		for(List<String> line : listSensorsDetails) {
+//		if(line.get(1).equals("Capteur hygrométrique")){
+//			this.add(lblMaxCapteur);
+//			this.add(maxCapteur);
+//			
+//			
+//		}
+//		}
+//	}
 	/**
 	 * This method is used to display the JTable of objects
 	 */
+	
 	public void configListObject() {
 		String[] header = {"ID_Capteur", "Type_Capteur", "Etat_Capteur", "ID_Emplacement", "Mac_Capteur", "NiveauAlerte_CapteurAppel", "Seuil_CapteurFumee", 
 				"Seuil_CapteurHygro", "Debut_CapteurOuverture", "Fin_CapteurOuverture", "Debut_CapteurPresence", "Fin_CapteurPresence", 
 				"NiveauAlerte_CapteurRFID", "Min_CapteurTemperature", "Max_CapteurTemperature"};
 		Integer x = 0;
+//		String nbNC = "";
 		for(List<String> line : listSensorsDetails) {
 			if(line.get(3)==null && !line.get(1).equals("Bracelet RFID")) {
+				
+				// TODO Jlabel pour faire afficher x comme etant le nb d'objets co
+//			     nbNC =	String.valueOf(x);
+//				lblnbNonConfig = new JLabel(nbNC);
+//				lblnbNonConfig.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//				lblnbNonConfig.setBounds(300, 145, 300, 30);
+//				this.add(lblnbNonConfig);
+//				
 				x++;
 			}
 		}
-		System.out.println(x);
+		System.out.println("Nombre d'objets dans la liste "+ x);
 		if(x>0) { 
-			// If the result is not empty, we could fill our table
+			// If the result is not empty, we can fill our table
 			Integer y = listSensorsDetails.get(0).size();
 			data = new Object[x][y]; 
 			Integer lineNumber = 0;
 			Integer columnNumber = 0;
 			for(List<String> line : listSensorsDetails) {
 				if(!(line.get(3)==null && !line.get(1).equals("Bracelet RFID"))) {
+					System.out.println("numero de colonne "+ columnNumber);
 					continue;
+					
+
+					// TODO Put "-" to the columns we don't need for each type  5 6 8 9 10 11 12 13 14
 				}
+					
+			
 				for(String column : line) {
 					data[lineNumber][columnNumber]=column;
 					columnNumber++;
+					
+					if (line.get(1).equals("Capteur hygrométrique")) {
+						if((columnNumber == 5 ) || (columnNumber == 6 )) {
+							System.out.println("test iccccccccccci");
+							System.out.println(lineNumber +"  "+ columnNumber);
+						 data[lineNumber][5]="-HELLA-";
+						 data[lineNumber][5]="-HELLA-";
+						 
+					}
+						
+						}	
+					
+					
 				}
+				for(int i =0; i<=14; i++) {
+				System.out.println(" test "+  data[lineNumber][i]);
+				
+				}
+				
 				columnNumber=0;
 				lineNumber++;
 			}
@@ -230,14 +289,10 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		objectTable.getColumnModel().getColumn(11).setMinWidth(0);
 		objectTable.getColumnModel().getColumn(11).setMaxWidth(0);
 		
-		// TODO Hide columns that aren't linked to the type chosed 
-		for(List<String> line : listSensorsDetails) {
-		if (line.get(1).equals("Capteur hygrométrique")) {
-		objectTable.getColumnModel().getColumn(4).equals("Hella");
 
-		}
+
 			
-		}
+		
 		if(scrollPane!=null)
 			remove(scrollPane);
 
