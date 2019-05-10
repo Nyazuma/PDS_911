@@ -166,6 +166,25 @@ public class GuiController {
 		MsgNumberObjectFetch nbObjectFetch = new MsgNumberObjectFetch (captorType, captorState, captorPlace, captorFloor, captorResidence);
 		return readInt(nbObjectFetch);
 	}
+	
+	
+	
+	public int nbObjectNonConfigured() {
+		Message nbObjectNonConfigured = new Message(MessageType.NUMBEROBJECTNONCONFIGURED);
+		String output = Tool.messageToJSON(nbObjectNonConfigured);
+		String answer;
+		try {
+			answer = contactServer(output);
+			if(answer!= null) {
+				MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
+				return result.getNumber();
+			}
+		}
+		catch (ConnectException e) {
+			return -1;
+		}
+		return -1;
+	}
 
 	/**
 	 * 
@@ -187,6 +206,23 @@ public class GuiController {
 		}
 		return false; 
 	}
+	
+//	public boolean updateNonConfig(List<String> rowUpdate) {
+//		MsgUpdateObjectNonConfig update =  new MsgUpdateObjectNonConfig(rowUpdate);  
+//		String output = Tool.messageToJSON(update);
+//		String answer; 
+//		try {
+//			answer = contactServer(output); 
+//			if(answer != null) {
+//				MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
+//				return result.getStatus(); 
+//			}
+//		}catch (ConnectException e) {
+//			return false; 
+//		}
+//		return false; 
+//	}
+//	
 	
 	/**
 	 * 

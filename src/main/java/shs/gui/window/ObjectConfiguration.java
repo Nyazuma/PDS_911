@@ -47,6 +47,8 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private JLabel lblResidence; 
 	private JSlider sliderTemperature;
 	private JLabel lblTemperatureCapteur; 
+	private JLabel objectNumberTitleLabel;
+	protected JLabel objectNumberLabel; 
 	//	private JComboBox<String> macCapteur; 
 	//	private JLabel lblMacCapteur; 	
 
@@ -97,20 +99,19 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		typeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		typeCapteur.setModel(modelTypeCapteur);
 		typeCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(1).toString());
-		typeCapteur.setBounds(771, 243, 265, 42);
+		typeCapteur.setBounds(791, 243, 265, 42);
 		this.add(typeCapteur);
 
 
 		//TODO Faire apparaitre tableau à gauche 
 		lblTypeCapteur = new JLabel("Type :");
 		lblTypeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblTypeCapteur.setBounds(681, 250, 152, 28);
+		lblTypeCapteur.setBounds(701, 250, 152, 28);
 		this.add(lblTypeCapteur);
-
 
 		lblMinCapteur = new JLabel("Min : ");
 		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblMinCapteur.setBounds(681, 329, 152, 28);
+		lblMinCapteur.setBounds(701, 329, 152, 28);
 		this.add(lblMinCapteur);	
 
 		listSensorsDetails = controller.listSensors();
@@ -121,12 +122,12 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		//		minCapteur.setModel(modelMinCapteur);
 		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		minCapteur.setBounds(771, 400, 265, 42);
+		minCapteur.setBounds(791, 400, 265, 42);
 		this.add(minCapteur);
 
 		lblMaxCapteur = new JLabel("Max : ");
 		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblMaxCapteur.setBounds(681, 395, 152, 28);
+		lblMaxCapteur.setBounds(701, 395, 152, 28);
 		this.add(lblMaxCapteur);	
 
 
@@ -135,7 +136,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		//		minCapteur.setModel(modelMinCapteur);
 		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		maxCapteur.setBounds(771, 330, 265, 42);
+		maxCapteur.setBounds(791, 330, 265, 42);
 		this.add(maxCapteur);
 
 
@@ -158,17 +159,12 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		message.setBounds(389, 802, 559, 16);
 		message.setEnabled(false);
 		this.add(message);
-
-		JLabel label = new JLabel("------------------------------------------------------------------------------------------------------------------------------------------");
-		label.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		label.setBounds(315, 179, 740, 16);
-		this.add(label);
-
-		JLabel label_1 = new JLabel("-------------------------------------------------------------------------------------------------------------------------------------------");
-		label_1.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		label_1.setBounds(315, 632, 740, 16);
-		this.add(label_1);
-
+		
+		objectNumberTitleLabel = new JLabel("Non configurés restants : ");
+		objectNumberTitleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectNumberTitleLabel.setBounds(50, 140, 300, 30);
+		this.add(objectNumberTitleLabel);
+		
 		returnButton = new JButton("Retour");
 		returnButton.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		returnButton.setBounds(56, 40, 98, 48);
@@ -219,16 +215,35 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 
 		// We cancel the user selection of a table case.
 		objectTable.setDefaultEditor(Object.class, null);
-		//Hide ID column
-		//objectTable.getColumnModel().getColumn(0).setMinWidth(0);
-		//objectTable.getColumnModel().getColumn(0).setMaxWidth(0);			
+		//Hide columns that I don't need
 
+		objectTable.getColumnModel().getColumn(2).setMinWidth(0);
+		objectTable.getColumnModel().getColumn(2).setMaxWidth(0);			
+		objectTable.getColumnModel().getColumn(3).setMinWidth(0);
+		objectTable.getColumnModel().getColumn(3).setMaxWidth(0);	 
+		objectTable.getColumnModel().getColumn(8).setMinWidth(0);
+		objectTable.getColumnModel().getColumn(8).setMaxWidth(0);
+		objectTable.getColumnModel().getColumn(9).setMinWidth(0);
+		objectTable.getColumnModel().getColumn(9).setMaxWidth(0);
+		objectTable.getColumnModel().getColumn(10).setMinWidth(0);
+		objectTable.getColumnModel().getColumn(10).setMaxWidth(0);
+		objectTable.getColumnModel().getColumn(11).setMinWidth(0);
+		objectTable.getColumnModel().getColumn(11).setMaxWidth(0);
+		
+		// TODO Hide columns that aren't linked to the type chosed 
+		for(List<String> line : listSensorsDetails) {
+		if (line.get(1).equals("Capteur hygrométrique")) {
+		objectTable.getColumnModel().getColumn(4).equals("Hella");
+
+		}
+			
+		}
 		if(scrollPane!=null)
 			remove(scrollPane);
 
 		scrollPane = new JScrollPane(objectTable);
-		scrollPane.setBounds(12, 99, 438, 527);
-		add(scrollPane, BorderLayout.CENTER);	
+		scrollPane.setBounds(50, 225, 638, 427);
+		add(scrollPane, BorderLayout.CENTER);		
 	}
 
 
