@@ -17,7 +17,8 @@ public class CategoryHygro extends CategoryObject{
 
 	public void launchAlert(Integer id) {
 		for(int i=0; i<3; i++) {
-			Integer hygroValue = (int) (Math.random()*5)+95;
+			Integer hygroValue = DataConfigSimu.getMIN_HYGRO_VALUE() + 
+					(int) (Math.random()*(DataConfigSimu.getMAX_HYGRO_VALUE()-DataConfigSimu.getMIN_HYGRO_VALUE()));
 			MsgReportHygro update = new MsgReportHygro(id, hygroValue);
 			Connector.contactServer(Tool.messageToJSON(update));
 			try {

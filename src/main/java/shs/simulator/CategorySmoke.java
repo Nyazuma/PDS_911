@@ -18,7 +18,8 @@ public class CategorySmoke extends CategoryObject{
 	@Override
 	public void launchAlert(Integer id) {
 		for(int i=0; i<3; i++) {
-			int smokeValue = (int) (50 + Math.random()*50);
+			int smokeValue = DataConfigSimu.getMIN_SMOKE_VALUE() + 
+					(int) (Math.random()*(DataConfigSimu.getMAX_SMOKE_VALUE()-DataConfigSimu.getMIN_SMOKE_VALUE()));
 			MsgReportSmoke update = new MsgReportSmoke(id, smokeValue);
 			Connector.contactServer(Tool.messageToJSON(update));
 			try {

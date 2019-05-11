@@ -12,7 +12,7 @@ import shs.common.Tool;
 
 public class DataConfig {
 
-	private static final String PROPERTIES_FILE = "configuration"; 
+	private static final String PROPERTIES_FILE = "configurationServer"; 
 	private static  String PROPERTY_URL; 
 	private static  String PORT; 
 	private static  String PROPERTY_DB; 

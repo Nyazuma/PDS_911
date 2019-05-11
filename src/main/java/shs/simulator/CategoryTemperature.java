@@ -17,7 +17,8 @@ public class CategoryTemperature extends CategoryObject{
 
 	public void launchAlert(Integer id) {
 		for(int i=0; i<3; i++) {
-			float temperature = (float) (10.0 + Math.random()*4.0);
+			float temperature = DataConfigSimu.getMIN_TEMPERATURE_VALUE() + 
+					(float)(Math.random()*(DataConfigSimu.getMAX_TEMPERATURE_VALUE()-DataConfigSimu.getMIN_TEMPERATURE_VALUE()));
 			MsgReportTemperature update = new MsgReportTemperature(id, temperature);
 			Connector.contactServer(Tool.messageToJSON(update));
 			try {

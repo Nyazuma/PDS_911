@@ -18,6 +18,7 @@ public class Simulation {
 
 	public Simulation() {
 		System.out.println("911 SHS Simulation > launched!\n");
+		DataConfigSimu.getInstanceConfig();
 		init();
 		menu();
 	}

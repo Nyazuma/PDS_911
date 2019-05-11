@@ -37,7 +37,8 @@ public abstract class CategoryObject implements Runnable{
 				int id = getRandomID();
 				launchAlert(id);
 				// Delay
-				Thread.sleep((long) (4000 + Math.random()*20000));
+				Thread.sleep((long) (DataConfigSimu.getMIN_TIME_AUTO() + 
+						Math.random()*(DataConfigSimu.getMAX_TIME_AUTO()-DataConfigSimu.getMIN_TIME_AUTO())));
 			}
 		} catch (InterruptedException e) {
 			System.out.println("There is no '" + referencedName + "' available");

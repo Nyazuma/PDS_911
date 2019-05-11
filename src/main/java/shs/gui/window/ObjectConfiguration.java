@@ -222,7 +222,6 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 				x++;
 			}
 		}
-		System.out.println("Nombre d'objets dans la liste "+ x);
 		if(x>0) { 
 			// If the result is not empty, we can fill our table
 			Integer y = listSensorsDetails.get(0).size();
@@ -231,18 +230,11 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 			Integer columnNumber = 0;
 			for(List<String> line : listSensorsDetails) {
 				if(!(line.get(3)==null && !line.get(1).equals("Bracelet RFID"))) {
-					System.out.println("numero de colonne "+ columnNumber);
 					continue;
-
-
-					// TODO Put "-" to the columns we don't need for each type  5 6 8 9 10 11 12 13 14
 				}
-
-
 				for(String column : line) {
 					if (line.get(1).equals("Capteur hygrométrique")) {
 						if((columnNumber == 5 ) || (columnNumber == 6 )) {
-							System.out.println(lineNumber +"  "+ columnNumber);
 							data[lineNumber][columnNumber]="-";;
 							columnNumber++;
 							continue;
@@ -251,10 +243,6 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 					data[lineNumber][columnNumber]=column;
 					columnNumber++;
 
-
-				}
-				for(int i =0; i<=14; i++) {
-					System.out.println(" test "+  data[lineNumber][i]);
 
 				}
 
