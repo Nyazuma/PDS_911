@@ -171,7 +171,15 @@ public class Controller {
 					((MsgNumberObjectFetch)input).getCaptorPlace(), ((MsgNumberObjectFetch)input).getCaptorFloor(), 
 					((MsgNumberObjectFetch)input).getCaptorResidence());
 			MsgIntResult answer22 = new MsgIntResult(resultInteger); 
-			return Tool.messageToJSON(answer22);		
+			return Tool.messageToJSON(answer22);
+		case LISTNONCONFIGURED :
+			resultList = listNonConfigured();
+			MsgListResult answer23 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer23);
+		case LISTSENSORSDETAILS :
+			resultList = sensorsDetails();
+			MsgListResult answer24 = new MsgListResult(resultList); 
+			return Tool.messageToJSON(answer24);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -369,6 +377,43 @@ public class Controller {
 	 * @return
 	 */
 	
+	
+	
+	private List<List<String>> configObject(String typeCapteur, String addresseMac) {
+		
+		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', TRUE, null,'" + addresseMac + "')"; 
+
+		
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(request);
+			ResultSet generatedKeys = statement.getGeneratedKeys();
+			generatedKeys.next();
+			int id = generatedKeys.getInt(1);
+			request = "";
+			System.out.println(typeCapteur);
+			System.out.println();
+//			if(typeCapteur.equals("Capteur appel"))
+//				request = "INSERT INTO CapteursAppel(ID_CapteurAppel, NiveauAlerte_CapteurAppel) values(" + id +", 2)";
+			if(typeCapteur.equals("Capteur de fumée"))
+				request = "INSERT INTO CapteursFumee(ID_CapteurFumee, Seuil_CapteurFumee) values(" + id + ", 00)";
+			if(typeCapteur.equals("Capteur de présence"))
+				request = "INSERT INTO CapteursPresence(ID_CapteurPresence, Debut_CapteurPresence, Fin_CapteurPresence) values(" + id +", '00:00:00', '23:59:59')";
+			if(typeCapteur.equals("Capteur de température"))
+				request = "INSERT INTO CapteursTemperature(ID_CapteurTemperature, Min_CapteurTemperature, Max_CapteurTemperature) values(" + id +", 00, 00)";
+			if(typeCapteur.equals("Capteur hygrométrique"))
+				request = "INSERT INTO CapteursHygro(ID_CapteurHygro, Seuil_CapteurHygro) values(" + id + ", 00)";
+			if(typeCapteur.equals("Capteur ouverture"))
+				request = "INSERT INTO CapteursOuverture(ID_CapteurOuverture, Debut_CapteurOuverture, Fin_CapteurOuverture) values(" + id +", '00:00:00', '23:59:59')";
+			statement.executeUpdate(request);
+		}catch (SQLException e) {
+			Tool.logger.error("addObject FAILED - SQL EXCEPTION : " + request);
+		}
+		return listObjects(); 
+	}	
+		
+	
+	
 	private List<List<String>> addObject(String typeCapteur, String addresseMac) {
 		String request = "INSERT INTO Capteurs (Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur) VALUES ('"+ typeCapteur +"', TRUE, null,'" + addresseMac + "')"; 
 		
@@ -456,7 +501,23 @@ public class Controller {
 		}
 
 	}
+	
 
+	private List<List<String>> sensorsDetails() {
+		String sql = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, ID_Emplacement, Mac_Capteur, NiveauAlerte_CapteurAppel, Seuil_CapteurFumee, Seuil_CapteurHygro, Debut_CapteurOuverture, " + 
+				"Fin_CapteurOuverture, Debut_CapteurPresence, Fin_CapteurPresence, NiveauAlerte_CapteurRFID, Min_CapteurTemperature, Max_CapteurTemperature " + 
+				"FROM Capteurs " + 
+				"LEFT JOIN CapteursAppel ON Capteurs.ID_Capteur = CapteursAppel.ID_CapteurAppel " + 
+				"LEFT JOIN CapteursFumee ON Capteurs.ID_Capteur = CapteursFumee.ID_CapteurFumee " + 
+				"LEFT JOIN CapteursHygro ON Capteurs.ID_Capteur = CapteursHygro.ID_CapteurHygro " + 
+				"LEFT JOIN CapteursOuverture ON Capteurs.ID_Capteur = CapteursOuverture.ID_CapteurOuverture " + 
+				"LEFT JOIN CapteursPresence ON Capteurs.ID_Capteur = CapteursPresence.ID_CapteurPresence " + 
+				"LEFT JOIN CapteursRFID ON Capteurs.ID_Capteur = CapteursRFID.ID_CapteurRFID " + 
+				"LEFT JOIN CapteursTemperature ON Capteurs.ID_Capteur = CapteursTemperature.ID_CapteurTemperature";
+		return getList(sql);
+	}
+
+	
 	/**
 	 * getList()
 	 * @return a list given by the select request
@@ -494,15 +555,23 @@ public class Controller {
 
 	}
 
+//	private List<List<String>> listObjectsConfig(){
+//		String request = "SELECT ID_Capteur, Type_Capteur, Etat_Capteur, Nom_Residence, Niveau_Etage, Nom_Emplacement, Mac_Capteur, Capteurs.ID_Emplacement " +
+//				" FROM Capteurs LEFT JOIN Emplacements ON Capteurs.ID_Emplacement=Emplacements.ID_Emplacement " + 
+//				"				LEFT JOIN Etages ON Emplacements.ID_Etage=Etages.ID_Etage " + 
+//				"				LEFT JOIN Residences ON Etages.ID_Residence=Residences.ID_Residence; "; 
+//		return getList(request);
+//
+//	}
 	private List<List<String>> listCapteurs(){
 		String request ="Select * from Capteurs where Type_Capteur != 'Bracelet RFID';"; 
 		return getList(request); 
 	}
-// TODO recup list non configurés	
-//	private List<List<String>> listConfigs(){
-//		String request ="Select * from Capteurs where ID_Emplacement = null "; 
-//		return getList(request); 
-//	}
+ //TODO recup list non configurés	
+	private List<List<String>> listNonConfigured(){
+		String request ="Select * from Capteurs where ID_Emplacement = null "; 
+		return getList(request); 
+	}
 
 
 	private List<List<String>> listResidences() {
