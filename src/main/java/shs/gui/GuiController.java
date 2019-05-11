@@ -31,13 +31,21 @@ import shs.common.Tool;
 
 public class GuiController {
 
+	
+	public enum option{
+		NO_INTERFACE
+	}
+	
 	// JFrame of the application
 	protected Gui gui;
 
 	public GuiController() {
 		this.gui=new Gui(this);
 	}
-
+	
+	public GuiController(option opt) {
+		
+	}
 	/**
 	 * 
 	 * @return
