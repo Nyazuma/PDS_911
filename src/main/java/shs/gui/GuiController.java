@@ -491,13 +491,12 @@ public class GuiController {
 	 */
 	private String contactServer(String request) throws ConnectException {
 
-		final int port = 2001;
+		final int port = DataConfigClient.getSERVER_PORT();
 
 		// Get the local address
 		InetAddress address = null;
 		try {
-			address = InetAddress.getLocalHost(); //+ mettre dans config 192.168.20.20 et garder le même port
-			//address = InetAddress.getByName("192.168.20.20");
+			address = InetAddress.getByName(DataConfigClient.getSERVER_URL());
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
@@ -514,7 +513,6 @@ public class GuiController {
 			requestServer.writeUTF(request);
 			requestServer.flush();
 			// We get the answer 
-			//TODO : put a timer before awfull exception
 			rawAnswerServer= new DataInputStream(socket.getInputStream());
 			answerServer = rawAnswerServer.readUTF();
 		}
@@ -523,9 +521,7 @@ public class GuiController {
 			try {
 				socket.close();
 				rawAnswerServer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} catch (IOException e) {}
 		}
 		return answerServer;
 	}
