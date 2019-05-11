@@ -321,11 +321,15 @@ public class Controller {
 				+ "c LEFT JOIN shs.Emplacements e on c.ID_Emplacement = e.ID_Emplacement " 
 				+ "LEFT JOIN shs.Etages et ON e.ID_Etage = et.ID_Etage "
 				+ "LEFT JOIN shs.Residences r ON et.ID_Residence = r.ID_Residence "
-				+ "WHERE Type_Capteur = '" + captorType + "' "
-				+ "AND Etat_Capteur = '" + captorState + "' "
-				+ "AND Nom_Emplacement = '" + captorPlace + "' "
-				+ "AND Niveau_Etage = '" + captorFloor + "' "
-				+ "AND Nom_Residence = '" + captorResidence + "';";
+				+ "WHERE Type_Capteur = '" + captorType + "' ";
+		if (!captorState.equals(""))
+				request = request + "AND Etat_Capteur = '" + captorState + "' ";
+		if (!captorPlace.equals(""))
+				request = request + "AND Nom_Emplacement = '" + captorPlace + "' ";
+		if (!captorFloor.equals(""))
+				request = request + "AND Niveau_Etage = '" + captorFloor + "' ";
+		if (!captorResidence.equals(""))
+				request = request + "AND Nom_Residence = '" + captorResidence + "';";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);

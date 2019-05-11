@@ -71,6 +71,7 @@ public class Statistics extends JPanel implements ActionListener{
 		this.add(btnRetour);
 		
 		objectNumberLabel = new JLabel("");
+		objectNumberLabel.setForeground(Color.RED);
 		objectNumberLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectNumberLabel.setBounds(267, 437, 55, 28);
 		objectNumberLabel.setText(Integer.toString(controller.nbObject())); 
@@ -85,7 +86,6 @@ public class Statistics extends JPanel implements ActionListener{
 		typeCapteur = new JComboBox<String>();
 		typeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		typeCapteur.setModel(modelTypeCapteur);
-		//typeCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(1).toString());
 		typeCapteur.setBounds(12, 130, 233, 32);
 		this.add(typeCapteur);
 		
@@ -97,8 +97,8 @@ public class Statistics extends JPanel implements ActionListener{
 		stateCaptor = new JComboBox<String>();
 		stateCaptor.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		stateCaptor.setModel(modelStateCaptor);
-		//etatCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(2).toString());
 		stateCaptor.setBounds(351, 130, 116, 32);
+		stateCaptor.insertItemAt("", 0);
 		this.add(stateCaptor);
 		
 		
@@ -111,8 +111,8 @@ public class Statistics extends JPanel implements ActionListener{
 		residence = new JComboBox<String>(); 
 		residence.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		residence.setModel(modelResidence);
-		//residence.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
 		residence.setBounds(530, 130, 134, 32);
+		residence.insertItemAt("", 0);
 		this.add(residence);
 		
 		JLabel lblNombresDeCapteurs = new JLabel("Nombres de capteurs");
@@ -130,6 +130,7 @@ public class Statistics extends JPanel implements ActionListener{
 		zone.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		zone.setModel(modelEmplacement);
 		zone.setBounds(735, 130, 134, 32);
+		zone.insertItemAt("", 0);
 		this.add(zone); 
 	
 		JLabel lblEtage = new JLabel("Etage");
@@ -142,6 +143,7 @@ public class Statistics extends JPanel implements ActionListener{
 		floor.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		floor.setModel(modelFloor);
 		floor.setBounds(963, 130, 161, 32);
+		floor.insertItemAt("", 0);
 		this.add(floor);
 		
 		JLabel lblNombreDeLogements = new JLabel("Nombre de logements");
@@ -201,7 +203,7 @@ public class Statistics extends JPanel implements ActionListener{
 		add(btnDetails);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(537, 612, 540, 226);
+		scrollPane.setBounds(1241, 89, 540, 226);
 		add(scrollPane);
 		
 		JLabel lblSocksRestants = new JLabel("Socks restants :");
@@ -209,21 +211,25 @@ public class Statistics extends JPanel implements ActionListener{
 		add(lblSocksRestants);
 		
 		objectAdded = new JLabel("0");
+		objectAdded.setForeground(Color.RED);
 		objectAdded.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectAdded.setBounds(646, 437, 55, 28);		
 		this.add(objectAdded);
 		
 		objectDeleted = new JLabel("0");
+		objectDeleted.setForeground(Color.RED);
 		objectDeleted.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectDeleted.setBounds(941, 437, 55, 28); 
 		this.add(objectDeleted);
 		
 		objectModified = new JLabel("0");
+		objectModified.setForeground(Color.RED);
 		objectModified.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectModified.setBounds(646, 494, 55, 28);
 		this.add(objectModified);
 		
 		objectAlert = new JLabel("0");
+		objectAlert.setForeground(Color.RED);
 		objectAlert.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		objectAlert.setBounds(862, 494, 55, 28);
 		this.add(objectAlert);
@@ -235,6 +241,7 @@ public class Statistics extends JPanel implements ActionListener{
 		this.add(btnValider2);
 		
 		fetchResult = new JLabel("0");
+		fetchResult.setForeground(Color.RED);
 		fetchResult.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		fetchResult.setBounds(442, 268, 55, 28);
 		this.add(fetchResult);
@@ -256,11 +263,6 @@ public class Statistics extends JPanel implements ActionListener{
 		}
 		
 		if (e.getSource().equals(btnValider2)) {
-			System.out.println(typeCapteur.getSelectedItem().toString());
-			System.out.println(stateCaptor.getSelectedItem().toString());
-			System.out.println(zone.getSelectedItem().toString());
-			System.out.println(floor.getSelectedItem().toString());
-			System.out.println(residence.getSelectedItem().toString());
 			fetchResult.setText(Integer.toString(controller.nbObjectFetch(typeCapteur.getSelectedItem().toString(), stateCaptor.getSelectedItem().toString(), 
 					zone.getSelectedItem().toString(), floor.getSelectedItem().toString(), residence.getSelectedItem().toString())));
 		}
