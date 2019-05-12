@@ -180,6 +180,14 @@ public class Controller {
 			resultList = sensorsDetails();
 			MsgListResult answer24 = new MsgListResult(resultList); 
 			return Tool.messageToJSON(answer24);
+		case NUMBEROBJECTON :
+			resultInteger = nbObjectsOn();
+			MsgIntResult answer25 = new MsgIntResult(resultInteger);
+			return Tool.messageToJSON(answer25);
+		case NUMBEROBJECTOFF :
+			resultInteger = nbObjectsOff();
+			MsgIntResult answer26 = new MsgIntResult(resultInteger);
+			return Tool.messageToJSON(answer26);
 		default:
 			Tool.logger.error("#Error : Controller > treatmentRequest : Unknow request " + request);
 			return null;
@@ -248,6 +256,44 @@ public class Controller {
 		}
 	}
 	
+	private int nbObjectsOn() {
+		String request = "Select count(*) from Capteurs WHERE Etat_Capteur = 1";  
+
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultat = statement.executeQuery(request);
+			resultat.next(); 
+			Tool.logger.info("nbObjectOn SUCCEED");
+
+			return resultat.getInt(1); 
+
+		}catch (SQLException e) {
+			Tool.logger.error("nbObjectOn FAILED - SQL EXCEPTION");
+
+			return 0; 
+		}
+	}
+	
+	private int nbObjectsOff() {
+		String request = "Select count(*) from Capteurs WHERE Etat_Capteur = 0";  
+
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultat = statement.executeQuery(request);
+			resultat.next(); 
+			Tool.logger.info("nbObjectOff SUCCEED");
+
+			return resultat.getInt(1); 
+
+		}catch (SQLException e) {
+			Tool.logger.error("nbObjectOff FAILED - SQL EXCEPTION");
+
+			return 0; 
+		}
+	}
+	
 	private int nbObjectAdded(String dateFrom, String dateTo) {							
 		String request = "SELECT COUNT(*) FROM shs.Historisations "
 				+ "WHERE Hist_comm='insert' "
@@ -256,12 +302,12 @@ public class Controller {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
-			Tool.logger.info("nbObject SUCCEED");
+			Tool.logger.info("nbObjectAdded SUCCEED");
 
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
-			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+			Tool.logger.error("nbObjectAdded FAILED - SQL EXCEPTION");
 
 			return 0; 
 		}
@@ -275,12 +321,12 @@ public class Controller {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
-			Tool.logger.info("nbObject SUCCEED");
+			Tool.logger.info("nbObjectDeleted SUCCEED");
 
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
-			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+			Tool.logger.error("nbObjectDeleted FAILED - SQL EXCEPTION");
 
 			return 0; 
 		}
@@ -294,12 +340,12 @@ public class Controller {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
-			Tool.logger.info("nbObject SUCCEED");
+			Tool.logger.info("nbObjectUpdated SUCCEED");
 
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
-			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+			Tool.logger.error("nbObjectUpdated FAILED - SQL EXCEPTION");
 
 			return 0; 
 		}
@@ -313,12 +359,12 @@ public class Controller {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
-			Tool.logger.info("nbObject SUCCEED");
+			Tool.logger.info("nbObjectAlert SUCCEED");
 
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
-			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+			Tool.logger.error("nbObjectAlert FAILED - SQL EXCEPTION");
 
 			return 0; 
 		}
@@ -329,21 +375,25 @@ public class Controller {
 				+ "c LEFT JOIN shs.Emplacements e on c.ID_Emplacement = e.ID_Emplacement " 
 				+ "LEFT JOIN shs.Etages et ON e.ID_Etage = et.ID_Etage "
 				+ "LEFT JOIN shs.Residences r ON et.ID_Residence = r.ID_Residence "
-				+ "WHERE Type_Capteur = '" + captorType + "' "
-				+ "AND Etat_Capteur = '" + captorState + "' "
-				+ "AND Nom_Emplacement = '" + captorPlace + "' "
-				+ "AND Niveau_Etage = '" + captorFloor + "' "
-				+ "AND Nom_Residence = '" + captorResidence + "';";
+				+ "WHERE Type_Capteur = '" + captorType + "' ";
+		if (!captorState.equals(""))
+				request = request + "AND Etat_Capteur = '" + captorState + "' ";
+		if (!captorPlace.equals(""))
+				request = request + "AND Nom_Emplacement = '" + captorPlace + "' ";
+		if (!captorFloor.equals(""))
+				request = request + "AND Niveau_Etage = '" + captorFloor + "' ";
+		if (!captorResidence.equals(""))
+				request = request + "AND Nom_Residence = '" + captorResidence + "';";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultat = statement.executeQuery(request);
 			resultat.next(); 
-			Tool.logger.info("nbObject SUCCEED");
+			Tool.logger.info("nbObjectFetch SUCCEED");
 
 			return resultat.getInt(1); 
 
 		}catch (SQLException e) {
-			Tool.logger.error("nbObject FAILED - SQL EXCEPTION");
+			Tool.logger.error("nbObjectFetch FAILED - SQL EXCEPTION");
 
 			return 0; 
 		}

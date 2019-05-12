@@ -12,9 +12,9 @@ public class MemoryCache implements Runnable {
 
 
 	private static Map<Integer, List<List<Object>>> cache = new ConcurrentHashMap<Integer, List<List<Object>>>();
-	// TODO : could be useful to put these numbers in the config file
+
 	final protected static Integer occurenciesNecessary = 3;
-	final protected static Integer delayTime = 2*60*1000; // max delay which defines that two events are linked
+	final protected static Integer delayTime = 3*60*1000; // max delay which defines that two events are linked
 	final protected static Integer frequenceClearTime = 15*60*1000;
 	
 	public static boolean addCacheData(Integer id) {

@@ -13,13 +13,12 @@ public class Connector {
 	
 	public static String contactServer(String request){
 
-		final int port = 2001;
+		final int port = DataConfigSimu.getSERVER_PORT();
 
 		// Get the local address
 		InetAddress address = null;
 		try {
-			address = InetAddress.getLocalHost(); 
-			//address = InetAddress.getByName("192.168.20.20");
+			address = InetAddress.getByName(DataConfigSimu.getSERVER_URL());
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}

@@ -11,7 +11,7 @@ public class LaunchGui {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		DataConfig.getInstanceConfig();
+		DataConfigClient.getInstanceConfig();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

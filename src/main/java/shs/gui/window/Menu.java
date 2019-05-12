@@ -31,7 +31,7 @@ public class Menu extends JPanel implements ActionListener{
 
 		titleLabel = new JLabel("Veuillez indiquer l'action que vous souhaitez r\u00E9aliser : ");
 		titleLabel.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		titleLabel.setBounds(541, 128, 400, 22);
+		titleLabel.setBounds(462, 128, 482, 22);
 		this.add(titleLabel);
 
 		ObjectGestionButton = new JButton("Gestion des objets");
