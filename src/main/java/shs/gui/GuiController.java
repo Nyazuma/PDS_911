@@ -10,6 +10,9 @@ import java.net.UnknownHostException;
 import java.sql.Date;
 import java.util.List;
 
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
+
 import shs.common.Message;
 import shs.common.MsgDeleteObject;
 import shs.common.MessageType;
@@ -27,6 +30,7 @@ import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
 import shs.common.MsgUpdateEmplacement;
 import shs.common.MsgUpdateObject;
+import shs.common.MsgUpdateObjectNonConfigured;
 import shs.common.Tool;
 
 public class GuiController {
@@ -249,22 +253,22 @@ public class GuiController {
 		return false; 
 	}
 	
-//	public boolean updateNonConfig(List<String> rowUpdate) {
-//		MsgUpdateObjectNonConfig update =  new MsgUpdateObjectNonConfig(rowUpdate);  
-//		String output = Tool.messageToJSON(update);
-//		String answer; 
-//		try {
-//			answer = contactServer(output); 
-//			if(answer != null) {
-//				MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
-//				return result.getStatus(); 
-//			}
-//		}catch (ConnectException e) {
-//			return false; 
-//		}
-//		return false; 
-//	}
-//	
+	public boolean updateNonConfig(String typeCapteur, Integer id, JTextField minCapteur, JTextField maxCapteur, JFormattedTextField minDate, JFormattedTextField maxDate) {
+		MsgUpdateObjectNonConfigured updateNonConfig =  new MsgUpdateObjectNonConfigured(id, typeCapteur, minCapteur ,maxCapteur, minDate, maxDate);  
+		String output = Tool.messageToJSON(updateNonConfig);
+		String answer; 
+		try {
+			answer = contactServer(output); 
+			if(answer != null) {
+				MsgBooleanResult result = (MsgBooleanResult)Tool.jsonToMessage(answer); 
+				return result.getStatus(); 
+			}
+		}catch (ConnectException e) {
+			return false; 
+		}
+		return false; 
+	}
+	
 	
 	/**
 	 * 

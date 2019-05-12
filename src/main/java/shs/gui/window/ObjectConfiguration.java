@@ -75,7 +75,8 @@ protected JTextField normalDate;
 private JButton buttonDate; 
 private JDateChooser dateFrom;
 private JDateChooser dateTo;
-private JFormattedTextField formatText;
+private JFormattedTextField minDate;
+private JFormattedTextField maxDate;
 	// TODO supprimer les lignes inutiles 
 
 	//Initialization of the JComboBox with a model
@@ -192,19 +193,19 @@ private JFormattedTextField formatText;
 	    Date datedebut = new Date();
 	    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
 	    String dateString = formatter.format(datedebut);
-	    formatText = new JFormattedTextField(createFormatter("##:##:##"));
-	    formatText.setColumns(20);
-	    formatText.setText(dateString);
-	    formatText.setBounds(791, 330, 96, 22);
+	    minDate = new JFormattedTextField(createFormatter("##:##:##"));
+	    minDate.setColumns(20);
+	    minDate.setText(dateString);
+	    minDate.setBounds(791, 330, 96, 22);
 	    
 	    
 	    Date datefin = new Date();
 	    SimpleDateFormat formatter2 = new SimpleDateFormat("hh:mm:ss");
 	    String dateString2 = formatter.format(datefin);
-	    formatText = new JFormattedTextField(createFormatter("##:##:##"));
-	    formatText.setColumns(20);
-	    formatText.setText(dateString);
-	    formatText.setBounds(789, 401, 96, 22);
+	    maxDate = new JFormattedTextField(createFormatter("##:##:##"));
+	    maxDate.setColumns(20);
+	    maxDate.setText(dateString);
+	    maxDate.setBounds(789, 401, 96, 22);
 	    
 
 	  //this.setLayout(new BorderLayout());
@@ -224,7 +225,7 @@ private JFormattedTextField formatText;
 		    try {
 		      formatter = new MaskFormatter(s);
 		    } catch (java.text.ParseException exc) {
-		      System.err.println("formatter is bad: " + exc.getMessage());
+		      System.err.println("Mauvais format de date: " + exc.getMessage());
 		    }
 		    return formatter;
 		  }
@@ -281,22 +282,22 @@ private JFormattedTextField formatText;
 			    Date datedebut = new Date();
 			    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
 			    String dateString = formatter.format(datedebut);
-			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
-			    formatText.setColumns(20);
-			    formatText.setText(dateString);
-			    formatText.setBounds(791, 330, 96, 22);
+			    minDate = new JFormattedTextField(createFormatter("##:##:##"));
+			    minDate.setColumns(20);
+			    minDate.setText(dateString);
+			    minDate.setBounds(791, 330, 96, 22);
 			    
-			    this.add(formatText);
+			    this.add(minDate);
 			    Date datefin = new Date();
 			    SimpleDateFormat formatter2 = new SimpleDateFormat("hh:mm:ss");
 			    String dateString2 = formatter.format(datefin);
-			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
-			    formatText.setColumns(20);
-			    formatText.setText(dateString);
-			    formatText.setBounds(789, 401, 96, 22);
+			    maxDate = new JFormattedTextField(createFormatter("##:##:##"));
+			    maxDate.setColumns(20);
+			    maxDate.setText(dateString);
+			    maxDate.setBounds(789, 401, 96, 22);
 				
 				
-				 this.add(formatText);
+				 this.add(maxDate);
 				
 				this.add(lblMaxCapteur);	
 //				this.add(maxCapteur);
@@ -332,22 +333,22 @@ private JFormattedTextField formatText;
 			    Date datedebut = new Date();
 			    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
 			    String dateString = formatter.format(datedebut);
-			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
-			    formatText.setColumns(20);
-			    formatText.setText(dateString);
-			    formatText.setBounds(791, 330, 96, 22);
+			    minDate = new JFormattedTextField(createFormatter("##:##:##"));
+			    minDate.setColumns(20);
+			    minDate.setText(dateString);
+			    minDate.setBounds(791, 330, 96, 22);
 			    
-			    this.add(formatText);
+			    this.add(minDate);
 			    Date datefin = new Date();
 			    SimpleDateFormat formatter2 = new SimpleDateFormat("hh:mm:ss");
 			    String dateString2 = formatter.format(datefin);
-			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
-			    formatText.setColumns(20);
-			    formatText.setText(dateString);
-			    formatText.setBounds(789, 401, 96, 22);
+			    maxDate = new JFormattedTextField(createFormatter("##:##:##"));
+			    maxDate.setColumns(20);
+			    maxDate.setText(dateString);
+			    maxDate.setBounds(789, 401, 96, 22);
 				
 				
-				 this.add(formatText);
+				 this.add(maxDate);
 				
 				this.add(lblMaxCapteur);	
 //				this.add(maxCapteur);
@@ -528,7 +529,7 @@ private JFormattedTextField formatText;
 		}
 		if(event.getSource().equals(returnButton)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
-			controller.getGui().changeWindow(WindowList.MENU);
+			controller.getGui().changeWindow(WindowList.OBJECTGESTION);
 			return;
 		}
 
@@ -554,22 +555,35 @@ private JFormattedTextField formatText;
 		}
 
 		if(event.getSource().equals(valider) && confirmation.isSelected()) {
+			
+			// TODO Revoir pour obliger à ce que min soit plus petit que max et date debut plus petit que date fin 
 	//		boolean test = controller.update(gestionUpdateConfig()); 
-			if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée") && !maxCapteur.getText().equals(""))|| (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID") && !maxCapteur.getText().equals(""))) {
+			if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée") && !maxCapteur.getText().equals(""))|| (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !minCapteur.getText().equals("") && !maxCapteur.getText().equals(""))) {
 				message.setText("L'object a été configuré avec succès !"); 
 				
-				message.setForeground(Color.WHITE);
-				message.setEnabled(true);
+				
+				
+				
+  //   controller.updateNonConfig(typeCapteur, id, minCapteur, maxCapteur, minDate, maxDate);
+				message.setForeground(Color.green);
+	//			message.setEnabled(true);
 				if(!minCapteur.getText().equals("")) {
 					
 					message.setText("Vous avez indiqué " + minCapteur.getText() +" pour valeur minimale"); 
-					message.setForeground(Color.WHITE);
-					message.setEnabled(true);			
-						
+					message.setForeground(Color.white);
+					message.setEnabled(true);		
+					
 				}
+				if((!minCapteur.getText().equals(""))&& (!maxCapteur.getText().equals(""))) {
+						message.setText("Vous avez indiqué "+ minCapteur.getText() +" pour valeur minimale et " + maxCapteur.getText() +" pour valeur maximale"); 
+						message.setForeground(Color.white);
+						message.setEnabled(true);	
+					}
+					
+				
 				if(!maxCapteur.getText().equals("")) {
 					message.setText("Vous avez indiqué " + maxCapteur.getText() +" pour valeur maximale"); 
-					message.setForeground(Color.WHITE);
+					message.setForeground(Color.white);
 					message.setEnabled(true);	
 				}
 				System.out.println("Valeur du min: " + minCapteur.getText());
