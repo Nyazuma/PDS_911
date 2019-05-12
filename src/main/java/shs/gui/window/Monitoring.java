@@ -67,11 +67,11 @@ public class Monitoring extends JPanel implements ActionListener{
 
 		displayMapButton = new JButton("Visualiser sur le plan");
 		displayMapButton.addActionListener(this);
-		displayMapButton.setBounds(810, 730, 166, 54);
+		displayMapButton.setBounds(810, 730, 244, 54);
 		add(displayMapButton);
 
 		disableAlertButton = new JButton("Désactiver l'alerte");
-		disableAlertButton.setBounds(1170, 730, 163, 54);
+		disableAlertButton.setBounds(1089, 730, 244, 54);
 		disableAlertButton.addActionListener(this);
 		add(disableAlertButton);
 
@@ -119,11 +119,6 @@ public class Monitoring extends JPanel implements ActionListener{
 
 		highAlertLabel = new JLabel("Une alarme de niveau 3 est active!");
 		highAlertLabel.setBounds(1105, 220, 207, 36);
-
-		modifySensorButton = new JButton("Modifier le capteur");
-		modifySensorButton.addActionListener(this);
-		modifySensorButton.setBounds(995, 730, 157, 54);
-		add(modifySensorButton);
 
 		detailsAlertLabel = new JLabel("Alerte sélectionnée :");
 		detailsAlertLabel.setFont(new Font("Cambria Math", Font.BOLD, 20));
