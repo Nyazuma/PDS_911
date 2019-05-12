@@ -31,10 +31,10 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private JLabel lblTypeCapteur; 
 	private JComboBox<String> etatCapteur; 
 	private JLabel lblEtatCapteur;
-	private JTextField minCapteur; 
-	private JLabel lblMinCapteur;
-	private JTextField maxCapteur; 
-	private JLabel lblMaxCapteur;
+	protected JTextField minCapteur; 
+	protected JLabel lblMinCapteur;
+	protected JTextField maxCapteur; 
+	protected JLabel lblMaxCapteur;
 	private JCheckBox confirmation; 
 	private JButton valider; 
 	private JButton returnButton; 
@@ -49,9 +49,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private JLabel lblTemperatureCapteur; 
 	private JLabel objectNumberTitleLabel;
 	protected JLabel objectNumberLabel; 
-	private JLabel  lblnbNonConfig;
-	//	private JComboBox<String> macCapteur; 
-	//	private JLabel lblMacCapteur; 	
+	private JLabel  lblnbNonConfig;	
 
 	protected JLabel errorSelection; 	
 
@@ -66,11 +64,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private DefaultComboBoxModel<String> modelEtage; 
 	private DefaultComboBoxModel<String> modelEmplacement; 
 
-	//	protected static List<List<String>> listObject; 
-	//	protected static Object[][] data; 
-	//	protected static JTable objectTable;
-	//	protected JScrollPane scrollPane;
-	//	protected JLabel errorSelection; 
+
 
 
 	private static JTable objectTable; 
@@ -110,38 +104,40 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		lblTypeCapteur.setBounds(701, 250, 152, 28);
 		this.add(lblTypeCapteur);
 
-		lblMinCapteur = new JLabel("Min : ");
-		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblMinCapteur.setBounds(701, 329, 152, 28);
-		this.add(lblMinCapteur);	
+//		lblMinCapteur = new JLabel("Min : ");
+//		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		lblMinCapteur.setBounds(701, 329, 152, 28);
+//		this.add(lblMinCapteur);	
 
 
 		listSensorsDetails = controller.listSensors();
 		configListObject();
-		//		makeFieldsAppear();
+		makeFieldsAppear();
 
+		
+		// TODO Regler le pb pour declarer une fois
 
-		//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
-		minCapteur = new JTextField();
-		minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		//		minCapteur.setModel(modelMinCapteur);
-		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		minCapteur.setBounds(791, 330, 265, 42);
-		this.add(minCapteur);
-
-		lblMaxCapteur = new JLabel("Max : ");
-		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		lblMaxCapteur.setBounds(701, 395, 152, 28);
-		//	this.add(lblMaxCapteur);	
-
-
-		//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
-		maxCapteur = new JTextField();
-		maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-		//		minCapteur.setModel(modelMinCapteur);
-		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-		maxCapteur.setBounds(791, 400, 265, 42);
-		//	this.add(maxCapteur);
+//		//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
+//		minCapteur = new JTextField();
+//		minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		//		minCapteur.setModel(modelMinCapteur);
+//		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+//		minCapteur.setBounds(791, 330, 265, 42);
+//		this.add(minCapteur);
+//
+//		lblMaxCapteur = new JLabel("Max : ");
+//		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		lblMaxCapteur.setBounds(701, 395, 152, 28);
+//		//	this.add(lblMaxCapteur);	
+//
+//
+//		//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
+//		maxCapteur = new JTextField();
+//		maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+//		//		minCapteur.setModel(modelMinCapteur);
+//		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
+//		maxCapteur.setBounds(791, 400, 265, 42);
+//		//	this.add(maxCapteur);
 
 		confirmation = new JCheckBox("Je confirme vouloir configurer cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
@@ -188,17 +184,87 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	 * This method make fields appear considering the type of captor selected
 	 */
 
-	//	public void makeFieldsAppear() {
-	//		System.out.println("Testhella");
-	//		for(List<String> line : listSensorsDetails) {
-	//		if(line.get(1).equals("Capteur hygrométrique")){
-	//			this.add(lblMaxCapteur);
-	//			this.add(maxCapteur);
-	//			
-	//			
-	//		}
-	//		}
-	//	}
+		public void makeFieldsAppear() {
+	//		System.out.println("Testhella");	
+			
+			minCapteur = new JTextField();
+			minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+			minCapteur.setBounds(791, 330, 265, 42);
+			
+			maxCapteur = new JTextField();
+			maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+			maxCapteur.setBounds(791, 400, 265, 42);
+
+			for(List<String> line : listSensorsDetails) {
+		//		System.out.println(line.get(1) + "test");
+			if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique")){
+				
+				lblMaxCapteur = new JLabel("Seuil: ");
+				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMaxCapteur.setBounds(701, 395, 152, 28);	
+				this.add(lblMaxCapteur);	
+				this.add(maxCapteur);
+		
+				
+			}
+			if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur ouverture")){
+				
+				lblMaxCapteur = new JLabel("Fin: ");
+				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMaxCapteur.setBounds(701, 395, 152, 28);	
+				lblMinCapteur = new JLabel("Debut : ");
+				lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMinCapteur.setBounds(701, 329, 152, 28);
+				this.add(lblMaxCapteur);	
+				this.add(maxCapteur);
+				this.add(lblMinCapteur);
+				this.add(minCapteur);
+				
+			}
+			
+			// ||(ObjectConfiguration.getRowUpdate().get(1).toString().equals("Capteur de température")))
+			if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température")){
+				lblMaxCapteur = new JLabel("Max : ");
+				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMaxCapteur.setBounds(701, 395, 152, 28);	
+				lblMinCapteur = new JLabel("Min : ");
+				lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMinCapteur.setBounds(701, 329, 152, 28);
+
+				this.add(lblMaxCapteur);	
+				this.add(maxCapteur);
+				this.add(lblMinCapteur);
+				this.add(minCapteur);
+				
+			}
+			else {
+				System.out.println("TEST FAUX");
+			}
+			if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de présence")){
+				lblMaxCapteur = new JLabel("Debut : ");
+				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMaxCapteur.setBounds(701, 395, 152, 28);		
+				lblMinCapteur = new JLabel("Fin : ");
+				lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMinCapteur.setBounds(701, 329, 152, 28);
+				
+				
+				this.add(lblMaxCapteur);	
+				this.add(maxCapteur);
+				this.add(lblMinCapteur);
+				this.add(minCapteur);
+			}
+			if((ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID")) || ((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel")))){
+				lblMaxCapteur = new JLabel("Niveau: ");
+				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMaxCapteur.setBounds(701, 395, 152, 28);		
+				
+				this.add(lblMaxCapteur);	
+				this.add(maxCapteur);
+				
+			}
+
+		}}
 	/**
 	 * This method is used to display the JTable of objects
 	 */
@@ -207,7 +273,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		String[] header = {"ID_Capteur", "Type_Capteur", "Etat_Capteur", "ID_Emplacement", "Mac_Capteur", "NiveauAlerte_CapteurAppel", "Seuil_CapteurFumee", 
 				"Seuil_CapteurHygro", "Debut_CapteurOuverture", "Fin_CapteurOuverture", "Debut_CapteurPresence", "Fin_CapteurPresence", 
 				"NiveauAlerte_CapteurRFID", "Min_CapteurTemperature", "Max_CapteurTemperature"};
-		Integer x = 0;
+		Integer x = 0; 
 		//		String nbNC = "";
 		for(List<String> line : listSensorsDetails) {
 			if(line.get(3)==null && !line.get(1).equals("Bracelet RFID")) {
@@ -231,32 +297,50 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 			Integer columnNumber = 0;
 			for(List<String> line : listSensorsDetails) {
 				if(!(line.get(3)==null && !line.get(1).equals("Bracelet RFID"))) {
-					System.out.println("numero de colonne "+ columnNumber);
+				//	System.out.println("numero de colonne "+ columnNumber);
 					continue;
 
 
-					// TODO Put "-" to the columns we don't need for each type  5 6 8 9 10 11 12 13 14
+
 				}
 
-
+				// Put "-" to the columns we don't need for each type  5 6 8 9 10 11 12 13 14
 				for(String column : line) {
 					if (line.get(1).equals("Capteur hygrométrique")) {
-						if((columnNumber == 5 ) || (columnNumber == 6 )) {
+						if((columnNumber == 5 ) || (columnNumber == 7 ) || (columnNumber == 8 ) || (columnNumber == 9 ) || (columnNumber == 10 ) || (columnNumber == 11 ) || (columnNumber == 12 ) || (columnNumber == 13 ) || (columnNumber == 14 )) {
 							System.out.println(lineNumber +"  "+ columnNumber);
-							data[lineNumber][columnNumber]="-";;
+							data[lineNumber][columnNumber]="   -  ";;
 							columnNumber++;
 							continue;
+							
 						}
 					}
+						if (line.get(1).equals("Capteur de fumée")) {
+							if((columnNumber == 5 ) || (columnNumber == 6 ) || (columnNumber == 7 ) || (columnNumber == 8 ) || (columnNumber == 9 ) || (columnNumber == 10 ) || (columnNumber == 11 ) || (columnNumber == 12 ) || (columnNumber == 13 ) || (columnNumber == 14 )) {
+								System.out.println(lineNumber +"  "+ columnNumber);
+								data[lineNumber][columnNumber]="   -  ";;
+								columnNumber++;
+								continue;							
+						}
+					}
+						if (line.get(1).equals("Capteur de présence")) {
+							if((columnNumber == 5 ) || (columnNumber == 6 ) || (columnNumber == 7 ) || (columnNumber == 8 ) || (columnNumber == 11 ) || (columnNumber == 12 ) || (columnNumber == 13 ) || (columnNumber == 14 )) {
+							//	System.out.println(lineNumber +"  "+ columnNumber);
+								data[lineNumber][columnNumber]="   -  ";;
+								columnNumber++;
+								continue;							
+						}
+					}
+					
 					data[lineNumber][columnNumber]=column;
 					columnNumber++;
 
 
 				}
-				for(int i =0; i<=14; i++) {
-					System.out.println(" test "+  data[lineNumber][i]);
-
-				}
+//				for(int i =0; i<=14; i++) {
+//			//		System.out.println(" test "+  data[lineNumber][i]);
+//
+//				}
 
 				columnNumber=0;
 				lineNumber++;
@@ -315,18 +399,25 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		return listUpdate;
 	}
 	private List<String> gestionUpdateConfig() {
-		List<String> listValues = new ArrayList<String>(); 
-		listValues.add(ObjectGestion.getRowUpdate().get(0).toString());
-		listValues.add(typeCapteur.getSelectedItem().toString()); 
-		if(etatCapteur.getSelectedItem().toString().contentEquals("Enable"))
-			listValues.add("1"); 
-		else 
-			listValues.add("0"); 
-		listValues.add(residenceCapteur.getSelectedItem().toString());
-		//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
-		listValues.add(etageCapteur.getSelectedItem().toString()); 
-		//		listValues.add(macCapteur.getSelectedItem().toString()); 
-		return listValues; 
+		List<String> listValuesConfig = new ArrayList<String>(); 
+		listValuesConfig.add(ObjectConfiguration.getRowUpdate().get(0).toString());
+		if (!minCapteur.getText().isEmpty()) {
+		listValuesConfig.add(minCapteur.getText().toString()); 
+		}
+		if (!maxCapteur.getText().isEmpty()) {
+		listValuesConfig.add(maxCapteur.getText().toString()); 
+		}
+//		if(etatCapteur.getSelectedItem().toString().contentEquals("Enable"))
+//			listValuesConfig.add("1"); 
+	else {
+		listValuesConfig.add(null);
+	}
+//			listValuesConfig.add("0"); 
+//		listValuesConfig.add(residenceCapteur.getSelectedItem().toString());
+//		//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
+//		listValuesConfig.add(etageCapteur.getSelectedItem().toString()); 
+//		//		listValues.add(macCapteur.getSelectedItem().toString()); 
+		return listValuesConfig; 
 
 	}
 
@@ -360,18 +451,21 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		}
 
 		if(event.getSource().equals(valider) && confirmation.isSelected()) {
-			boolean test = controller.update(gestionUpdateConfig()); 
-			if(test) {
+		//	boolean test = controller.update(gestionUpdateConfig()); 
+		//	if(test) {
 				message.setText("L'object a été configuré avec succès !"); 
 				message.setForeground(Color.WHITE);
 				message.setEnabled(true);
+				
+				System.out.println("Valeur du min: " + minCapteur.getText());
+				System.out.println("Valeur du max: " + maxCapteur.getText());
 			}
-			else {
-				message.setText("Une erreur est survenue. L'object n'a pas pu être configuré.");
-				message.setForeground(Color.RED);
-				message.setEnabled(true);
-
-			}
-		}
+//			else {
+//				message.setText("Une erreur est survenue. L'object n'a pas pu être configuré.");
+//				message.setForeground(Color.RED);
+//				message.setEnabled(true);
+//
+//			}
+//		}
 
 	}}
