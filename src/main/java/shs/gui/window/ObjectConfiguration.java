@@ -1,11 +1,29 @@
 package shs.gui.window;
+import javax.swing.text.*;
+
+import java.awt.BorderLayout;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+/*from   w  w w.jav  a2s .  co  m*/
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.text.MaskFormatter;
+import com.toedter.calendar.JDateChooser;
+
+import java.awt.event.*;
+import javax.swing.*;
+import java.text.*;
+import java.awt.*;
+import java.util.*;
+  
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -49,11 +67,15 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private JLabel lblTemperatureCapteur; 
 	private JLabel objectNumberTitleLabel;
 	protected JLabel objectNumberLabel; 
-	private JLabel  lblnbNonConfig;	
+	//private JLabel  lblnbNonConfig;	
 
 	protected JLabel errorSelection; 	
-
-
+  private JFormattedTextField formattedDate;
+protected JTextField normalDate;
+private JButton buttonDate; 
+private JDateChooser dateFrom;
+private JDateChooser dateTo;
+private JFormattedTextField formatText;
 	// TODO supprimer les lignes inutiles 
 
 	//Initialization of the JComboBox with a model
@@ -63,6 +85,7 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private DefaultComboBoxModel<String> modelResidence; 
 	private DefaultComboBoxModel<String> modelEtage; 
 	private DefaultComboBoxModel<String> modelEmplacement; 
+
 
 
 
@@ -104,12 +127,23 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		lblTypeCapteur.setBounds(701, 250, 152, 28);
 		this.add(lblTypeCapteur);
 
-//		lblMinCapteur = new JLabel("Min : ");
-//		lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		lblMinCapteur.setBounds(701, 329, 152, 28);
-//		this.add(lblMinCapteur);	
+	    
+		dateFrom = new JDateChooser();
+		dateFrom.setDateFormatString("yyyy-MM-dd");
+		Date date = new Date();
+		dateFrom.setDate(date);
+		dateFrom.setBounds(791, 330, 96, 22);
 
 
+		
+		dateTo = new JDateChooser();
+		dateTo.setDateFormatString("yyyy-MM-dd");
+		dateTo.setDate(date);
+		dateTo.setBounds(789, 401, 96, 22);
+	//	this.add(dateTo);
+		//this.add(dateFrom);
+	    
+	    
 		listSensorsDetails = controller.listSensors();
 		configListObject();
 		makeFieldsAppear();
@@ -117,27 +151,6 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		
 		// TODO Regler le pb pour declarer une fois
 
-//		//	modelMinCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
-//		minCapteur = new JTextField();
-//		minCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		//		minCapteur.setModel(modelMinCapteur);
-//		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-//		minCapteur.setBounds(791, 330, 265, 42);
-//		this.add(minCapteur);
-//
-//		lblMaxCapteur = new JLabel("Max : ");
-//		lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		lblMaxCapteur.setBounds(701, 395, 152, 28);
-//		//	this.add(lblMaxCapteur);	
-//
-//
-//		//	modelMaxCapteur = new DefaultComboBoxModel<String>(controller.readResidences());
-//		maxCapteur = new JTextField();
-//		maxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-//		//		minCapteur.setModel(modelMinCapteur);
-//		//		minCapteur.setSelectedItem(ObjectGestion.getRowUpdate().get(3).toString());
-//		maxCapteur.setBounds(791, 400, 265, 42);
-//		//	this.add(maxCapteur);
 
 		confirmation = new JCheckBox("Je confirme vouloir configurer cet objet.");
 		confirmation.setBackground(new Color(95, 158, 160));
@@ -175,10 +188,48 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		returnButton.setBounds(56, 40, 98, 48);
 		returnButton.addActionListener(this);
 		this.add(returnButton);
+		
+	    Date datedebut = new Date();
+	    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
+	    String dateString = formatter.format(datedebut);
+	    formatText = new JFormattedTextField(createFormatter("##:##:##"));
+	    formatText.setColumns(20);
+	    formatText.setText(dateString);
+	    formatText.setBounds(791, 330, 96, 22);
+	    
+	    
+	    Date datefin = new Date();
+	    SimpleDateFormat formatter2 = new SimpleDateFormat("hh:mm:ss");
+	    String dateString2 = formatter.format(datefin);
+	    formatText = new JFormattedTextField(createFormatter("##:##:##"));
+	    formatText.setColumns(20);
+	    formatText.setText(dateString);
+	    formatText.setBounds(789, 401, 96, 22);
+	    
+
+	  //this.setLayout(new BorderLayout());
+	//   this.add(new JLabel("Entrer une date sous le format HH:MM:SS ");
+	 //   this.add(formatText);
 
 	}
+	
+	
 
 
+	
+	
+
+		  private MaskFormatter createFormatter(String s) {
+		    MaskFormatter formatter = null;
+		    try {
+		      formatter = new MaskFormatter(s);
+		    } catch (java.text.ParseException exc) {
+		      System.err.println("formatter is bad: " + exc.getMessage());
+		    }
+		    return formatter;
+		  }
+
+		
 
 	/**
 	 * This method make fields appear considering the type of captor selected
@@ -207,18 +258,40 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		
 				
 			}
+			
+			// TODO Autorisé seulement forme date
 			if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur ouverture")){
-				
-				lblMaxCapteur = new JLabel("Fin: ");
+				lblMaxCapteur = new JLabel("Debut : ");
 				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-				lblMaxCapteur.setBounds(701, 395, 152, 28);	
-				lblMinCapteur = new JLabel("Debut : ");
+				lblMaxCapteur.setBounds(701, 329, 152, 28);		
+				lblMinCapteur = new JLabel("Fin : ");
 				lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-				lblMinCapteur.setBounds(701, 329, 152, 28);
+				lblMinCapteur.setBounds(701, 395, 152, 28);
+				
+			    Date datedebut = new Date();
+			    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
+			    String dateString = formatter.format(datedebut);
+			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
+			    formatText.setColumns(20);
+			    formatText.setText(dateString);
+			    formatText.setBounds(791, 330, 96, 22);
+			    
+			    this.add(formatText);
+			    Date datefin = new Date();
+			    SimpleDateFormat formatter2 = new SimpleDateFormat("hh:mm:ss");
+			    String dateString2 = formatter.format(datefin);
+			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
+			    formatText.setColumns(20);
+			    formatText.setText(dateString);
+			    formatText.setBounds(789, 401, 96, 22);
+				
+				
+				 this.add(formatText);
+				
 				this.add(lblMaxCapteur);	
-				this.add(maxCapteur);
+//				this.add(maxCapteur);
 				this.add(lblMinCapteur);
-				this.add(minCapteur);
+//				this.add(minCapteur);		
 				
 			}
 			
@@ -237,22 +310,39 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 				this.add(minCapteur);
 				
 			}
-			else {
-				System.out.println("TEST FAUX");
-			}
+
 			if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de présence")){
 				lblMaxCapteur = new JLabel("Debut : ");
 				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-				lblMaxCapteur.setBounds(701, 395, 152, 28);		
+				lblMaxCapteur.setBounds(701, 329, 152, 28);		
 				lblMinCapteur = new JLabel("Fin : ");
 				lblMinCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
-				lblMinCapteur.setBounds(701, 329, 152, 28);
+				lblMinCapteur.setBounds(701, 395, 152, 28);
 				
+			    Date datedebut = new Date();
+			    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
+			    String dateString = formatter.format(datedebut);
+			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
+			    formatText.setColumns(20);
+			    formatText.setText(dateString);
+			    formatText.setBounds(791, 330, 96, 22);
+			    
+			    this.add(formatText);
+			    Date datefin = new Date();
+			    SimpleDateFormat formatter2 = new SimpleDateFormat("hh:mm:ss");
+			    String dateString2 = formatter.format(datefin);
+			    formatText = new JFormattedTextField(createFormatter("##:##:##"));
+			    formatText.setColumns(20);
+			    formatText.setText(dateString);
+			    formatText.setBounds(789, 401, 96, 22);
+				
+				
+				 this.add(formatText);
 				
 				this.add(lblMaxCapteur);	
-				this.add(maxCapteur);
+//				this.add(maxCapteur);
 				this.add(lblMinCapteur);
-				this.add(minCapteur);
+//				this.add(minCapteur);
 			}
 			if((ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID")) || ((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel")))){
 				lblMaxCapteur = new JLabel("Niveau: ");
@@ -423,6 +513,9 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent event) {
 
+		if(event.getSource().equals(buttonDate)) {
+			normalDate.setText(""+formattedDate.getValue());
+		}
 		if(event.getSource().equals(returnButton)) {
 			this.controller.getGui().setBounds(100, 100, 1400, 900);
 			controller.getGui().changeWindow(WindowList.MENU);
@@ -451,21 +544,33 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		}
 
 		if(event.getSource().equals(valider) && confirmation.isSelected()) {
-		//	boolean test = controller.update(gestionUpdateConfig()); 
-		//	if(test) {
+			boolean test = controller.update(gestionUpdateConfig()); 
+			if(test) {
 				message.setText("L'object a été configuré avec succès !"); 
+				
 				message.setForeground(Color.WHITE);
 				message.setEnabled(true);
-				
+				if(!minCapteur.getText().equals("")) {
+					
+					message.setText("Vous avez indiqué " + minCapteur.getText() +" pour valeur minimale"); 
+					message.setForeground(Color.WHITE);
+					message.setEnabled(true);			
+						
+				}
+				if(!maxCapteur.getText().equals("")) {
+					message.setText("Vous avez indiqué " + maxCapteur.getText() +" pour valeur maximale"); 
+					message.setForeground(Color.WHITE);
+					message.setEnabled(true);	
+				}
 				System.out.println("Valeur du min: " + minCapteur.getText());
 				System.out.println("Valeur du max: " + maxCapteur.getText());
 			}
-//			else {
-//				message.setText("Une erreur est survenue. L'object n'a pas pu être configuré.");
-//				message.setForeground(Color.RED);
-//				message.setEnabled(true);
-//
-//			}
-//		}
+			else {
+				message.setText("Une erreur est survenue. L'object n'a pas pu être configuré.");
+				message.setForeground(Color.RED);
+				message.setEnabled(true);
+
+			}
+		}
 
 	}}
