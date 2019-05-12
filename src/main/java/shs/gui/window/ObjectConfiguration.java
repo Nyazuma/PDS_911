@@ -258,6 +258,16 @@ private JFormattedTextField formatText;
 		
 				
 			}
+            if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée")){
+				
+				lblMaxCapteur = new JLabel("Seuil: ");
+				lblMaxCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
+				lblMaxCapteur.setBounds(701, 395, 152, 28);	
+				this.add(lblMaxCapteur);	
+				this.add(maxCapteur);
+		
+				
+			}
 			
 			// TODO Autorisé seulement forme date
 			if(ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur ouverture")){
@@ -398,7 +408,7 @@ private JFormattedTextField formatText;
 				for(String column : line) {
 					if (line.get(1).equals("Capteur hygrométrique")) {
 						if((columnNumber == 5 ) || (columnNumber == 7 ) || (columnNumber == 8 ) || (columnNumber == 9 ) || (columnNumber == 10 ) || (columnNumber == 11 ) || (columnNumber == 12 ) || (columnNumber == 13 ) || (columnNumber == 14 )) {
-							System.out.println(lineNumber +"  "+ columnNumber);
+						//	System.out.println(lineNumber +"  "+ columnNumber);
 							data[lineNumber][columnNumber]="   -  ";;
 							columnNumber++;
 							continue;
@@ -477,39 +487,39 @@ private JFormattedTextField formatText;
 	 * Method use to get the values of the selected row. It will be use especially in the ObjectModification class
 	 * @return
 	 */
-	protected static List<String> getRowUpdate(){
-		int ligne = objectTable.getSelectedRow(); 
-		List<String> listUpdate = new ArrayList<String>(); 
-		for(int i = 0; i<data[ligne].length; i++) {
-			if(data[ligne][i]!=null)
-				listUpdate.add(data[ligne][i].toString()); 
-			else
-				listUpdate.add(null);
-		}
-		return listUpdate;
-	}
-	private List<String> gestionUpdateConfig() {
-		List<String> listValuesConfig = new ArrayList<String>(); 
-		listValuesConfig.add(ObjectConfiguration.getRowUpdate().get(0).toString());
-		if (!minCapteur.getText().isEmpty()) {
-		listValuesConfig.add(minCapteur.getText().toString()); 
-		}
-		if (!maxCapteur.getText().isEmpty()) {
-		listValuesConfig.add(maxCapteur.getText().toString()); 
-		}
-//		if(etatCapteur.getSelectedItem().toString().contentEquals("Enable"))
-//			listValuesConfig.add("1"); 
-	else {
-		listValuesConfig.add(null);
-	}
-//			listValuesConfig.add("0"); 
-//		listValuesConfig.add(residenceCapteur.getSelectedItem().toString());
-//		//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
-//		listValuesConfig.add(etageCapteur.getSelectedItem().toString()); 
-//		//		listValues.add(macCapteur.getSelectedItem().toString()); 
-		return listValuesConfig; 
-
-	}
+//	protected static List<String> getRowUpdate(){
+//		int ligne = objectTable.getSelectedRow(); 
+//		List<String> listUpdate = new ArrayList<String>(); 
+//		for(int i = 0; i<data[ligne].length; i++) {
+//			if(data[ligne][i]!=null)
+//				listUpdate.add(data[ligne][i].toString()); 
+//			else
+//				listUpdate.add(null);
+//		}
+//		return listUpdate;
+//	}
+//	private List<String> gestionUpdateConfig() {
+//		List<String> listValuesConfig = new ArrayList<String>(); 
+//		listValuesConfig.add(ObjectConfiguration.getRowUpdate().get(0).toString());
+//		if (!minCapteur.getText().isEmpty()) {
+//		listValuesConfig.add(minCapteur.getText().toString()); 
+//		}
+//		if (!maxCapteur.getText().isEmpty()) {
+//		listValuesConfig.add(maxCapteur.getText().toString()); 
+//		}
+////		if(etatCapteur.getSelectedItem().toString().contentEquals("Enable"))
+////			listValuesConfig.add("1"); 
+//	else {
+//		listValuesConfig.add(null);
+//	}
+////			listValuesConfig.add("0"); 
+////		listValuesConfig.add(residenceCapteur.getSelectedItem().toString());
+////		//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
+////		listValuesConfig.add(etageCapteur.getSelectedItem().toString()); 
+////		//		listValues.add(macCapteur.getSelectedItem().toString()); 
+//		return listValuesConfig; 
+//
+//	}
 
 	public void actionPerformed(ActionEvent event) {
 
@@ -544,8 +554,8 @@ private JFormattedTextField formatText;
 		}
 
 		if(event.getSource().equals(valider) && confirmation.isSelected()) {
-			boolean test = controller.update(gestionUpdateConfig()); 
-			if(test) {
+	//		boolean test = controller.update(gestionUpdateConfig()); 
+			if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée") && !maxCapteur.getText().equals(""))|| (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID") && !maxCapteur.getText().equals(""))) {
 				message.setText("L'object a été configuré avec succès !"); 
 				
 				message.setForeground(Color.WHITE);
