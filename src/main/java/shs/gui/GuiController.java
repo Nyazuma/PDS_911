@@ -142,6 +142,40 @@ public class GuiController {
 		return -1;
 	}
 	
+	public int nbObjectOn() {
+		Message nbObjectOn = new Message(MessageType.NUMBEROBJECTON);
+		String output = Tool.messageToJSON(nbObjectOn);
+		String answer;
+		try {
+			answer = contactServer(output);
+			if(answer!= null) {
+				MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
+				return result.getNumber();
+			}
+		}
+		catch (ConnectException e) {
+			return -1;
+		}
+		return -1;
+	}
+	
+	public int nbObjectOff() {
+		Message nbObjectOff = new Message(MessageType.NUMBEROBJECTOFF);
+		String output = Tool.messageToJSON(nbObjectOff);
+		String answer;
+		try {
+			answer = contactServer(output);
+			if(answer!= null) {
+				MsgIntResult result = (MsgIntResult)Tool.jsonToMessage(answer);
+				return result.getNumber();
+			}
+		}
+		catch (ConnectException e) {
+			return -1;
+		}
+		return -1;
+	}
+	
 	public int nbObjectAdded(String dateFrom, String dateTo) {
 		MsgNumberObjectAdded nbObjectAdded = new MsgNumberObjectAdded (dateFrom, dateTo);
 		return readInt(nbObjectAdded);

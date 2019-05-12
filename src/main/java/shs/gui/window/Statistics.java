@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,8 @@ public class Statistics extends JPanel implements ActionListener{
 	private JLabel objectModified;
 	private JLabel objectAlert;
 	private JLabel fetchResult;
+	private JLabel objectOn;
+	private JLabel objectOff;
 
 	private GuiController controller;
 	
@@ -99,6 +102,7 @@ public class Statistics extends JPanel implements ActionListener{
 		stateCaptor.setModel(modelStateCaptor);
 		stateCaptor.setBounds(351, 130, 116, 32);
 		stateCaptor.insertItemAt("", 0);
+		stateCaptor.setSelectedIndex(0);
 		this.add(stateCaptor);
 		
 		
@@ -113,6 +117,7 @@ public class Statistics extends JPanel implements ActionListener{
 		residence.setModel(modelResidence);
 		residence.setBounds(530, 130, 134, 32);
 		residence.insertItemAt("", 0);
+		residence.setSelectedIndex(0);
 		this.add(residence);
 		
 		JLabel lblNombresDeCapteurs = new JLabel("Nombres de capteurs");
@@ -131,6 +136,7 @@ public class Statistics extends JPanel implements ActionListener{
 		zone.setModel(modelEmplacement);
 		zone.setBounds(735, 130, 134, 32);
 		zone.insertItemAt("", 0);
+		zone.setSelectedIndex(0);
 		this.add(zone); 
 	
 		JLabel lblEtage = new JLabel("Etage");
@@ -144,22 +150,21 @@ public class Statistics extends JPanel implements ActionListener{
 		floor.setModel(modelFloor);
 		floor.setBounds(963, 130, 161, 32);
 		floor.insertItemAt("", 0);
+		floor.setSelectedIndex(0);
 		this.add(floor);
-		
-		JLabel lblNombreDeLogements = new JLabel("Nombre de logements");
-		lblNombreDeLogements.setBounds(88, 489, 134, 26);
-		add(lblNombreDeLogements);
 		
 		JLabel lblResultat = new JLabel("Resultat :");
 		lblResultat.setBounds(375, 268, 134, 26);
 		add(lblResultat);
 		
-		JLabel lblNombresTotalDe = new JLabel("Nombre total de capteurs");
+		JLabel lblNombresTotalDe = new JLabel("Nombre total de capteurs :");
 		lblNombresTotalDe.setBounds(88, 438, 192, 26);
 		add(lblNombresTotalDe);
 		
 		dateFrom = new JDateChooser();
 		dateFrom.setDateFormatString("yyyy-MM-dd");
+		Date date = new Date();
+		dateFrom.setDate(date);
 		dateFrom.setBounds(576, 371, 96, 22);
 		this.add(dateFrom);
 		
@@ -169,6 +174,7 @@ public class Statistics extends JPanel implements ActionListener{
 		
 		dateTo = new JDateChooser();
 		dateTo.setDateFormatString("yyyy-MM-dd");
+		dateTo.setDate(date);
 		dateTo.setBounds(758, 371, 96, 22);
 		this.add(dateTo);
 		
@@ -177,7 +183,7 @@ public class Statistics extends JPanel implements ActionListener{
 		add(lblTo);
 		
 		JLabel lblCaptorDeleted = new JLabel("Capteurs ajoute :");
-		lblCaptorDeleted.setBounds(530, 443, 123, 16);
+		lblCaptorDeleted.setBounds(530, 443, 104, 16);
 		add(lblCaptorDeleted);
 		
 		JLabel lblCapteursSupprimes = new JLabel("Capteurs supprimes :");
@@ -197,18 +203,6 @@ public class Statistics extends JPanel implements ActionListener{
 		JLabel lblAlertes = new JLabel("Alertes :");
 		lblAlertes.setBounds(807, 499, 56, 16);
 		add(lblAlertes);
-		
-		JButton btnDetails = new JButton("Details");
-		btnDetails.setBounds(686, 560, 97, 25);
-		add(btnDetails);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(1241, 89, 540, 226);
-		add(scrollPane);
-		
-		JLabel lblSocksRestants = new JLabel("Socks restants :");
-		lblSocksRestants.setBounds(88, 547, 134, 16);
-		add(lblSocksRestants);
 		
 		objectAdded = new JLabel("0");
 		objectAdded.setForeground(Color.RED);
@@ -245,6 +239,28 @@ public class Statistics extends JPanel implements ActionListener{
 		fetchResult.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		fetchResult.setBounds(442, 268, 55, 28);
 		this.add(fetchResult);
+		
+		JLabel lblCapteurActifs = new JLabel("Capteurs actifs :");
+		lblCapteurActifs.setBounds(88, 477, 100, 26);
+		add(lblCapteurActifs);
+		
+		JLabel lblCapteursNonActifs = new JLabel("Capteurs eteints :");
+		lblCapteursNonActifs.setBounds(88, 516, 107, 26);
+		add(lblCapteursNonActifs);
+		
+		objectOn = new JLabel("0");
+		objectOn.setForeground(Color.RED);
+		objectOn.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectOn.setBounds(200, 477, 40, 28);
+		objectOn.setText(Integer.toString(controller.nbObjectOn())); 
+		this.add(objectOn);
+		
+		objectOff = new JLabel("0");
+		objectOff.setForeground(Color.RED);
+		objectOff.setFont(new Font("Cambria Math", Font.BOLD, 16));
+		objectOff.setBounds(210, 516, 55, 28);
+		objectOff.setText(Integer.toString(controller.nbObjectOff())); 
+		this.add(objectOff);
 		
 	}
 
