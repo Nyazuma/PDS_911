@@ -791,7 +791,7 @@ public class Map extends JPanel implements ActionListener{
 		informationWindow.setTitle("Informations du capteur");
 		informationWindow.setBounds(100, 100, 549, 638);
 		informationWindow.setLocationRelativeTo(null);
-		if(!ID_EmplacementAlerte.isEmpty()) {
+		if(ID_EmplacementAlerte!= null && !ID_EmplacementAlerte.isEmpty()) {
 			if(getIdEmplacement(button).equals(ID_EmplacementAlerte))
 				informationWindow.getContentPane().setBackground(new Color(255, 77, 77));
 			else
