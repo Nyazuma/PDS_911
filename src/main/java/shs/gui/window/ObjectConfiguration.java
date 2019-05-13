@@ -71,27 +71,16 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	//private JLabel  lblnbNonConfig;	
 
 	protected JLabel errorSelection; 	
-  private JFormattedTextField formattedDate;
-protected JTextField normalDate;
-private JButton buttonDate; 
-private JDateChooser dateFrom;
-private JDateChooser dateTo;
-private JFormattedTextField minDate;
-private JFormattedTextField maxDate;
-	// TODO supprimer les lignes inutiles 
+    private JFormattedTextField formattedDate;
+    protected JTextField normalDate;
+    private JButton buttonDate; 
+	private JDateChooser dateFrom;
+	private JDateChooser dateTo;
+	private JFormattedTextField minDate;
+	private JFormattedTextField maxDate;
 
 	//Initialization of the JComboBox with a model
 	private DefaultComboBoxModel<String> modelTypeCapteur;
-	private DefaultComboBoxModel<String> modelEtatCapteur; 
-	private DefaultComboBoxModel<String> modelMinCapteur;
-	private DefaultComboBoxModel<String> modelResidence; 
-	private DefaultComboBoxModel<String> modelEtage; 
-	private DefaultComboBoxModel<String> modelEmplacement; 
-
-
-
-
-
 	private static JTable objectTable; 
 	private List<List<String>> listSensorsDetails = new ArrayList<List<String>>(); 
 	List<List<String>> listAllCapteurs = new ArrayList<List<String>>(); 
@@ -122,30 +111,13 @@ private JFormattedTextField maxDate;
 		typeCapteur.setBounds(791, 243, 265, 42);
 		this.add(typeCapteur);
 
-
-		//TODO Faire apparaitre tableau à gauche 
+ 
 		lblTypeCapteur = new JLabel("Type :");
 		lblTypeCapteur.setFont(new Font("Cambria Math", Font.BOLD, 16));
 		lblTypeCapteur.setBounds(701, 250, 152, 28);
 		this.add(lblTypeCapteur);
 
-	    
-		dateFrom = new JDateChooser();
-		dateFrom.setDateFormatString("yyyy-MM-dd");
-		Date date = new Date();
-		dateFrom.setDate(date);
-		dateFrom.setBounds(791, 330, 96, 22);
-
-
-		
-		dateTo = new JDateChooser();
-		dateTo.setDateFormatString("yyyy-MM-dd");
-		dateTo.setDate(date);
-		dateTo.setBounds(789, 401, 96, 22);
-	//	this.add(dateTo);
-		//this.add(dateFrom);
-	    
-	    
+	   	    
 		listSensorsDetails = controller.listSensors();
 		configListObject();
 		makeFieldsAppear();
@@ -530,37 +502,34 @@ private JFormattedTextField maxDate;
 		}
 
 		
-		// TODO Regler pb des conditions min/max
 		// TODO Regler pb de validation sans rien entré dans les champs 
 		// TODO Rajouter condition: si aucun sans rfid mit, afficher message d'erreur 
 		if(event.getSource().equals(valider) && confirmation.isSelected()) {
 			
-
-			if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée") && !maxCapteur.getText().equals(""))|| (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !minCapteur.getText().equals("") && !maxCapteur.getText().equals("")) && (Integer.parseInt(minCapteur.getText()) < Integer.parseInt(maxCapteur.getText())) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de présence") && !minDate.getText().equals("") && !maxDate.getText().equals(""))) {
-				message.setText("L'object a été configuré avec succès !"); 
-				
-				
-				String type = ObjectGestion.getRowUpdate().get(1).toString();
-				Integer id = Integer.parseInt(ObjectGestion.getRowUpdate().get(0).toString());
-				controller.updateNonConfig(type, id, minCapteur, maxCapteur, minDate, maxDate);
-				message.setForeground(Color.white);
-				
-				
-			}
-			else if ( (Integer.parseInt(minCapteur.getText()) >= Integer.parseInt(maxCapteur.getText()))) {
+			if ( !(Integer.parseInt(minCapteur.getText()) < Integer.parseInt(maxCapteur.getText()))) {
 				message.setText("Votre Maximum doit être supérieur au Minimum");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);
-				
 
 			}
-			else if ( !(Integer.parseInt(minDate.getText()) >= Integer.parseInt(maxDate.getText()))) {
+			else if ( !(Integer.parseInt(minDate.getText()) < Integer.parseInt(maxDate.getText()))) {
 				message.setText("Votre Date de debut et de fin ne sont pas dans l'ordre chronologique ");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);
 				
 
-			}else {
+			}else if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée") && !maxCapteur.getText().equals(""))|| (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !minCapteur.getText().equals("") && !maxCapteur.getText().equals("")) && (Integer.parseInt(minCapteur.getText()) < Integer.parseInt(maxCapteur.getText())) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de présence") && !minDate.getText().equals("") && !maxDate.getText().equals(""))) {
+					message.setText("L'object a été configuré avec succès !"); 
+					
+					
+					String type = ObjectGestion.getRowUpdate().get(1).toString();
+					Integer id = Integer.parseInt(ObjectGestion.getRowUpdate().get(0).toString());
+					controller.updateNonConfig(type, id, minCapteur, maxCapteur, minDate, maxDate);
+					message.setForeground(Color.WHITE);
+					
+					
+				}
+			else{
 				message.setText("Une erreur est survenue. L'object n'a pas pu être configuré.");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);	
