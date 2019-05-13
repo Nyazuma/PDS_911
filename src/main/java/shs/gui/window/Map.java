@@ -88,7 +88,7 @@ public class Map extends JPanel implements ActionListener{
 	private JLabel infoAddressMac;
 
 	/**
-	 * Management Alerte
+	 * Management Alert
 	 */
 	private String ID_EmplacementAlerte; 
 	/**
@@ -228,10 +228,14 @@ public class Map extends JPanel implements ActionListener{
 		smartLocation.addActionListener(this);
 		this.add(smartLocation);
 
-		if(listEmplacementOccupied.isEmpty()) 
-			smartLocation.setEnabled(true);
-		else 
-			smartLocation.setEnabled(false);
+		for(int i = 0;  i<listJButtonsEtage1.size(); i++) {
+			if(!isEmplacementFree(listJButtonsEtage1.get(i))) {
+				smartLocation.setEnabled(false);
+				break;
+			}
+			else
+				smartLocation.setEnabled(true);
+		}
 
 		progressBar = new JProgressBar();
 		progressBar.setBounds(1440, 23, 193, 25);
@@ -373,10 +377,26 @@ public class Map extends JPanel implements ActionListener{
 		smartLocation.addActionListener(this);
 		this.add(smartLocation);
 
-		if(listEmplacementOccupied.isEmpty()) 
-			smartLocation.setEnabled(true);
-		else 
-			smartLocation.setEnabled(false);
+		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+			for(int i = 0;  i<listJButtonsEtage1.size(); i++) {
+				if(!isEmplacementFree(listJButtonsEtage1.get(i))) {
+					smartLocation.setEnabled(false);
+					break;
+				}
+				else
+					smartLocation.setEnabled(true);
+			}
+		}
+		else {
+			for(int i = 0;  i<listJButtonsEtage2.size(); i++) {
+				if(!isEmplacementFree(listJButtonsEtage2.get(i))) {
+					smartLocation.setEnabled(false);
+					break;
+				}
+				else
+					smartLocation.setEnabled(true);
+			}
+		}
 
 		progressBar = new JProgressBar();
 		progressBar.setBounds(1440, 23, 193, 25);
@@ -463,7 +483,8 @@ public class Map extends JPanel implements ActionListener{
 			listButton.get(ligne).addActionListener(this);
 			this.add(listButton.get(ligne));
 		}
-		this.repaint(); 
+		this.setVisible(false);
+		this.setVisible(true);
 	}
 
 	/**
@@ -1062,15 +1083,25 @@ public class Map extends JPanel implements ActionListener{
 		else if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
 			if(event.getSource().equals(smartLocation)){
 				smartPlacement(listJButtonsEtage2);
+				listJButtonsEtage1 = new ArrayList<JButton>();
+				listJButtonsEtage2 = new ArrayList<JButton>();
 				listAllCapteurs = controller.listCapteurs(); 
 				listEmplacement = controller.EmplacementFull(); 
 				listEmplacementOccupied = listEmplacementOccupied(listEmplacement); 
 				initListObjectNullEmplacement();
 				dispatchEtageEmplacement();
+				if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
+					removeButton(listJButtonsEtage1);
+					displayButton(listJButtonsEtage2);
+				}
+				else {
+					removeButton(listJButtonsEtage2);
+					displayButton(listJButtonsEtage1);
+				}
 				gestionListObject();
-				scrollPane.repaint();
 				progressBar.setVisible(false);
 				smartLocation.setEnabled(false);
+				this.repaint();
 			}
 			else
 				actionButton(event, listJButtonsEtage2);
@@ -1085,6 +1116,14 @@ public class Map extends JPanel implements ActionListener{
 		if(event.getSource().equals(comboStage)) {
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+				for(int i = 0;  i<listJButtonsEtage1.size(); i++) {
+					if(!isEmplacementFree(listJButtonsEtage1.get(i))) {
+						smartLocation.setEnabled(false);
+						break;
+					}
+					else
+						smartLocation.setEnabled(true);
+				}
 				removeButton(listJButtonsEtage2);
 				displayButton(listJButtonsEtage1);
 				try {
@@ -1097,31 +1136,61 @@ public class Map extends JPanel implements ActionListener{
 				imageIcon.setImage(image);
 				picLabel.setIcon(imageIcon);
 
-
 			}
 
 			if(comboStage.getSelectedItem().toString().equals("Etage 2")) {
+				for(int i = 0;  i<listJButtonsEtage2.size(); i++) {
+					if(!isEmplacementFree(listJButtonsEtage2.get(i))) {
+						smartLocation.setEnabled(false);
+						break;
+					}
+					else
+						smartLocation.setEnabled(true);
+				}
 				try {
 					image = ImageIO.read(getClass().getResource("/images/"+ tabImage[1]));  
 				} catch (IOException e) {
 					System.out.println("ERROR - IMAGE NOT FOUND");
 					e.printStackTrace();
 				}
+				removeButton(listJButtonsEtage1);
+				displayButton(listJButtonsEtage2);
 
 				imageIcon.setImage(image);
 				picLabel.setIcon(imageIcon);
 
 
-			}
-			this.repaint();
 
+			} 
+			this.repaint();
 		}
 
 		//Used to update the display of the smart button
-		if(listEmplacementOccupied.isEmpty())
-			smartLocation.setEnabled(true);
-		else 
-			smartLocation.setEnabled(false);
+		//		if(listEmplacementOccupied.isEmpty())
+		//			smartLocation.setEnabled(true);
+		//		else 
+		//			smartLocation.setEnabled(false);
+
+		if(comboStage.getSelectedItem().toString().equals("Etage 1")) {
+			for(int i = 0;  i<listJButtonsEtage1.size(); i++) {
+				if(!isEmplacementFree(listJButtonsEtage1.get(i))) {
+					smartLocation.setEnabled(false);
+					break;
+				}
+				else
+					smartLocation.setEnabled(true);
+			}
+		}
+		else {
+			for(int i = 0;  i<listJButtonsEtage2.size(); i++) {
+				if(!isEmplacementFree(listJButtonsEtage2.get(i))) {
+					smartLocation.setEnabled(false);
+					break;
+				}
+				else
+					smartLocation.setEnabled(true);
+			}
+		}
 
 	}
 
