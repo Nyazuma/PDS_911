@@ -20,7 +20,7 @@ public abstract class CategoryObject implements Runnable{
 
 	private Integer getRandomID() throws InterruptedException {
 		if(listObjects.isEmpty())
-			Thread.currentThread().interrupt();
+			throw new InterruptedException();
 		// Choice of the sensor
 		int id = (int)(Math.random()*listObjects.size());
 		String activeSensor = listObjects.get(id);

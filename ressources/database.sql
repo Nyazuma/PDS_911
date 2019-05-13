@@ -438,9 +438,9 @@ INSERT INTO Emplacements (Nom_Emplacement, ID_Etage, X, Y, Width, Height)
  ('Salle sport', '1', 1521, 655, 42, 37),
  ('Salle sport', '1', 1521, 605, 42, 37),
  
- ('Salle sport', '1', 1521, 826, 42, 37),
- ('Salle sport', '1', 1521, 767, 42, 37),
- ('Salle sport', '1', 1521, 876, 42, 37),
+ ('Bibliothèque', '1', 1521, 826, 42, 37),
+ ('Bibliothèque', '1', 1521, 767, 42, 37),
+ ('Bibliothèque', '1', 1521, 876, 42, 37),
  
  ('Salle activité', '1', 1751, 113, 42, 37),
  ('Salle activité', '1', 1697, 113, 42, 37),

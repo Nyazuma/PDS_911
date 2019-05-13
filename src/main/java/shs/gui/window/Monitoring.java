@@ -38,7 +38,6 @@ public class Monitoring extends JPanel implements ActionListener{
 	protected JLabel highAlertIconPanel;
 	protected JLabel lowAlertLabel;
 	protected JLabel highAlertLabel;
-	protected JButton modifySensorButton;
 	protected JButton toggleDisabledAlertsButton;
 	protected JLabel detailsAlertLabel;
 	protected JTextPane detailsAlertText;
@@ -249,14 +248,16 @@ public class Monitoring extends JPanel implements ActionListener{
 			return;
 		}
 		if(event.getSource().equals(displayMapButton)) {
-			if(alertsTable.getSelectedRow()> -1) {
-				stopThread=true;
-				refreshAlertsThread.interrupt();
-				//TODO link with map
-				controller.getGui().loadWindowMap((String) displayedData[alertsTable.getSelectedRow()][8]);
+			if(alertsTable.getSelectedRow() == -1) {
+				detailsAlertText.setText("Vous n'avez pas sélectionné d'alerte à localiser!");
+			}
+			else if(displayedData[alertsTable.getSelectedRow()][6].equals("Bracelet RFID")) {
+				detailsAlertText.setText("Un bracelet RFID n'a pas d'emplacement à visualiser");
 			}
 			else {
-				detailsAlertText.setText("Vous n'avez pas sélectionné d'alerte à localiser!");
+				stopThread=true;
+				refreshAlertsThread.interrupt();
+				controller.getGui().loadWindowMap((String) displayedData[alertsTable.getSelectedRow()][8]);
 			}
 			return;
 		}
@@ -277,18 +278,6 @@ public class Monitoring extends JPanel implements ActionListener{
 			else {
 				detailsAlertText.setText("Vous n'avez pas sélectionné d'alerte à désactiver!");
 			}
-			return;
-		}
-		if(event.getSource().equals(modifySensorButton)) {
-			if(alertsTable.getSelectedRow()> -1) {
-				stopThread=true;
-				refreshAlertsThread.interrupt();
-				//TODO link with Modify sensors
-				//controller.getGui().
-			}
-			else {
-				detailsAlertText.setText("Vous n'avez pas sélectionné d'alerte pour modifier son capteur!");
-			};
 			return;
 		}
 		if(event.getSource().equals(refreshButton)) {
