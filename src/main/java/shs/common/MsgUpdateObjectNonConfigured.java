@@ -12,23 +12,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MsgUpdateObjectNonConfigured extends Message{
 
-	protected JTextField minCapteur;
-	protected JTextField maxCapteur;
-	protected JFormattedTextField minDate;
-	protected JFormattedTextField maxDate;
+	protected String minCapteur;
+	protected String maxCapteur;
+	protected String minDate;
+	protected String maxDate;
 	protected Integer id;
 	protected String typeCapteur;
 
 	@JsonCreator
-	
 
 	public MsgUpdateObjectNonConfigured(
 			@JsonProperty("id") Integer id,
 			@JsonProperty("typeCapteur") String typeCapteur,
-			@JsonProperty("minCapteur") JTextField minCapteur,
-			@JsonProperty("maxCapteur") JTextField maxCapteur, 
-			@JsonProperty("minDate") JFormattedTextField minDate, 	
-			@JsonProperty("maxDate") JFormattedTextField maxDate) {
+			@JsonProperty("minCapteur") String minCapteur,
+			@JsonProperty("maxCapteur") String maxCapteur, 
+			@JsonProperty("minDate") String minDate, 	
+			@JsonProperty("maxDate") String maxDate) {
 		super(MessageType.UPDATEOBJECTNONCONFIG);
 		this.id= id;
 		this.typeCapteur=typeCapteur;
@@ -39,7 +38,7 @@ public class MsgUpdateObjectNonConfigured extends Message{
 	}
 
 	public String getMinCaptor() {
-		return minCapteur.getText().toString();
+		return minCapteur;
 	}
 	public Integer getId() {
 		return id;
@@ -48,13 +47,13 @@ public class MsgUpdateObjectNonConfigured extends Message{
 		return typeCapteur;
 	}
 	public String getMaxCaptor() {
-		return maxCapteur.getText().toString();
+		return maxCapteur;
 	}
 	public String getMinDate() {
-		return minDate.getText().toString();
+		return minDate;
 	}
 	public String getMaxDate() {
-		return maxDate.getText().toString();
+		return maxDate;
 	}
 
 

@@ -488,39 +488,40 @@ private JFormattedTextField maxDate;
 	 * Method use to get the values of the selected row. It will be use especially in the ObjectModification class
 	 * @return
 	 */
-//	protected static List<String> getRowUpdate(){
-//		int ligne = objectTable.getSelectedRow(); 
-//		List<String> listUpdate = new ArrayList<String>(); 
-//		for(int i = 0; i<data[ligne].length; i++) {
-//			if(data[ligne][i]!=null)
-//				listUpdate.add(data[ligne][i].toString()); 
-//			else
-//				listUpdate.add(null);
-//		}
-//		return listUpdate;
-//	}
-//	private List<String> gestionUpdateConfig() {
-//		List<String> listValuesConfig = new ArrayList<String>(); 
-//		listValuesConfig.add(ObjectConfiguration.getRowUpdate().get(0).toString());
-//		if (!minCapteur.getText().isEmpty()) {
-//		listValuesConfig.add(minCapteur.getText().toString()); 
-//		}
-//		if (!maxCapteur.getText().isEmpty()) {
-//		listValuesConfig.add(maxCapteur.getText().toString()); 
-//		}
-////		if(etatCapteur.getSelectedItem().toString().contentEquals("Enable"))
-////			listValuesConfig.add("1"); 
-//	else {
-//		listValuesConfig.add(null);
-//	}
-////			listValuesConfig.add("0"); 
-////		listValuesConfig.add(residenceCapteur.getSelectedItem().toString());
-////		//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
-////		listValuesConfig.add(etageCapteur.getSelectedItem().toString()); 
-////		//		listValues.add(macCapteur.getSelectedItem().toString()); 
-//		return listValuesConfig; 
-//
-//	}
+	protected static List<String> getRowUpdate(){
+		int ligne = objectTable.getSelectedRow(); 
+		List<String> listUpdate = new ArrayList<String>(); 
+		for(int i = 0; i<data[ligne].length; i++) {
+			if(data[ligne][i]!=null)
+				listUpdate.add(data[ligne][i].toString()); 
+			else
+				listUpdate.add(null);
+		}
+		return listUpdate;
+	}
+	
+	private List<String> gestionUpdateConfig() {
+		List<String> listValues = new ArrayList<String>(); 
+		listValues.add(ObjectConfiguration.getRowUpdate().get(0).toString());
+		if (!minCapteur.getText().equals("")) {
+		listValues.add(minCapteur.getText().toString()); 
+		}
+		if (!maxCapteur.getText().equals("")) {
+		listValues.add(maxCapteur.getText().toString()); 
+		}
+//		if(etatCapteur.getSelectedItem().toString().contentEquals("Enable"))
+//			listValuesConfig.add("1"); 
+	else {
+		listValues.add(null);
+	}
+//			listValuesConfig.add("0"); 
+//		listValuesConfig.add(residenceCapteur.getSelectedItem().toString());
+//		//		listValues.add(emplacementCapteur.getSelectedItem().toString()); 
+//		listValuesConfig.add(etageCapteur.getSelectedItem().toString()); 
+//		//		listValues.add(macCapteur.getSelectedItem().toString()); 
+		return listValues; 
+
+	}
 
 	public void actionPerformed(ActionEvent event) {
 
@@ -562,9 +563,9 @@ private JFormattedTextField maxDate;
 				message.setText("L'object a été configuré avec succès !"); 
 				
 				
-				
-				
-  //   controller.updateNonConfig(typeCapteur, id, minCapteur, maxCapteur, minDate, maxDate);
+				String type = ObjectGestion.getRowUpdate().get(1).toString();
+				Integer id = Integer.parseInt(ObjectGestion.getRowUpdate().get(0).toString());
+				controller.updateNonConfig(type, id, minCapteur, maxCapteur, minDate, maxDate);
 				message.setForeground(Color.green);
 	//			message.setEnabled(true);
 				if(!minCapteur.getText().equals("")) {
