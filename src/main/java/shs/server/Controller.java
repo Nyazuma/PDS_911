@@ -20,6 +20,11 @@ import shs.common.MsgDeleteEmplacement;
 import shs.common.MsgDeleteObject;
 import shs.common.MsgIntResult;
 import shs.common.MsgListResult;
+import shs.common.MsgNumberObjectAdded;
+import shs.common.MsgNumberObjectAlert;
+import shs.common.MsgNumberObjectDeleted;
+import shs.common.MsgNumberObjectFetch;
+import shs.common.MsgNumberObjectUpdated;
 import shs.common.MsgReportCall;
 import shs.common.MsgReportHygro;
 import shs.common.MsgReportMotion;
@@ -28,13 +33,8 @@ import shs.common.MsgReportRFID;
 import shs.common.MsgReportSmoke;
 import shs.common.MsgReportTemperature;
 import shs.common.MsgUpdateEmplacement;
+import shs.common.MsgUpdateNonConfigured;
 import shs.common.MsgUpdateObject;
-import shs.common.MsgNumberObjectAdded;
-import shs.common.MsgNumberObjectDeleted;
-import shs.common.MsgNumberObjectUpdated;
-import shs.common.MsgNumberObjectAlert;
-import shs.common.MsgNumberObjectFetch;
-import shs.common.MsgUpdateObjectNonConfigured;
 import shs.common.Tool;
 
 public class Controller {
@@ -190,7 +190,7 @@ public class Controller {
 			MsgIntResult answer26 = new MsgIntResult(resultInteger);
 			return Tool.messageToJSON(answer26);
 		case UPDATEOBJECTNONCONFIG : 
-			resultBoolean = updateObjectNonConfig(((MsgUpdateObjectNonConfigured)input).getTypeCaptor(), ((MsgUpdateObjectNonConfigured)input).getId(), ((MsgUpdateObjectNonConfigured)input).getMinCaptor(), ((MsgUpdateObjectNonConfigured)input).getMaxCaptor(),((MsgUpdateObjectNonConfigured)input).getMinDate(),((MsgUpdateObjectNonConfigured)input).getMaxDate()); 
+			resultBoolean = updateObjectNonConfig(((MsgUpdateNonConfigured)input).getTypeCapteur(), ((MsgUpdateNonConfigured)input).getID(), ((MsgUpdateNonConfigured)input).getMinCapteur(), ((MsgUpdateNonConfigured)input).getMaxCapteur(),((MsgUpdateNonConfigured)input).getMinDate(),((MsgUpdateNonConfigured)input).getMaxDate()); 
 			MsgBooleanResult answer27 = new MsgBooleanResult(resultBoolean); 
 			return Tool.messageToJSON(answer27); 
 		default:
@@ -844,31 +844,28 @@ public class Controller {
 	 * @return
 	 */
 	private boolean updateObjectNonConfig(String typeCapteur, Integer id, String minCapteur, String maxCapteur, String minDate, String maxDate) {
-		String request = "UPDATE CapteursAppel SET minCapteur =" + minCapteur +" WHERE ID_CapteurAppel =" + id +";";
+		String request = "";
 		try {
-			System.out.println(request);
 			Statement statement = connection.createStatement();
-
-			
-			
 			if(typeCapteur.equals("Capteur appel"))
 				request = "UPDATE CapteursAppel SET NiveauAlerte_CapteurAppel ="+ minCapteur +" WHERE ID_CapteurAppel =" + id +";";
 			if(typeCapteur.equals("Capteur de fumée"))
 				request = "UPDATE CapteursFumee SET Seuil_CapteurFumee ="+ maxCapteur +" WHERE ID_CapteurFumee =" + id +";";
 			if(typeCapteur.equals("Capteur de présence"))
-				request = "UPDATE CapteursPresence SET Debut_CapteurPresence ="+ minDate +" + Fin_CapteurPresence ="+ maxDate +" WHERE ID_CapteurPresence =" + id +";";
+				request = "UPDATE CapteursPresence SET Debut_CapteurPresence ="+ minDate +", Fin_CapteurPresence ="+ maxDate +" WHERE ID_CapteurPresence =" + id +";";
 			if(typeCapteur.equals("Capteur de température"))
-				request = "UPDATE CapteursTemperature SET Min_CapteurTemperature ="+ minCapteur +" + Max_CapteurTemperature ="+ maxCapteur +" WHERE ID_CapteurTemperature =" + id +";";
+				request = "UPDATE CapteursTemperature SET Min_CapteurTemperature ="+ minCapteur +", Max_CapteurTemperature ="+ maxCapteur +" WHERE ID_CapteurTemperature =" + id +";";
 			if(typeCapteur.equals("Capteur hygrométrique"))
 				request = "UPDATE CapteursHygro SET Seuil_CapteurHygro ="+ maxCapteur +" WHERE ID_CapteurHygro =" + id +";";
 			if(typeCapteur.equals("Capteur ouverture"))
-				request = "UPDATE CapteursOuverture SET Debut_CapteurOuverture ="+ minDate +" + Fin_CapteurOuverture ="+ maxDate +" WHERE ID_CapteurOuverture =" + id +";";
+				request = "UPDATE CapteursOuverture SET Debut_CapteurOuverture ="+ minDate +", Fin_CapteurOuverture ="+ maxDate +" WHERE ID_CapteurOuverture =" + id +";";
 
-			
+			System.out.println(request);
 		
 			statement.executeUpdate(request);
 			return true; 
 		}catch (SQLException e) {
+			System.out.println("error");
 			Tool.logger.error("updateObjectNonConfig FAILED - SQL EXCEPTION");
 			return false;
 		}

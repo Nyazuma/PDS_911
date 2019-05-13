@@ -49,7 +49,7 @@ public class Tool {
 				return mapper.readValue(json, MsgUpdateObject.class); 
 			}
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.UPDATEOBJECTNONCONFIG.toString())) {
-				return mapper.readValue(json, MsgUpdateObjectNonConfigured.class); 
+				return mapper.readValue(json, MsgUpdateNonConfigured.class); 
 			}
 			if(map.get("type").toString().equalsIgnoreCase(MessageType.REPORTRFID.toString())) {
 				return mapper.readValue(json, MsgReportRFID.class); 

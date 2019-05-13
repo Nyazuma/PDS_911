@@ -7,30 +7,29 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.sql.Date;
 import java.util.List;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 
 import shs.common.Message;
-import shs.common.MsgDeleteObject;
 import shs.common.MessageType;
 import shs.common.MsgAddObject;
 import shs.common.MsgBooleanResult;
 import shs.common.MsgChangeAlert;
 import shs.common.MsgConnection;
+import shs.common.MsgDeleteEmplacement;
+import shs.common.MsgDeleteObject;
+import shs.common.MsgIntResult;
+import shs.common.MsgListResult;
 import shs.common.MsgNumberObjectAdded;
 import shs.common.MsgNumberObjectAlert;
 import shs.common.MsgNumberObjectDeleted;
 import shs.common.MsgNumberObjectFetch;
 import shs.common.MsgNumberObjectUpdated;
-import shs.common.MsgDeleteEmplacement;
-import shs.common.MsgIntResult;
-import shs.common.MsgListResult;
 import shs.common.MsgUpdateEmplacement;
+import shs.common.MsgUpdateNonConfigured;
 import shs.common.MsgUpdateObject;
-import shs.common.MsgUpdateObjectNonConfigured;
 import shs.common.Tool;
 
 public class GuiController {
@@ -254,7 +253,7 @@ public class GuiController {
 	}
 	
 	public boolean updateNonConfig(String typeCapteur, Integer id, JTextField minCapteur, JTextField maxCapteur, JFormattedTextField minDate, JFormattedTextField maxDate) {
-		MsgUpdateObjectNonConfigured updateNonConfig =  new MsgUpdateObjectNonConfigured(id, typeCapteur, minCapteur.getText() ,maxCapteur.getText(), minDate.getText(), maxDate.getText());  
+		MsgUpdateNonConfigured updateNonConfig =  new MsgUpdateNonConfigured(id, typeCapteur, minCapteur.getText() ,maxCapteur.getText(), minDate.getText(), maxDate.getText());  
 		String output = Tool.messageToJSON(updateNonConfig);
 		String answer; 
 		try {
