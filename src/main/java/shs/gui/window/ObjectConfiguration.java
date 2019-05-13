@@ -504,21 +504,27 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		
 		// TODO Regler pb de validation sans rien entré dans les champs 
 		// TODO Rajouter condition: si aucun sans rfid mit, afficher message d'erreur 
+		// TODO Convert String to java.sql.date pour les comparer 
 		if(event.getSource().equals(valider) && confirmation.isSelected()) {
 			
-			if ( !(Integer.parseInt(minCapteur.getText()) < Integer.parseInt(maxCapteur.getText()))) {
+			if ( minCapteur.getText().equals("") && maxCapteur.getText().equals("") && !(Integer.parseInt(minCapteur.getText()) < Integer.parseInt(maxCapteur.getText()))) {
 				message.setText("Votre Maximum doit être supérieur au Minimum");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);
 
 			}
-			else if ( !(Integer.parseInt(minDate.getText()) < Integer.parseInt(maxDate.getText()))) {
-				message.setText("Votre Date de debut et de fin ne sont pas dans l'ordre chronologique ");
+
+			else if ((ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel"))) {
+				if(maxCapteur.getText().equals("1") || maxCapteur.getText().equals("2") || maxCapteur.getText().equals("3")) {
+					message.setText("L'object a été configuré avec succès !"); 
+
+			}else {
+				message.setText("Entrez un niveau d'alerte égal à 1,2 ou 3 ");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);
-				
-
-			}else if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée") && !maxCapteur.getText().equals(""))|| (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !minCapteur.getText().equals("") && !maxCapteur.getText().equals("")) && (Integer.parseInt(minCapteur.getText()) < Integer.parseInt(maxCapteur.getText())) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de présence") && !minDate.getText().equals("") && !maxDate.getText().equals(""))) {
+			}
+			}
+         else if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur hygrométrique") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de fumée") && !maxCapteur.getText().equals(""))|| (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur appel") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Bracelet RFID") && !maxCapteur.getText().equals("")) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de température") && !minCapteur.getText().equals("") && !maxCapteur.getText().equals("")) && (Integer.parseInt(minCapteur.getText()) < Integer.parseInt(maxCapteur.getText())) || (ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de présence") && !minDate.getText().equals("") && !maxDate.getText().equals(""))) {
 					message.setText("L'object a été configuré avec succès !"); 
 					
 					
