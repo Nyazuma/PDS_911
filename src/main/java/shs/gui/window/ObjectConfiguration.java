@@ -454,13 +454,12 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 				message.setForeground(Color.WHITE);
 
 				
-			}
-			else if(!minDate.getText().trim().matches("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]") || !maxDate.getText().trim().matches("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]") || !minCapteur.getText().trim().matches("[0-9]*") || !maxCapteur.getText().trim().matches("[0-9]*") ) {
+			if(!minDate.getText().trim().matches("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]") || !maxDate.getText().trim().matches("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]") || !minCapteur.getText().trim().matches("[0-9]*") || !maxCapteur.getText().trim().matches("[0-9]*") ) {
 				message.setText("Entrer uniquement des chiffres");
 				message.setForeground(Color.RED);
 				message.setEnabled(true);
 				
-			}
+			}}
 	
 			else if (!maxCapteur.getText().equals("") || !minCapteur.getText().equals("") || !maxDate.getText().equals("") || !minDate.getText().equals("") ){
 								message.setText("L'object a été configuré avec succès !"); 
