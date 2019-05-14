@@ -16,13 +16,11 @@ public class CategoryMotion extends CategoryObject{
 	}
 
 	public void launchAlert(Integer id) {
-		for(int i=0; i<3; i++) {
-			MsgReportMotion update = new MsgReportMotion(id);
-			Connector.contactServer(Tool.messageToJSON(update));
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {}
-		}
+		MsgReportMotion update = new MsgReportMotion(id);
+		Connector.contactServer(Tool.messageToJSON(update));
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {}
 	}
 
 
