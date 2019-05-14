@@ -3,12 +3,15 @@ package shs.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+import org.apache.log4j.Level;
+
 import shs.common.Tool;
 
 public class ServerLaunch {
 
 	public static void main(String args[]) throws IOException {
 		
+		Tool.logger.getRootLogger().setLevel(Level.OFF);
 		System.out.println("SHS Server : launch");
 		
 		// DataSource
