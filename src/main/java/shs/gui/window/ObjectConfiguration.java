@@ -47,8 +47,6 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	
 	private JComboBox<String> typeCapteur; 
 	private JLabel lblTypeCapteur; 
-	private JComboBox<String> etatCapteur; 
-	private JLabel lblEtatCapteur;
 	protected JTextField minCapteur; 
 	protected JLabel lblMinCapteur;
 	protected JTextField maxCapteur; 
@@ -58,31 +56,13 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 	private JButton refresh; 
 	private JButton returnButton; 
 	private JLabel message; 
-	private JComboBox<String> emplacementCapteur; 
-	private JLabel lblEmplacement; 
-	private JComboBox<String> etageCapteur; 
-	private JLabel lblEtage; 
-	private JComboBox<String> residenceCapteur; 
-	private JLabel lblResidence; 
-	private JSlider sliderTemperature;
-	private JLabel lblTemperatureCapteur; 
 	private JLabel objectNumberTitleLabel;
 	protected JLabel objectNumberLabel; 
-	//private JLabel  lblnbNonConfig;	
-
 	protected JLabel errorSelection; 	
-	private JTextField formattedDate;
 	protected JTextField normalDate;
-	private JButton buttonDate; 
-	private JDateChooser dateFrom;
-	private JDateChooser dateTo;
 	private JTextField minDate;
 	private JTextField maxDate;
-//	protected String dateString;
-//	protected String dateString2;
-//	protected Date date1;
-//	protected SimpleDateFormat formatter;
-//	protected Date date2;
+
 	
 
 	//Initialization of the JComboBox with a model
