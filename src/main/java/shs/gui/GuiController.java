@@ -252,7 +252,7 @@ public class GuiController {
 		return false; 
 	}
 	
-	public boolean updateNonConfig(String typeCapteur, Integer id, JTextField minCapteur, JTextField maxCapteur, JFormattedTextField minDate, JFormattedTextField maxDate) {
+	public boolean updateNonConfig(String typeCapteur, Integer id, JTextField minCapteur, JTextField maxCapteur, JTextField minDate, JTextField maxDate) {
 		MsgUpdateNonConfigured updateNonConfig =  new MsgUpdateNonConfigured(id, typeCapteur, minCapteur.getText() ,maxCapteur.getText(), minDate.getText(), maxDate.getText());  
 		String output = Tool.messageToJSON(updateNonConfig);
 		String answer; 

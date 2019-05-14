@@ -854,13 +854,13 @@ public class Controller {
 			if(typeCapteur.equals("Capteur de fumée"))
 				request = "UPDATE CapteursFumee SET Seuil_CapteurFumee ="+ maxCapteur +" WHERE ID_CapteurFumee =" + id +";";
 			if(typeCapteur.equals("Capteur de présence"))
-				request = "UPDATE CapteursPresence SET Debut_CapteurPresence ="+ minDate +", Fin_CapteurPresence ="+ maxDate +" WHERE ID_CapteurPresence =" + id +";";
+				request = "UPDATE CapteursPresence SET Debut_CapteurPresence = " + '\"'+  minDate + '\"' + ", Fin_CapteurPresence ="+ '\"' + maxDate + '\"' + " WHERE ID_CapteurPresence =" + id +";";
 			if(typeCapteur.equals("Capteur de température"))
 				request = "UPDATE CapteursTemperature SET Min_CapteurTemperature ="+ minCapteur +", Max_CapteurTemperature ="+ maxCapteur +" WHERE ID_CapteurTemperature =" + id +";";
 			if(typeCapteur.equals("Capteur hygrométrique"))
 				request = "UPDATE CapteursHygro SET Seuil_CapteurHygro ="+ maxCapteur +" WHERE ID_CapteurHygro =" + id +";";
 			if(typeCapteur.equals("Capteur ouverture"))
-				request = "UPDATE CapteursOuverture SET Debut_CapteurOuverture ="+ minDate +", Fin_CapteurOuverture ="+ maxDate +" WHERE ID_CapteurOuverture =" + id +";";
+				request = "UPDATE CapteursOuverture SET Debut_CapteurOuverture ="+ '\"'+ minDate + '\"'+", Fin_CapteurOuverture ="+ '\"'+ maxDate + '\"'+" WHERE ID_CapteurOuverture =" + id +";";
 
 			System.out.println(request);
 		
