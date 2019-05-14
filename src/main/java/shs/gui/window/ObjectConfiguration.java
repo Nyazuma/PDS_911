@@ -461,10 +461,9 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 		}
 
 
-		// TODO Regler pb de validation sans rien entré dans les champs 
-		// TODO Rajouter condition: si aucun sans rfid mit, afficher message d'erreur 
-		// TODO Convert String to java.sql.date pour les comparer 
+
 		if(event.getSource().equals(valider) && confirmation.isSelected()) {
+			
 			
 			if((ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur ouverture") || ObjectGestion.getRowUpdate().get(1).toString().equals("Capteur de présence") )) {
 				
@@ -476,7 +475,13 @@ public class ObjectConfiguration extends JPanel implements ActionListener{
 
 				
 			}
-
+			else if(!minDate.getText().trim().matches("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]") || !maxDate.getText().trim().matches("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]") || !minCapteur.getText().trim().matches("[0-9]*") || !maxCapteur.getText().trim().matches("[0-9]*") ) {
+				message.setText("Entrer uniquement des chiffres");
+				message.setForeground(Color.RED);
+				message.setEnabled(true);
+				
+			}
+	
 			else if (!maxCapteur.getText().equals("") || !minCapteur.getText().equals("") || !maxDate.getText().equals("") || !minDate.getText().equals("") ){
 								message.setText("L'object a été configuré avec succès !"); 
 								
