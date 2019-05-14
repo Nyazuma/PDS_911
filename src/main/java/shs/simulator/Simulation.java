@@ -116,7 +116,6 @@ public class Simulation {
 	}
 
 	private void launchAlert(String sensorType, List<String> listSensors) {
-		//TODO config file
 		final Integer maxNumberSensorsDisplayed = 15;
 		System.out.println("############# Launch specific alerts (2) ############");
 		System.out.println("With which sensor do you want to launch an alert?");
@@ -147,19 +146,19 @@ public class Simulation {
 				System.out.print("Invalid! Try again : ");
 		}while(!(0<answer && answer<=maxNumberSensorsDisplayed && answer<=listSensors.size()));
 		CategoryObject category = null;
-		if(sensorType.equals("Bracelet RFID"))
+		if(sensorType.trim().equals("Bracelet RFID"))
 			category = new CategoryRFID();
-		if(sensorType.equals("Capteur appel"))
+		if(sensorType.trim().equals("Capteur appel"))
 			category = new CategoryCall();
-		if(sensorType.equals("Capteur de fumée"))
+		if(sensorType.trim().equals("Capteur de fumée"))
 			category = new CategorySmoke();
-		if(sensorType.equals("Capteur de présence"))
+		if(sensorType.trim().equals("Capteur de présence"))
 			category = new CategoryMotion();
-		if(sensorType.equals("Capteur de température"))
-			new CategoryTemperature();
-		if(sensorType.equals("Capteur hygrométrique"))
+		if(sensorType.trim().equals("Capteur de température"))
+			category = new CategoryTemperature();
+		if(sensorType.trim().equals("Capteur hygrométrique"))
 			category = new CategoryHygro();
-		if(sensorType.equals("Capteur ouverture"))
+		if(sensorType.trim().equals("Capteur ouverture"))
 			category = new CategoryOpening();
 		Integer id = Integer.parseInt(listSensors.get(answer-1));
 		category.launchAlert(id);

@@ -36,12 +36,26 @@ public class MemoryCache implements Runnable {
 				}
 			}
 			// to avoid the launch of alerts already sent, we had changed occurencies>=ocurrenciesNecessary
-			if(occurencies==occurenciesNecessary)
+			if(occurencies==occurenciesNecessary) {
+				System.out.println("#Monitoring report : " + occurencies + " reports were received from the sensor ID n°" + id 
+						+ ", lets test the value!");
 				return true;
-			else
+			}
+			else {
+				if(occurencies<occurenciesNecessary) {
+					System.out.println("#Monitoring report : " + occurencies + " reports were received from the sensor ID n°" + id 
+							+ ", need " + (occurenciesNecessary-occurencies) + " more!");
+				}
+				else {
+					System.out.println("#Monitoring report : " + occurencies + " reports were received from the sensor ID n°" + id 
+							+ ", the test was already done in the last 5 minutes");
+				}
 				return false;
+			}
 		}
 		else {
+			System.out.println("#Monitoring report : 1 report was received from the sensor ID n°" + id 
+					+ ", need 2 more!");
 			List<Object> lineSensors = new ArrayList<Object>();
 			List<List<Object>> infoSensors = new ArrayList<List<Object>>();
 			lineSensors.add(new Timestamp(System.currentTimeMillis()));
@@ -69,6 +83,7 @@ public class MemoryCache implements Runnable {
 			return null;
 		else {
 			average = average / occurencies;
+			System.out.println("#Monitoring report : the average value of the last reports is " + average + " for the sensor ID n°" + id);
 			return average;
 		}			
 	}

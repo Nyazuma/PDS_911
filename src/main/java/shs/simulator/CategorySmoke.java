@@ -17,15 +17,13 @@ public class CategorySmoke extends CategoryObject{
 
 	@Override
 	public void launchAlert(Integer id) {
-		for(int i=0; i<3; i++) {
-			int smokeValue = DataConfigSimu.getMIN_SMOKE_VALUE() + 
-					(int) (Math.random()*(DataConfigSimu.getMAX_SMOKE_VALUE()-DataConfigSimu.getMIN_SMOKE_VALUE()));
-			MsgReportSmoke update = new MsgReportSmoke(id, smokeValue);
-			Connector.contactServer(Tool.messageToJSON(update));
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {}
-		}
+		int smokeValue = DataConfigSimu.getMIN_SMOKE_VALUE() + 
+				(int) (Math.random()*(DataConfigSimu.getMAX_SMOKE_VALUE()-DataConfigSimu.getMIN_SMOKE_VALUE()));
+		MsgReportSmoke update = new MsgReportSmoke(id, smokeValue);
+		Connector.contactServer(Tool.messageToJSON(update));
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {}
 	}
 
 }
